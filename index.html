@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Kurumsal Şablon Oluşturucu</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; }
+
+        .btn-download-all {
+            background: #00637d; color: white;
+            border: none;
+            padding: 7px 14px; border-radius: 8px;
+            cursor: pointer; font-family: 'Google Sans', sans-serif;
+            font-size: 12px; font-weight: 600;
+            transition: background 0.2s; width: auto; white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .btn-download-all:hover { background: #00506a; }
+        .btn-download-all:active { transform: scale(0.98); }
+
+        /* === LAYOUT === */
+        body { font-family: 'Google Sans', sans-serif; background-color: #f0f2f5; padding: 20px; display: flex; gap: 20px; margin: 0; height: 100vh; overflow: hidden; align-items: stretch; }
+
+        /* === SIDEBAR === */
+        .sidebar { width: 310px; flex-shrink: 0; overflow-y: auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .sidebar-section { padding: 18px 18px; border-bottom: 1px solid #f2f2f2; }
+        .sidebar-section:last-child { border-bottom: none; }
+        .sidebar-section-header { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
+        .sidebar-section-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .sidebar-section-title { font-size: 13px; font-weight: 700; color: #00637d; }
+
+        /* Form */
+        .form-group { margin-bottom: 14px; }
+        .form-group:last-child { margin-bottom: 0; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.4px; }
+        input[type="text"], input[type="file"], button { font-family: 'Google Sans', sans-serif; }
+        input[type="text"] { width: 100%; padding: 9px 11px; border: 1.5px solid #e5e5e5; border-radius: 8px; font-size: 14px; color: #333; transition: border-color 0.2s, box-shadow 0.2s; outline: none; }
+        input[type="text"]:focus { border-color: #00637d; box-shadow: 0 0 0 3px rgba(0,99,125,0.1); }
+        input[type="file"] { width: 100%; padding: 6px 0; font-size: 13px; color: #666; }
+        .instr { color: #999; font-size: 11px; display: block; margin-top: 6px; line-height: 1.55; }
+
+        /* Buttons */
+        button { background-color: #00637d; color: white; border: none; padding: 10px 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px; transition: background 0.2s, transform 0.1s; }
+        button:hover { background-color: #00506a; }
+        button:active { transform: scale(0.98); }
+        .btn-group { display: flex; gap: 8px; margin-bottom: 10px; }
+        .btn-add { background-color: #28a745; font-size: 12px; padding: 7px; border-radius: 6px; }
+        .btn-add:hover { background-color: #218838; }
+        .btn-remove { background-color: #dc3545; font-size: 12px; padding: 7px; border-radius: 6px; }
+        .btn-remove:hover { background-color: #c82333; }
+        .logo-input-wrapper { margin-bottom: 8px; }
+        .btn-small-clear { background-color: #dc3545; font-size: 11px; padding: 5px 10px; margin-top: 5px; width: auto; display: inline-block; border-radius: 6px; }
+
+        /* === PREVIEW AREA === */
+        .preview-area { flex-grow: 1; display: flex; flex-direction: column; min-width: 0; overflow-y: auto; }
+
+        /* Tabs */
+        .template-tabs { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; background: white; border-radius: 12px 12px 0 0; padding: 10px 10px 0 10px; box-shadow: 0 -1px 0 0 #eee inset; }
+        .tab-download-wrap { margin-left: auto; padding: 0 2px 10px 8px; border-left: 1px solid #eee; flex-shrink: 0; }
+        .template-tab {
+            padding: 9px 14px 10px; border-radius: 8px 8px 0 0;
+            cursor: pointer; border: none; background: transparent;
+            font-family: 'Google Sans', sans-serif; font-size: 12px; color: #888; font-weight: 500;
+            transition: color 0.15s, background 0.15s;
+            display: flex; flex-direction: column; align-items: center; gap: 1px;
+            width: auto; transform: none; white-space: nowrap; line-height: 1.3;
+        }
+        .template-tab:hover { background: #f5f5f5; color: #444; }
+        .template-tab.active { color: #00637d; font-weight: 700; background: #f0f2f5; border-bottom: 3px solid #00637d; }
+        .tab-label { font-size: 12px; }
+        .tab-size { font-size: 10px; color: #bbb; font-weight: 400; }
+        .template-tab.active .tab-size { color: #7ab8c8; }
+
+        /* Canvas Card */
+        .canvas-card { background: white; padding: 20px; border-radius: 0 0 12px 12px; box-shadow: 0 0px 0px rgba(0,0,0,0.06); text-align: center; display: none; }
+        .canvas-card.active { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; }
+        .canvas-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .canvas-card-name { font-size: 15px; font-weight: 700; color: #222; }
+        .dimension-badge { background: #f0f2f5; color: #777; padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        canvas { max-width: 100%; max-height: calc(100vh - 220px); width: auto; height: auto; border-radius: 8px; cursor: grab; box-shadow: 0 2px 16px rgba(0,0,0,0.12); }
+        canvas:active { cursor: grabbing; }
+        .download-btn { background-color: #00637d; margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 14px; }
+        .download-btn:hover { background-color: #00506a; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+
+        <!-- Etkinlik -->
+        <div class="sidebar-section">
+            <div class="sidebar-section-header">
+                <div class="sidebar-section-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00637d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <span class="sidebar-section-title">Etkinlik</span>
+            </div>
+            <div class="form-group">
+                <label>Etkinlik Adı</label>
+                <input type="text" id="eventName" value="Yükseköğretimde Yapay Zeka" onkeyup="drawAllCanvases()">
+            </div>
+        </div>
+
+        <!-- Konuşmacı -->
+        <div class="sidebar-section">
+            <div class="sidebar-section-header">
+                <div class="sidebar-section-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00637d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <span class="sidebar-section-title">Konuşmacı</span>
+            </div>
+            <div class="form-group">
+                <label>Fotoğraf (İsteğe Bağlı)</label>
+                <input type="file" id="speakerPhotoInput" accept="image/*" onchange="handleSpeakerPhotoUpload(event)">
+                <button class="btn-remove btn-small-clear" onclick="clearSpeakerPhoto()">✕ Fotoğrafı Kaldır</button>
+            </div>
+            <div class="form-group">
+                <label>Ad Soyad</label>
+                <input type="text" id="speakerName" value="Prof. Dr. Yusuf Sinan Akgül" onkeyup="drawAllCanvases()">
+            </div>
+            <div class="form-group">
+                <label>Ünvan (İsteğe Bağlı)</label>
+                <input type="text" id="speakerTitle" placeholder="Örn: Bilgisayar Müh. Bölümü" onkeyup="drawAllCanvases()">
+            </div>
+            <div class="form-group">
+                <label>Moderatör (İsteğe Bağlı)</label>
+                <input type="text" id="moderatorName" value="Doç. Dr. Ahmet Yılmaz" onkeyup="drawAllCanvases()">
+            </div>
+        </div>
+
+        <!-- Tarih & Yer -->
+        <div class="sidebar-section">
+            <div class="sidebar-section-header">
+                <div class="sidebar-section-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00637d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <span class="sidebar-section-title">Tarih & Yer</span>
+            </div>
+            <div class="form-group">
+                <label>Tarih</label>
+                <input type="text" id="dateInput" value="14 Nisan 2026" onkeyup="drawAllCanvases()">
+            </div>
+            <div class="form-group">
+                <label>Yer</label>
+                <input type="text" id="locInput" value="Topkapı Yerleşkesi" onkeyup="drawAllCanvases()">
+            </div>
+            <div class="form-group">
+                <label>Saat</label>
+                <input type="text" id="timeInput" value="Saat: 14:00" onkeyup="drawAllCanvases()">
+            </div>
+        </div>
+
+        <!-- Görseller -->
+        <div class="sidebar-section">
+            <div class="sidebar-section-header">
+                <div class="sidebar-section-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00637d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <span class="sidebar-section-title">Görseller</span>
+            </div>
+            <div class="form-group">
+                <label>Etkinlik Ana Görseli</label>
+                <input type="file" id="eventPhoto" accept="image/*" onchange="handleImageUpload(event)">
+                <small class="instr">
+                    <strong>Kontroller:</strong><br>
+                    1. <strong>Sürükle:</strong> Resme tıkla/dokun ve kaydır.<br>
+                    2. <strong>Büyüt:</strong> Tekerleği çevir veya pinch yap.<br>
+                    * Her iki fotoğraf alanı için geçerlidir.
+                </small>
+            </div>
+        </div>
+
+        <!-- Logolar -->
+        <div class="sidebar-section">
+            <div class="sidebar-section-header">
+                <div class="sidebar-section-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00637d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                </div>
+                <span class="sidebar-section-title">Logolar</span>
+            </div>
+            <div class="form-group">
+                <label>Kurum / Fakülte Adı (İsteğe Bağlı)</label>
+                <input type="text" id="footerText" placeholder="Örn: İktisadi ve İdari Bilimler..." onkeyup="drawAllCanvases()">
+            </div>
+            <div class="form-group" id="dynamicLogosContainer">
+                <label>Ekstra Logolar (İsteğe Bağlı)</label>
+                <div class="btn-group">
+                    <button class="btn-add" onclick="addLogoInput()">+ Yeni Logo</button>
+                    <button class="btn-remove" onclick="removeLogoInput()">− Sil</button>
+                </div>
+                <div class="logo-input-wrapper" id="logo-wrapper-0">
+                    <input type="file" accept="image/*" onchange="handleMultipleLogos(0, event)">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="preview-area" id="previewContainer">
+    </div>
+
+    <script>
+        const templates = [
+            { 
+                id: "afis", name: "01 - Afiş", width: 840, height: 1190, bgImage: "arkaplanlar/afis.png",
+                photo: { x: 70, y: 350, w: 340, h: 600, radius: 20 },
+                redBox: { x: 430, y: 350, w: 340, h: 290, radius: 20 }, redBoxBg: { x: 370, y: 550, w: 485, h: 485 }, 
+                blueBox: { x: 430, y: 660, w: 340, h: 290, radius: 20 }, blueBoxBg: { x: 640, y: 630, w: 150, h: 220 }, 
+                eventText: { x: 420, y: 150, size: 70, color: "#00637d", align: "center", maxWidth: 700, lineHeight: 80 },
+                
+                speakerPhoto: { x: 460, y: 380, radius: 50, expandH: 90 },
+                speakerText: { x: 460, size: 30, color: "#ffffff", align: "left", maxWidth: 280, lineHeight: 35 },
+                moderatorText: { x: 460, size: 20, color: "#ffffff", align: "left", maxWidth: 280, lineHeight: 25 },
+                
+                dateText: { x: 460, size: 24, color: "#ffffff", align: "left", maxWidth: 280, lineHeight: 30 },
+                footer: { y: 1040, h: 75, gap: 20, textMaxWidth: 200, textSize: 20, textColor: "#00637d" }
+            },
+            { 
+                id: "web-banner", name: "02 - Web Banner", width: 1920, height: 600, bgImage: "arkaplanlar/web-banner.png",
+                photo: { x: 1000, y: 38, w: 380, h: 525, radius: 20 },
+                redBox: { x: 1400, y: 38, w: 420, h: 252, radius: 20 }, redBoxBg: { x: 1400, y: 158, w: 420, h: 420 },
+                blueBox: { x: 1400, y: 311, w: 420, h: 252, radius: 20 }, blueBoxBg: { x: 1720, y: 301, w: 115, h: 165 },
+                eventText: { x: 500, y: 200, size: 80, color: "#00637d", align: "center", maxWidth: 800, lineHeight: 90 },
+
+                speakerPhoto: { x: 1440, y: 58, radius: 35, expandH: 70 },
+                speakerText: { x: 1440, size: 30, color: "#ffffff", align: "left", maxWidth: 300, lineHeight: 35 },
+                moderatorText: { x: 1440, size: 24, color: "#ffffff", align: "left", maxWidth: 300, lineHeight: 30 },
+                
+                dateText: { x: 1440, size: 25, color: "#ffffff", align: "left", maxWidth: 360, lineHeight: 35 },
+                footer: { y: 450, h: 80, gap: 30, textMaxWidth: 300, textSize: 24, textColor: "#00637d" }
+            },
+            { 
+                id: "mobil-banner", name: "03 - Mobil Banner", width: 750, height: 750, bgImage: "arkaplanlar/mobil-banner.png",
+                photo: { x: 50, y: 180, w: 310, h: 420, radius: 15 },
+                redBox: { x: 380, y: 180, w: 320, h: 200, radius: 15 }, redBoxBg: { x: 380, y: 280, w: 320, h: 320 },
+                blueBox: { x: 380, y: 400, w: 320, h: 200, radius: 15 }, blueBoxBg: { x: 610, y: 370, w: 115, h: 165 },
+                eventText: { x: 375, y: 100, size: 45, color: "#00637d", align: "center", maxWidth: 650, lineHeight: 50 },
+                
+                speakerPhoto: { x: 410, y: 200, radius: 40, expandH: 90 },
+                speakerText: { x: 410, size: 25, color: "#ffffff", align: "left", maxWidth: 260, lineHeight: 30 },
+                moderatorText: { x: 410, size: 16, color: "#ffffff", align: "left", maxWidth: 260, lineHeight: 20 },
+                
+                dateText: { x: 410, size: 20, color: "#ffffff", align: "left", maxWidth: 260, lineHeight: 25 },
+                footer: { y: 640, h: 60, gap: 15, textMaxWidth: 160, textSize: 16, textColor: "#00637d" }
+            },
+            { 
+                id: "story", name: "04 - Story", width: 1080, height: 1920, bgImage: "arkaplanlar/story.png",
+                photo: { x: 100, y: 550, w: 420, h: 880, radius: 25 },
+                redBox: { x: 550, y: 550, w: 430, h: 425, radius: 25 }, redBoxBg: { x: 550, y: 850, w: 430, h: 430 },
+                blueBox: { x: 550, y: 1000, w: 430, h: 425, radius: 25 }, blueBoxBg: { x: 840, y: 950, w: 192, h: 276 },
+                eventText: { x: 540, y: 300, size: 90, color: "#00637d", align: "center", maxWidth: 900, lineHeight: 95 },
+                
+                speakerPhoto: { x: 590, y: 590, radius: 70, expandH: 140 },
+                speakerText: { x: 590, size: 40, color: "#ffffff", align: "left", maxWidth: 360, lineHeight: 50 },
+                moderatorText: { x: 590, size: 28, color: "#ffffff", align: "left", maxWidth: 360, lineHeight: 35 },
+                
+                dateText: { x: 590, size: 30, color: "#ffffff", align: "left", maxWidth: 360, lineHeight: 40 },
+                footer: { y: 1600, h: 110, gap: 30, textMaxWidth: 300, textSize: 24, textColor: "#00637d" }
+            },
+            { 
+                id: "post", name: "05 - Sosyal Medya", width: 1080, height: 1350, bgImage: "arkaplanlar/post.png",
+                photo: { x: 90, y: 350, w: 420, h: 790, radius: 25 },
+                redBox: { x: 540, y: 350, w: 450, h: 385, radius: 25 }, redBoxBg: { x: 540, y: 600, w: 450, h: 450 },
+                blueBox: { x: 540, y: 755, w: 450, h: 385, radius: 25 }, blueBoxBg: { x: 850, y: 740, w: 174, h: 250 },
+                eventText: { x: 540, y: 180, size: 75, color: "#00637d", align: "center", maxWidth: 900, lineHeight: 85 },
+                
+                speakerPhoto: { x: 580, y: 390, radius: 55, expandH: 100 },
+                speakerText: { x: 580, size: 40, color: "#ffffff", align: "left", maxWidth: 380, lineHeight: 45 },
+                moderatorText: { x: 580, size: 26, color: "#ffffff", align: "left", maxWidth: 380, lineHeight: 35 },
+                
+                dateText: { x: 580, size: 30, color: "#ffffff", align: "left", maxWidth: 380, lineHeight: 40 },
+                footer: { y: 1190, h: 90, gap: 30, textMaxWidth: 300, textSize: 24, textColor: "#00637d" }
+            },
+            {
+                id: "tv", name: "06 - TV Ekranı", width: 1920, height: 1080, bgImage: "arkaplanlar/tv.png",
+                photo: { x: 170, y: 300, w: 800, h: 500, radius: 25 },
+                redBox: { x: 990, y: 300, w: 370, h: 500, radius: 25 }, redBoxBg: { x: 895, y: 710, w: 560, h: 560 },
+                blueBox: { x: 1380, y: 300, w: 370, h: 500, radius: 25 }, blueBoxBg: { x: 1619, y: 295, w: 173, h: 248 },
+                eventText: { x: 960, y: 200, size: 85, color: "#00637d", align: "center", maxWidth: 1600, lineHeight: 95 },
+
+                speakerPhoto: { x: 1015, y: 320, radius: 45, expandH: 0 },
+                speakerText: { x: 1015, size: 38, color: "#ffffff", align: "left", maxWidth: 310, lineHeight: 46 },
+                moderatorText: { x: 1015, size: 24, color: "#ffffff", align: "left", maxWidth: 310, lineHeight: 30 },
+
+                dateText: { x: 1400, size: 32, color: "#ffffff", align: "left", maxWidth: 320, lineHeight: 42 },
+                footer: { y: 890, h: 120, gap: 40, textMaxWidth: 400, textSize: 28, textColor: "#00637d" }
+            }
+        ];
+
+        let activeTemplateId = templates[0].id;
+
+        let uploadedPhoto = null;
+        let uploadedSpeakerPhoto = null;
+        
+        let loadedBackgrounds = {};
+        let loadedRedBoxBg = null;
+        let loadedBlueBoxBg = null;
+        let loadedLogoFsm = null;
+        let loadedLogo555 = null;
+        
+        // FOTOĞRAF HAFIZALARI
+        let photoStates = {}; 
+        let speakerPhotoStates = {}; 
+
+        let uploadedDynamicLogos = []; 
+        let logoInputCount = 1;
+
+        function preloadImagesAndInit() {
+            let loadedCount = 0;
+            const totalImages = templates.length + 4; 
+            function checkLoad() { loadedCount++; if (loadedCount === totalImages) initApp(); }
+
+            templates.forEach(tpl => {
+                const img = new Image(); img.onload = () => { loadedBackgrounds[tpl.id] = img; checkLoad(); }; img.onerror = () => { checkLoad(); }; img.src = tpl.bgImage;
+            });
+
+            loadedRedBoxBg = new Image(); loadedRedBoxBg.onload = checkLoad; loadedRedBoxBg.onerror = checkLoad; loadedRedBoxBg.src = "arkaplanlar/kutu-1-arkaplan.png";
+            loadedBlueBoxBg = new Image(); loadedBlueBoxBg.onload = checkLoad; loadedBlueBoxBg.onerror = checkLoad; loadedBlueBoxBg.src = "arkaplanlar/kutu-2-arkaplan.png";
+            loadedLogoFsm = new Image(); loadedLogoFsm.onload = checkLoad; loadedLogoFsm.onerror = checkLoad; loadedLogoFsm.src = "arkaplanlar/logo-fsm.png";
+            loadedLogo555 = new Image(); loadedLogo555.onload = checkLoad; loadedLogo555.onerror = checkLoad; loadedLogo555.src = "arkaplanlar/logo-555.png";
+        }
+
+        function switchTab(id) {
+            activeTemplateId = id;
+            document.querySelectorAll('.template-tab').forEach(t => t.classList.toggle('active', t.dataset.id === id));
+            document.querySelectorAll('.canvas-card').forEach(c => c.classList.toggle('active', c.dataset.id === id));
+            const tpl = templates.find(t => t.id === id);
+            if (tpl) drawSingleCanvas(tpl);
+        }
+
+        function downloadAll() {
+            templates.forEach((tpl, i) => {
+                setTimeout(() => downloadSingle(tpl.id, tpl.name), i * 80);
+            });
+        }
+
+        function initApp() {
+            const container = document.getElementById('previewContainer');
+            container.innerHTML = '';
+
+            // Tab bar
+            const tabBar = document.createElement('div');
+            tabBar.className = 'template-tabs';
+            templates.forEach(tpl => {
+                const shortName = tpl.name.replace(/^\d+ - /, '');
+                tabBar.innerHTML += `<button class="template-tab${tpl.id === activeTemplateId ? ' active' : ''}" data-id="${tpl.id}" onclick="switchTab('${tpl.id}')">
+                    <span class="tab-label">${shortName}</span>
+                    <span class="tab-size">${tpl.width}×${tpl.height}</span>
+                </button>`;
+            });
+            tabBar.innerHTML += `<div class="tab-download-wrap"><button class="btn-download-all" onclick="downloadAll()">⬇ Tümünü İndir</button></div>`;
+            container.appendChild(tabBar);
+
+            // Canvas cards
+            templates.forEach(tpl => {
+                const shortName = tpl.name.replace(/^\d+ - /, '');
+                const card = document.createElement('div');
+                card.className = 'canvas-card' + (tpl.id === activeTemplateId ? ' active' : '');
+                card.dataset.id = tpl.id;
+                card.innerHTML = `
+                    <canvas id="canvas-${tpl.id}" width="${tpl.width}" height="${tpl.height}"></canvas>
+                    <button class="download-btn" onclick="downloadSingle('${tpl.id}', '${tpl.name}')">⬇ Bu Görseli İndir</button>
+                `;
+                container.appendChild(card);
+            });
+
+            templates.forEach(tpl => setupCanvasEvents(document.getElementById(`canvas-${tpl.id}`), tpl));
+            drawAllCanvases();
+        }
+
+        function addLogoInput() {
+            const container = document.getElementById('dynamicLogosContainer'); const index = logoInputCount;
+            const div = document.createElement('div'); div.className = 'logo-input-wrapper'; div.id = `logo-wrapper-${index}`;
+            div.innerHTML = `<input type="file" accept="image/*" onchange="handleMultipleLogos(${index}, event)">`;
+            container.appendChild(div); logoInputCount++;
+        }
+        function removeLogoInput() {
+            if (logoInputCount > 0) {
+                logoInputCount--; const container = document.getElementById('dynamicLogosContainer');
+                const lastInput = document.getElementById(`logo-wrapper-${logoInputCount}`); if(lastInput) container.removeChild(lastInput);
+                uploadedDynamicLogos.splice(logoInputCount, 1); drawAllCanvases();
+            }
+        }
+        function handleMultipleLogos(index, event) {
+            const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
+            reader.onload = function(e) { const img = new Image(); img.onload = function() { uploadedDynamicLogos[index] = img; drawAllCanvases(); }; img.src = e.target.result; };
+            reader.readAsDataURL(file);
+        }
+        
+        function handleSpeakerPhotoUpload(event) {
+            const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedSpeakerPhoto = new Image();
+                uploadedSpeakerPhoto.onload = function() { 
+                    templates.forEach(tpl => {
+                        const sSize = tpl.speakerPhoto.radius * 2;
+                        const coverScale = Math.max(sSize / uploadedSpeakerPhoto.width, sSize / uploadedSpeakerPhoto.height);
+                        speakerPhotoStates[tpl.id] = { baseScale: coverScale, userScale: 1, panX: (sSize - uploadedSpeakerPhoto.width * coverScale) / 2, panY: (sSize - uploadedSpeakerPhoto.height * coverScale) / 2 };
+                    });
+                    drawAllCanvases(); 
+                };
+                uploadedSpeakerPhoto.src = e.target.result;
+            }; reader.readAsDataURL(file);
+        }
+        function clearSpeakerPhoto() { uploadedSpeakerPhoto = null; document.getElementById('speakerPhotoInput').value = ""; drawAllCanvases(); }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedPhoto = new Image(); uploadedPhoto.onload = function() { 
+                    templates.forEach(tpl => {
+                        const coverScale = Math.max(tpl.photo.w / uploadedPhoto.width, tpl.photo.h / uploadedPhoto.height);
+                        const scaledWidth = uploadedPhoto.width * coverScale; const scaledHeight = uploadedPhoto.height * coverScale;
+                        photoStates[tpl.id] = { baseScale: coverScale, userScale: 1, panX: (tpl.photo.w - scaledWidth) / 2, panY: (tpl.photo.h - scaledHeight) / 2 };
+                    });
+                    drawAllCanvases(); 
+                }; uploadedPhoto.src = e.target.result;
+            }; reader.readAsDataURL(file);
+        }
+
+        function setupCanvasEvents(canvas, tpl) {
+            let activeDrag = null; 
+            let startDragX = 0; let startDragY = 0; let initialPinchDistance = 0; let initialPinchScale = 1;
+
+            function getCanvasCoordinates(e) {
+                const rect = canvas.getBoundingClientRect(); const scaleX = canvas.width / rect.width; const scaleY = canvas.height / rect.height;
+                if (e.touches && e.touches.length > 0) return { x: (e.touches[0].clientX - rect.left) * scaleX, y: (e.touches[0].clientY - rect.top) * scaleY };
+                return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+            }
+            function getPinchDistance(touches) { return Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY); }
+            
+            function startPan(coords) {
+                if (uploadedSpeakerPhoto && speakerPhotoStates[tpl.id]) {
+                    const sp = tpl.speakerPhoto;
+                    if (Math.hypot(coords.x - (sp.x + sp.radius), coords.y - (sp.y + sp.radius)) <= sp.radius) {
+                        activeDrag = 'speaker'; startDragX = coords.x - speakerPhotoStates[tpl.id].panX; startDragY = coords.y - speakerPhotoStates[tpl.id].panY; return;
+                    }
+                }
+                if (uploadedPhoto && photoStates[tpl.id]) {
+                    if (coords.x >= tpl.photo.x && coords.x <= tpl.photo.x + tpl.photo.w && coords.y >= tpl.photo.y && coords.y <= tpl.photo.y + tpl.photo.h) {
+                        activeDrag = 'main'; startDragX = coords.x - photoStates[tpl.id].panX; startDragY = coords.y - photoStates[tpl.id].panY;
+                    }
+                }
+            }
+            function doPan(coords) {
+                if (!activeDrag) return;
+                if (activeDrag === 'main') { photoStates[tpl.id].panX = coords.x - startDragX; photoStates[tpl.id].panY = coords.y - startDragY; }
+                else if (activeDrag === 'speaker') { speakerPhotoStates[tpl.id].panX = coords.x - startDragX; speakerPhotoStates[tpl.id].panY = coords.y - startDragY; }
+                drawSingleCanvas(tpl);
+            }
+
+            canvas.addEventListener('wheel', (e) => {
+                const coords = getCanvasCoordinates(e); let target = null; let tplPhoto = null; let tplState = null;
+                
+                if (uploadedSpeakerPhoto && speakerPhotoStates[tpl.id]) {
+                    const sp = tpl.speakerPhoto;
+                    if (Math.hypot(coords.x - (sp.x + sp.radius), coords.y - (sp.y + sp.radius)) <= sp.radius) {
+                        target = 'speaker'; tplPhoto = { x: sp.x, y: sp.y, w: sp.radius*2, h: sp.radius*2 }; tplState = speakerPhotoStates[tpl.id];
+                    }
+                }
+                if (!target && uploadedPhoto && photoStates[tpl.id]) {
+                    if (coords.x >= tpl.photo.x && coords.x <= tpl.photo.x + tpl.photo.w && coords.y >= tpl.photo.y && coords.y <= tpl.photo.y + tpl.photo.h) {
+                        target = 'main'; tplPhoto = tpl.photo; tplState = photoStates[tpl.id];
+                    }
+                }
+                if (!target) return;
+                e.preventDefault(); 
+                const zoomFactor = 0.001; let newScale = Math.min(Math.max(1, tplState.userScale + (e.deltaY * -zoomFactor)), 10);
+                const photoWidth = target === 'main' ? uploadedPhoto.width : uploadedSpeakerPhoto.width;
+                const photoHeight = target === 'main' ? uploadedPhoto.height : uploadedSpeakerPhoto.height;
+                const scaledW_before = photoWidth * tplState.baseScale * tplState.userScale; const scaledH_before = photoHeight * tplState.baseScale * tplState.userScale;
+                const relX = (coords.x - tplPhoto.x - tplState.panX) / scaledW_before; const relY = (coords.y - tplPhoto.y - tplState.panY) / scaledH_before;
+                tplState.userScale = newScale;
+                const scaledW_after = photoWidth * tplState.baseScale * tplState.userScale; const scaledH_after = photoHeight * tplState.baseScale * tplState.userScale;
+                tplState.panX = coords.x - tplPhoto.x - (relX * scaledW_after); tplState.panY = coords.y - tplPhoto.y - (relY * scaledH_after);
+                drawSingleCanvas(tpl);
+            }, { passive: false });
+
+            canvas.addEventListener('mousedown', (e) => startPan(getCanvasCoordinates(e))); canvas.addEventListener('mousemove', (e) => doPan(getCanvasCoordinates(e))); window.addEventListener('mouseup', () => activeDrag = null);
+            canvas.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) { startPan(getCanvasCoordinates(e)); } 
+                else if (e.touches.length === 2) { 
+                    const coords = getCanvasCoordinates(e);
+                    if (uploadedSpeakerPhoto && speakerPhotoStates[tpl.id] && Math.hypot(coords.x - (tpl.speakerPhoto.x + tpl.speakerPhoto.radius), coords.y - (tpl.speakerPhoto.y + tpl.speakerPhoto.radius)) <= tpl.speakerPhoto.radius) {
+                        activeDrag = 'speaker_pinch'; initialPinchDistance = getPinchDistance(e.touches); initialPinchScale = speakerPhotoStates[tpl.id].userScale;
+                    } else if (uploadedPhoto && photoStates[tpl.id]) {
+                        activeDrag = 'main_pinch'; initialPinchDistance = getPinchDistance(e.touches); initialPinchScale = photoStates[tpl.id].userScale;
+                    }
+                }
+            }, { passive: false });
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault(); 
+                if (e.touches.length === 1) { doPan(getCanvasCoordinates(e)); } 
+                else if (e.touches.length === 2 && activeDrag) {
+                    const currentDistance = getPinchDistance(e.touches); let pinchScale = (currentDistance / initialPinchDistance) * initialPinchScale;
+                    if(activeDrag === 'main_pinch') photoStates[tpl.id].userScale = Math.min(Math.max(1, pinchScale), 10);
+                    else if (activeDrag === 'speaker_pinch') speakerPhotoStates[tpl.id].userScale = Math.min(Math.max(1, pinchScale), 10);
+                    drawSingleCanvas(tpl);
+                }
+            }, { passive: false });
+            canvas.addEventListener('touchend', () => { activeDrag = null; initialPinchDistance = 0; });
+        }
+
+        // Satırları bölüp bir dizi olarak döndüren yardımcı fonksiyon
+        function getLines(ctx, text, maxWidth) {
+            if(!text) return [];
+            const words = text.split(' '); let lines = []; let currentLine = '';
+            for(let n = 0; n < words.length; n++) {
+                const testLine = currentLine + words[n] + ' '; const metrics = ctx.measureText(testLine);
+                if (metrics.width > maxWidth && n > 0) { lines.push(currentLine.trim()); currentLine = words[n] + ' '; } 
+                else { currentLine = testLine; }
+            }
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        function drawFooter(ctx, tpl, dynamicTextStr) {
+            const f = tpl.footer; if (!f) return;
+            let items = []; 
+            if (loadedLogoFsm && loadedLogoFsm.complete && loadedLogoFsm.naturalHeight > 0) {
+                let w = (loadedLogoFsm.naturalWidth / loadedLogoFsm.naturalHeight) * f.h; items.push({ type: 'img', img: loadedLogoFsm, w: w, h: f.h });
+            }
+            if (dynamicTextStr && dynamicTextStr.trim() !== '') {
+                let fontSize = f.textSize; let lines = []; let textW = 0; let lineHeight = fontSize * 1.2;
+                while (fontSize >= 10) {
+                    ctx.font = `bold ${fontSize}px 'Google Sans', sans-serif`; lines = [];
+                    let words = dynamicTextStr.split(' '); let currentLine = ''; let maxLineWidth = 0;
+                    for (let i = 0; i < words.length; i++) {
+                        let testLine = currentLine + words[i] + ' '; let metrics = ctx.measureText(testLine);
+                        if (metrics.width > f.textMaxWidth && i > 0) {
+                            lines.push(currentLine.trim()); let m2 = ctx.measureText(currentLine.trim());
+                            if(m2.width > maxLineWidth) maxLineWidth = m2.width; currentLine = words[i] + ' ';
+                        } else { currentLine = testLine; }
+                    }
+                    lines.push(currentLine.trim()); let m3 = ctx.measureText(currentLine.trim()); if(m3.width > maxLineWidth) maxLineWidth = m3.width;
+                    lineHeight = fontSize * 1.2;
+                    if (lines.length * lineHeight <= f.h + 10) { textW = maxLineWidth; break; }
+                    fontSize -= 2; 
+                }
+                items.push({ type: 'text', lines: lines, fontSize: fontSize, w: textW, h: lines.length * lineHeight });
+            }
+            if (loadedLogo555 && loadedLogo555.complete && loadedLogo555.naturalHeight > 0) {
+                let w = (loadedLogo555.naturalWidth / loadedLogo555.naturalHeight) * f.h; items.push({ type: 'img', img: loadedLogo555, w: w, h: f.h });
+            }
+            uploadedDynamicLogos.forEach(logoImg => {
+                if (logoImg && logoImg.complete && logoImg.naturalHeight > 0) {
+                    let w = (logoImg.naturalWidth / logoImg.naturalHeight) * f.h; items.push({ type: 'img', img: logoImg, w: w, h: f.h });
+                }
+            });
+
+            let totalWidth = items.reduce((sum, item) => sum + item.w, 0) + (items.length > 1 ? (items.length - 1) * f.gap : 0);
+            let maxAllowedWidth = tpl.width - 80; let scaleFactor = 1; let currentGap = f.gap;
+            if (totalWidth > maxAllowedWidth) {
+                scaleFactor = maxAllowedWidth / totalWidth; currentGap = f.gap * scaleFactor; totalWidth = maxAllowedWidth; 
+                items.forEach(item => { item.w = item.w * scaleFactor; item.h = item.h * scaleFactor; if (item.type === 'text') item.fontSize = item.fontSize * scaleFactor; });
+            }
+            let startX; if (tpl.id === "web-banner") { startX = tpl.eventText.x - (totalWidth / 2); } else { startX = (tpl.width - totalWidth) / 2; }
+            let currX = startX;
+            items.forEach(item => {
+                if (item.type === 'img') {
+                    let imgY = f.y + (f.h - item.h) / 2; ctx.drawImage(item.img, currX, imgY, item.w, item.h); currX += item.w + currentGap;
+                } else if (item.type === 'text') {
+                    ctx.fillStyle = f.textColor; ctx.font = `bold ${item.fontSize}px 'Google Sans', sans-serif`; ctx.textAlign = 'left';
+                    let textStartY = f.y + (f.h - item.h) / 2 + item.fontSize * 0.8; let lh = item.fontSize * 1.2;
+                    item.lines.forEach((line, idx) => { ctx.fillText(line, currX, textStartY + idx * lh); });
+                    currX += item.w + currentGap;
+                }
+            });
+        }
+
+        // ESKİ wrapText FONKSİYONU - Sadece Etkinlik Başlığı İçin Kullanılıyor
+        function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+            const words = text.split(' '); let line = ''; let currentY = y;
+            for(let n = 0; n < words.length; n++) {
+                const testLine = line + words[n] + ' '; const metrics = ctx.measureText(testLine); const testWidth = metrics.width;
+                if (testWidth > maxWidth && n > 0) { ctx.fillText(line, x, currentY); line = words[n] + ' '; currentY += lineHeight; }
+                else { line = testLine; }
+            }
+            ctx.fillText(line, x, currentY);
+            return currentY + lineHeight;
+        }
+
+        function drawSingleCanvas(tpl) {
+            const eName = document.getElementById('eventName').value;
+            let sName = document.getElementById('speakerName').value.trim();
+            let sTitle = document.getElementById('speakerTitle').value.trim();
+
+            let mNameRaw = document.getElementById('moderatorName').value.trim();
+            let mName = mNameRaw;
+            let modTitle = "";
+            let actualModName = "";
+
+            if (mNameRaw !== '') {
+                modTitle = "Moderatör:";
+                if (mNameRaw.toLowerCase().startsWith('moderatör:')) {
+                    actualModName = mNameRaw.substring(10).trim();
+                } else if (mNameRaw.toLowerCase().startsWith('moderatör')) {
+                    actualModName = mNameRaw.substring(9).trim();
+                } else {
+                    actualModName = mNameRaw;
+                }
+            }
+
+            const dateStr = document.getElementById('dateInput').value;
+            const locStr = document.getElementById('locInput').value;
+            const timeStr = document.getElementById('timeInput').value;
+            const footerText = document.getElementById('footerText').value; 
+
+            const canvas = document.getElementById(`canvas-${tpl.id}`);
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Ana Arkaplan
+            if (loadedBackgrounds[tpl.id]) { ctx.drawImage(loadedBackgrounds[tpl.id], 0, 0, canvas.width, canvas.height); } 
+            else { ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+
+            // Ana Fotoğraf
+            if (uploadedPhoto && photoStates[tpl.id]) {
+                ctx.save(); ctx.beginPath(); ctx.roundRect(tpl.photo.x, tpl.photo.y, tpl.photo.w, tpl.photo.h, tpl.photo.radius); ctx.clip(); 
+                const state = photoStates[tpl.id];
+                ctx.drawImage(uploadedPhoto, tpl.photo.x + state.panX, tpl.photo.y + state.panY, uploadedPhoto.width * state.baseScale * state.userScale, uploadedPhoto.height * state.baseScale * state.userScale);
+                ctx.restore();
+            } else {
+                ctx.fillStyle = "#e0e0e0"; ctx.beginPath(); ctx.roundRect(tpl.photo.x, tpl.photo.y, tpl.photo.w, tpl.photo.h, tpl.photo.radius); ctx.fill();
+            }
+
+            const shiftY = (uploadedSpeakerPhoto && tpl.speakerPhoto) ? tpl.speakerPhoto.expandH : 0;
+            const redBoxH = tpl.redBox.h + shiftY;
+            const blueBoxH = tpl.blueBox.h - shiftY;
+            const blueBoxY = tpl.blueBox.y + shiftY;
+
+            // Kırmızı Kutu
+            ctx.fillStyle = "#e14748"; ctx.beginPath(); ctx.roundRect(tpl.redBox.x, tpl.redBox.y, tpl.redBox.w, redBoxH, tpl.redBox.radius); ctx.fill();
+            if (loadedRedBoxBg && loadedRedBoxBg.complete && loadedRedBoxBg.naturalWidth !== 0) {
+                ctx.save(); ctx.beginPath(); ctx.roundRect(tpl.redBox.x, tpl.redBox.y, tpl.redBox.w, redBoxH, tpl.redBox.radius); ctx.clip();
+                ctx.drawImage(loadedRedBoxBg, tpl.redBoxBg.x, tpl.redBoxBg.y + shiftY, tpl.redBoxBg.w, tpl.redBoxBg.h); ctx.restore();
+            }
+
+            // Mavi Kutu
+            ctx.fillStyle = "#00637d"; ctx.beginPath(); ctx.roundRect(tpl.blueBox.x, blueBoxY, tpl.blueBox.w, blueBoxH, tpl.blueBox.radius); ctx.fill();
+            if (loadedBlueBoxBg && loadedBlueBoxBg.complete && loadedBlueBoxBg.naturalWidth !== 0) {
+                ctx.save(); ctx.beginPath(); ctx.roundRect(tpl.blueBox.x, blueBoxY, tpl.blueBox.w, blueBoxH, tpl.blueBox.radius); ctx.clip();
+                ctx.drawImage(loadedBlueBoxBg, tpl.blueBoxBg.x, tpl.blueBoxBg.y + shiftY, tpl.blueBoxBg.w, tpl.blueBoxBg.h); ctx.restore();
+            }
+
+            // Konuşmacı Fotoğrafı
+            if (uploadedSpeakerPhoto && speakerPhotoStates[tpl.id]) {
+                ctx.save(); ctx.beginPath();
+                const cx = tpl.speakerPhoto.x + tpl.speakerPhoto.radius; const cy = tpl.speakerPhoto.y + tpl.speakerPhoto.radius;
+                ctx.arc(cx, cy, tpl.speakerPhoto.radius, 0, Math.PI * 2); ctx.clip();
+                const sState = speakerPhotoStates[tpl.id];
+                ctx.drawImage(uploadedSpeakerPhoto, tpl.speakerPhoto.x + sState.panX, tpl.speakerPhoto.y + sState.panY, uploadedSpeakerPhoto.width * sState.baseScale * sState.userScale, uploadedSpeakerPhoto.height * sState.baseScale * sState.userScale);
+                ctx.restore();
+            }
+
+            // Etkinlik Ana Başlığı
+            ctx.fillStyle = tpl.eventText.color; ctx.font = `bold ${tpl.eventText.size}px 'Google Sans', sans-serif`; ctx.textAlign = tpl.eventText.align;
+            wrapText(ctx, eName, tpl.eventText.x, tpl.eventText.y, tpl.eventText.maxWidth, tpl.eventText.lineHeight);
+
+            // --- KIRMIZI KUTU: YAZILARI DİKEY ORTALAMA MOTORU ---
+            let redBoxLines = [];
+            
+            // Konuşmacı Kısmı
+            let tagSize = tpl.speakerText.size * 0.45; // Global olarak belirledik
+            
+            if (sName !== '') {
+                ctx.font = `300 ${tagSize}px 'Google Sans', sans-serif`;
+                let tagWrapped = getLines(ctx, "Konuşmacı:", tpl.speakerText.maxWidth);
+                tagWrapped.forEach((line, idx) => {
+                    let isLast = idx === tagWrapped.length - 1;
+                    redBoxLines.push({ text: line, font: `300 ${tagSize}px 'Google Sans', sans-serif`, color: "#ffffff", lh: tagSize * 1.2, mb: isLast ? tagSize * 1.3 : 0 });
+                });
+
+                ctx.font = `bold ${tpl.speakerText.size}px 'Google Sans', sans-serif`;
+                let spkWrapped = getLines(ctx, sName, tpl.speakerText.maxWidth);
+                spkWrapped.forEach((line, idx) => {
+                    let isLast = idx === spkWrapped.length - 1;
+                    let hasTitleOrMod = sTitle !== '' || actualModName !== '';
+                    redBoxLines.push({ text: line, font: `bold ${tpl.speakerText.size}px 'Google Sans', sans-serif`, color: tpl.speakerText.color, lh: tpl.speakerText.lineHeight, mb: isLast ? (hasTitleOrMod ? tpl.speakerText.size * 0.1 : 0) : 0 });
+                });
+
+                // Ünvan
+                if (sTitle !== '') {
+                    let titleSize = tpl.speakerText.size * 0.65;
+                    ctx.font = `300 ${titleSize}px 'Google Sans', sans-serif`;
+                    let titleWrapped = getLines(ctx, sTitle, tpl.speakerText.maxWidth);
+                    titleWrapped.forEach((line, idx) => {
+                        let isLast = idx === titleWrapped.length - 1;
+                        redBoxLines.push({ text: line, font: `300 ${titleSize}px 'Google Sans', sans-serif`, color: "#ffffff", lh: titleSize * 1.2, mb: isLast ? (actualModName !== '' ? tpl.speakerText.size * 0.6 : 0) : 0 });
+                    });
+                }
+            }
+
+            // Moderatör Kısmı
+            if (actualModName !== '') {
+                // 1. Satır: "Moderatör:" etiketi (Konuşmacı etiketi ile aynı incelik ve ebatta)
+                ctx.font = `300 ${tagSize}px 'Google Sans', sans-serif`;
+                let modTagWrapped = getLines(ctx, modTitle, tpl.moderatorText.maxWidth);
+                modTagWrapped.forEach((line, idx) => {
+                    let isLast = idx === modTagWrapped.length - 1;
+                    redBoxLines.push({
+                        text: line,
+                        font: `300 ${tagSize}px 'Google Sans', sans-serif`,
+                        color: "#ffffff",
+                        lh: tagSize * 1.2,
+                        mb: isLast ? tagSize * 0.8 : 0
+                    });
+                });
+
+                // 2. Satır: Moderatörün ismi
+                ctx.font = `bold ${tpl.moderatorText.size}px 'Google Sans', sans-serif`;
+                let modWrapped = getLines(ctx, actualModName, tpl.moderatorText.maxWidth);
+                modWrapped.forEach(line => {
+                    redBoxLines.push({ 
+                        text: line, 
+                        font: `bold ${tpl.moderatorText.size}px 'Google Sans', sans-serif`, 
+                        color: tpl.moderatorText.color, 
+                        lh: tpl.moderatorText.lineHeight, 
+                        mb: 0 
+                    });
+                });
+            }
+
+            if (redBoxLines.length > 0) {
+                let totalRedHeight = redBoxLines.reduce((sum, item) => sum + item.lh + item.mb, 0);
+
+                let textAreaTop, textAreaBottom, redStartY;
+                if (uploadedSpeakerPhoto && tpl.speakerPhoto) {
+                    textAreaTop = tpl.speakerPhoto.y + tpl.speakerPhoto.radius * 2 + 10;
+                    redStartY = textAreaTop + redBoxLines[0].lh * 0.8;
+                } else {
+                    textAreaTop = tpl.redBox.y;
+                    textAreaBottom = tpl.redBox.y + redBoxH;
+                    let textAreaHeight = textAreaBottom - textAreaTop;
+                    redStartY = textAreaTop + (textAreaHeight - totalRedHeight) / 2 + redBoxLines[0].lh * 0.8;
+                }
+
+                ctx.textAlign = tpl.speakerText.align;
+                let currentRedY = redStartY;
+                redBoxLines.forEach(item => {
+                    ctx.font = item.font; ctx.fillStyle = item.color;
+                    ctx.fillText(item.text, tpl.speakerText.x, currentRedY);
+                    currentRedY += item.lh + item.mb;
+                });
+            }
+
+            // --- MAVİ KUTU: YAZILARI DİKEY ORTALAMA MOTORU ---
+            let blueBoxLines = [];
+            ctx.font = `bold ${tpl.dateText.size}px 'Google Sans', sans-serif`;
+            
+            if (dateStr.trim() !== '') {
+                let dateWrapped = getLines(ctx, dateStr, tpl.dateText.maxWidth);
+                dateWrapped.forEach(line => blueBoxLines.push({text: line, lh: tpl.dateText.lineHeight}));
+            }
+            if (locStr.trim() !== '') {
+                let locWrapped = getLines(ctx, locStr, tpl.dateText.maxWidth);
+                locWrapped.forEach(line => blueBoxLines.push({text: line, lh: tpl.dateText.lineHeight}));
+            }
+            if (timeStr.trim() !== '') {
+                let timeWrapped = getLines(ctx, timeStr, tpl.dateText.maxWidth);
+                timeWrapped.forEach(line => blueBoxLines.push({text: line, lh: tpl.dateText.lineHeight}));
+            }
+
+            if (blueBoxLines.length > 0) {
+                let totalBlueHeight = blueBoxLines.reduce((sum, item) => sum + item.lh, 0);
+                let blueStartY = blueBoxY + (blueBoxH - totalBlueHeight) / 2 + blueBoxLines[0].lh * 0.8;
+
+                ctx.textAlign = tpl.dateText.align; ctx.fillStyle = tpl.dateText.color;
+                let currentBlueY = blueStartY;
+                blueBoxLines.forEach(item => {
+                    ctx.fillText(item.text, tpl.dateText.x, currentBlueY);
+                    currentBlueY += item.lh;
+                });
+            }
+
+            drawFooter(ctx, tpl, footerText);
+        }
+
+        function drawAllCanvases() {
+            const tpl = templates.find(t => t.id === activeTemplateId);
+            if (tpl) drawSingleCanvas(tpl);
+        }
+
+        function downloadSingle(canvasId, fileName) {
+            try {
+                const canvas = document.getElementById(`canvas-${canvasId}`);
+                const link = document.createElement('a');
+                let safeName = fileName.replace(/[^a-zA-Z0-9ğüşöçİĞÜŞÖÇ]/g, '-').toLowerCase() + ".png";
+                
+                link.download = safeName;
+                link.href = canvas.toDataURL("image/png");
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (err) {
+                alert("İndirme Başarısız!\n\nTarayıcı Güvenliği (CORS) nedeniyle görsel indirilemedi. Lütfen index.html dosyasını çift tıklayarak açmak yerine VS Code üzerinden 'Live Server' eklentisi ile çalıştırın.\n\nHata: " + err.message);
+                console.error(err);
+            }
+        }
+
+        window.onload = () => { document.fonts.ready.then(() => { preloadImagesAndInit(); }); };
+    </script>
+</body>
+</html>
