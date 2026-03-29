@@ -61,7 +61,8 @@
 
         /* Tabs */
         .template-tabs { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; background: white; border-radius: 12px 12px 0 0; padding: 10px 10px 0 10px; box-shadow: 0 -1px 0 0 #eee inset; }
-        .tab-download-wrap { margin-left: auto; padding: 0 2px 10px 8px; border-left: 1px solid #eee; flex-shrink: 0; }
+        .tab-download-wrap { margin-left: auto; padding: 0 2px 10px 8px; border-left: 1px solid #eee; flex-shrink: 0; display: flex; gap: 6px; }
+        .tab-download-wrap .btn-download-all { flex: 1; }
         .template-tab {
             padding: 9px 14px 10px; border-radius: 8px 8px 0 0;
             cursor: pointer; border: none; background: transparent;
@@ -86,11 +87,38 @@
         canvas:active { cursor: grabbing; }
         .download-btn { background-color: #00637d; margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 14px; }
         .download-btn:hover { background-color: #00506a; }
+
+        /* Theme Selector */
+        .theme-options { display: flex; gap: 10px; align-items: center; }
+        .theme-dot {
+            width: 26px; height: 26px; border-radius: 50%;
+            cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+            flex-shrink: 0;
+        }
+        .theme-dot:hover { transform: scale(1.12); }
+        .theme-dot.active { box-shadow: 0 0 0 3px #00637d; }
+        .theme-dot-white { background: #ffffff; border: 1px solid #ccc; }
+        .theme-dot-teal  { background: #00637d; border: 1px solid #00637d; }
+        .theme-dot-white.active { box-shadow: 0 0 0 3px #aaa; }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
+
+        <!-- Tema -->
+        <div class="sidebar-section">
+            <div class="sidebar-section-header">
+                <div class="sidebar-section-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00637d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/><path d="M2 12h20"/></svg>
+                </div>
+                <span class="sidebar-section-title">Tema</span>
+            </div>
+            <div class="theme-options">
+                <div class="theme-dot theme-dot-white active" id="theme-1" onclick="switchTheme(1)" title="Varsayılan tema"></div>
+                <div class="theme-dot theme-dot-teal"  id="theme-2" onclick="switchTheme(2)" title="Alternatif tema"></div>
+            </div>
+        </div>
 
         <!-- Etkinlik -->
         <div class="sidebar-section">
@@ -218,7 +246,7 @@
                 moderatorText: { x: 460, size: 20, color: "#ffffff", align: "left", maxWidth: 280, lineHeight: 25 },
                 
                 dateText: { x: 460, size: 24, color: "#ffffff", align: "left", maxWidth: 280, lineHeight: 30 },
-                footer: { y: 1040, h: 75, gap: 20, textMaxWidth: 200, textSize: 20, textColor: "#00637d" }
+                footer: { y: 1040, h: 75, gap: 20, textMaxWidth: 190, textSize: 20, textColor: "#00637d" }
             },
             { 
                 id: "web-banner", name: "02 - Web Banner", width: 1920, height: 600, bgImage: "arkaplanlar/web-banner.png",
@@ -232,7 +260,7 @@
                 moderatorText: { x: 1440, size: 24, color: "#ffffff", align: "left", maxWidth: 300, lineHeight: 30 },
                 
                 dateText: { x: 1440, size: 25, color: "#ffffff", align: "left", maxWidth: 360, lineHeight: 35 },
-                footer: { y: 450, h: 80, gap: 30, textMaxWidth: 300, textSize: 24, textColor: "#00637d" }
+                footer: { y: 450, h: 80, gap: 30, textMaxWidth: 200, textSize: 24, textColor: "#00637d" }
             },
             { 
                 id: "mobil-banner", name: "03 - Mobil Banner", width: 750, height: 750, bgImage: "arkaplanlar/mobil-banner.png",
@@ -246,7 +274,7 @@
                 moderatorText: { x: 410, size: 16, color: "#ffffff", align: "left", maxWidth: 260, lineHeight: 20 },
                 
                 dateText: { x: 410, size: 20, color: "#ffffff", align: "left", maxWidth: 260, lineHeight: 25 },
-                footer: { y: 640, h: 60, gap: 15, textMaxWidth: 160, textSize: 16, textColor: "#00637d" }
+                footer: { y: 640, h: 60, gap: 15, textMaxWidth: 140, textSize: 15, textColor: "#00637d" }
             },
             { 
                 id: "story", name: "04 - Story", width: 1080, height: 1920, bgImage: "arkaplanlar/story.png",
@@ -260,7 +288,7 @@
                 moderatorText: { x: 590, size: 28, color: "#ffffff", align: "left", maxWidth: 360, lineHeight: 35 },
                 
                 dateText: { x: 590, size: 30, color: "#ffffff", align: "left", maxWidth: 360, lineHeight: 40 },
-                footer: { y: 1600, h: 110, gap: 30, textMaxWidth: 300, textSize: 24, textColor: "#00637d" }
+                footer: { y: 1600, h: 110, gap: 30, textMaxWidth: 180, textSize: 28, textColor: "#00637d" }
             },
             { 
                 id: "post", name: "05 - Sosyal Medya", width: 1080, height: 1350, bgImage: "arkaplanlar/post.png",
@@ -274,7 +302,7 @@
                 moderatorText: { x: 580, size: 26, color: "#ffffff", align: "left", maxWidth: 380, lineHeight: 35 },
                 
                 dateText: { x: 580, size: 30, color: "#ffffff", align: "left", maxWidth: 380, lineHeight: 40 },
-                footer: { y: 1190, h: 90, gap: 30, textMaxWidth: 300, textSize: 24, textColor: "#00637d" }
+                footer: { y: 1190, h: 90, gap: 30, textMaxWidth: 180, textSize: 22, textColor: "#00637d" }
             },
             {
                 id: "tv", name: "06 - TV Ekranı", width: 1920, height: 1080, bgImage: "arkaplanlar/tv.png",
@@ -288,11 +316,51 @@
                 moderatorText: { x: 1015, size: 24, color: "#ffffff", align: "left", maxWidth: 310, lineHeight: 30 },
 
                 dateText: { x: 1400, size: 32, color: "#ffffff", align: "left", maxWidth: 320, lineHeight: 42 },
-                footer: { y: 890, h: 120, gap: 40, textMaxWidth: 400, textSize: 28, textColor: "#00637d" }
+                footer: { y: 890, h: 120, gap: 40, textMaxWidth: 200, textSize: 25, textColor: "#00637d" }
             }
         ];
 
         let activeTemplateId = templates[0].id;
+        let activeTheme = 1;
+
+        const themeBgMap = {
+            1: { afis: "arkaplanlar/afis.png", "web-banner": "arkaplanlar/web-banner.png", "mobil-banner": "arkaplanlar/mobil-banner.png", story: "arkaplanlar/story.png", post: "arkaplanlar/post.png", tv: "arkaplanlar/tv.png" },
+            2: { afis: "arkaplanlar/afis-2.png", "web-banner": "arkaplanlar/web-banner-2.png", "mobil-banner": "arkaplanlar/mobil-banner-2.png", story: "arkaplanlar/story-2.png", post: "arkaplanlar/post-2.png", tv: "arkaplanlar/tv-2.png" }
+        };
+
+        const themeColors = {
+            1: { redBox: "#e14748", blueBox: "#00637d", eventText: "#00637d" },
+            2: { redBox: "#007e9b", blueBox: "#003a47", eventText: "#ffffff" }
+        };
+
+        const themeAssets = {
+            1: { fsm: "arkaplanlar/logo-fsm.png", logo555: "arkaplanlar/logo-555.png", redBg: "arkaplanlar/kutu-1-arkaplan.png", blueBg: "arkaplanlar/kutu-2-arkaplan.png" },
+            2: { fsm: "arkaplanlar/logo-fsm-2.png", logo555: "arkaplanlar/logo-555-2.png", redBg: "arkaplanlar/kutu-3-arkaplan.png", blueBg: "arkaplanlar/kutu-4-arkaplan.png" }
+        };
+
+        function switchTheme(theme) {
+            if (activeTheme === theme) return;
+            activeTheme = theme;
+            document.getElementById('theme-1').classList.toggle('active', theme === 1);
+            document.getElementById('theme-2').classList.toggle('active', theme === 2);
+            const assets = themeAssets[theme];
+            let loaded = 0;
+            const total = templates.length + 4;
+            function onLoad() { loaded++; if (loaded === total) drawAllCanvases(); }
+
+            templates.forEach(tpl => {
+                tpl.bgImage = themeBgMap[theme][tpl.id];
+                const img = new Image();
+                img.onload = () => { loadedBackgrounds[tpl.id] = img; onLoad(); };
+                img.onerror = onLoad;
+                img.src = tpl.bgImage;
+            });
+
+            const fsmImg = new Image(); fsmImg.onload = () => { loadedLogoFsm = fsmImg; onLoad(); }; fsmImg.onerror = onLoad; fsmImg.src = assets.fsm;
+            const img555 = new Image(); img555.onload = () => { loadedLogo555 = img555; onLoad(); }; img555.onerror = onLoad; img555.src = assets.logo555;
+            const redBg = new Image(); redBg.onload = () => { loadedRedBoxBg = redBg; onLoad(); }; redBg.onerror = onLoad; redBg.src = assets.redBg;
+            const blueBg = new Image(); blueBg.onload = () => { loadedBlueBoxBg = blueBg; onLoad(); }; blueBg.onerror = onLoad; blueBg.src = assets.blueBg;
+        }
 
         let uploadedPhoto = null;
         let uploadedSpeakerPhoto = null;
@@ -333,6 +401,11 @@
             if (tpl) drawSingleCanvas(tpl);
         }
 
+        function downloadActive() {
+            const tpl = templates.find(t => t.id === activeTemplateId);
+            if (tpl) downloadSingle(tpl.id, tpl.name);
+        }
+
         function downloadAll() {
             templates.forEach((tpl, i) => {
                 setTimeout(() => downloadSingle(tpl.id, tpl.name), i * 80);
@@ -353,7 +426,7 @@
                     <span class="tab-size">${tpl.width}×${tpl.height}</span>
                 </button>`;
             });
-            tabBar.innerHTML += `<div class="tab-download-wrap"><button class="btn-download-all" onclick="downloadAll()">⬇ Tümünü İndir</button></div>`;
+            tabBar.innerHTML += `<div class="tab-download-wrap"><button class="btn-download-all" onclick="downloadActive()">⬇ Bu Görseli İndir</button><button class="btn-download-all" onclick="downloadAll()">⬇ Tümünü İndir</button></div>`;
             container.appendChild(tabBar);
 
             // Canvas cards
@@ -364,7 +437,6 @@
                 card.dataset.id = tpl.id;
                 card.innerHTML = `
                     <canvas id="canvas-${tpl.id}" width="${tpl.width}" height="${tpl.height}"></canvas>
-                    <button class="download-btn" onclick="downloadSingle('${tpl.id}', '${tpl.name}')">⬇ Bu Görseli İndir</button>
                 `;
                 container.appendChild(card);
             });
@@ -540,8 +612,9 @@
                     lines.push(currentLine.trim()); let m3 = ctx.measureText(currentLine.trim()); if(m3.width > maxLineWidth) maxLineWidth = m3.width;
                     lineHeight = fontSize * 1.2;
                     if (lines.length * lineHeight <= f.h + 10) { textW = maxLineWidth; break; }
-                    fontSize -= 2; 
+                    fontSize -= 2;
                 }
+                if (items.length > 0) items.push({ type: 'divider', w: 2, h: f.h });
                 items.push({ type: 'text', lines: lines, fontSize: fontSize, w: textW, h: lines.length * lineHeight });
             }
             if (loadedLogo555 && loadedLogo555.complete && loadedLogo555.naturalHeight > 0) {
@@ -557,15 +630,20 @@
             let maxAllowedWidth = tpl.width - 80; let scaleFactor = 1; let currentGap = f.gap;
             if (totalWidth > maxAllowedWidth) {
                 scaleFactor = maxAllowedWidth / totalWidth; currentGap = f.gap * scaleFactor; totalWidth = maxAllowedWidth; 
-                items.forEach(item => { item.w = item.w * scaleFactor; item.h = item.h * scaleFactor; if (item.type === 'text') item.fontSize = item.fontSize * scaleFactor; });
+                items.forEach(item => { if (item.type === 'divider') return; item.w = item.w * scaleFactor; item.h = item.h * scaleFactor; if (item.type === 'text') item.fontSize = item.fontSize * scaleFactor; });
             }
             let startX; if (tpl.id === "web-banner") { startX = tpl.eventText.x - (totalWidth / 2); } else { startX = (tpl.width - totalWidth) / 2; }
             let currX = startX;
             items.forEach(item => {
                 if (item.type === 'img') {
                     let imgY = f.y + (f.h - item.h) / 2; ctx.drawImage(item.img, currX, imgY, item.w, item.h); currX += item.w + currentGap;
+                } else if (item.type === 'divider') {
+                    const divColor = activeTheme === 2 ? "#ffffff" : "#00637d";
+                    const divY = f.y + (f.h - item.h) / 2;
+                    ctx.fillStyle = divColor; ctx.fillRect(currX, divY, item.w, item.h);
+                    currX += item.w + currentGap;
                 } else if (item.type === 'text') {
-                    ctx.fillStyle = f.textColor; ctx.font = `bold ${item.fontSize}px 'Google Sans', sans-serif`; ctx.textAlign = 'left';
+                    ctx.fillStyle = activeTheme === 2 ? "#ffffff" : f.textColor; ctx.font = `bold ${item.fontSize}px 'Google Sans', sans-serif`; ctx.textAlign = 'left';
                     let textStartY = f.y + (f.h - item.h) / 2 + item.fontSize * 0.8; let lh = item.fontSize * 1.2;
                     item.lines.forEach((line, idx) => { ctx.fillText(line, currX, textStartY + idx * lh); });
                     currX += item.w + currentGap;
@@ -637,14 +715,14 @@
             const blueBoxY = tpl.blueBox.y + shiftY;
 
             // Kırmızı Kutu
-            ctx.fillStyle = "#e14748"; ctx.beginPath(); ctx.roundRect(tpl.redBox.x, tpl.redBox.y, tpl.redBox.w, redBoxH, tpl.redBox.radius); ctx.fill();
+            ctx.fillStyle = themeColors[activeTheme].redBox; ctx.beginPath(); ctx.roundRect(tpl.redBox.x, tpl.redBox.y, tpl.redBox.w, redBoxH, tpl.redBox.radius); ctx.fill();
             if (loadedRedBoxBg && loadedRedBoxBg.complete && loadedRedBoxBg.naturalWidth !== 0) {
                 ctx.save(); ctx.beginPath(); ctx.roundRect(tpl.redBox.x, tpl.redBox.y, tpl.redBox.w, redBoxH, tpl.redBox.radius); ctx.clip();
                 ctx.drawImage(loadedRedBoxBg, tpl.redBoxBg.x, tpl.redBoxBg.y + shiftY, tpl.redBoxBg.w, tpl.redBoxBg.h); ctx.restore();
             }
 
             // Mavi Kutu
-            ctx.fillStyle = "#00637d"; ctx.beginPath(); ctx.roundRect(tpl.blueBox.x, blueBoxY, tpl.blueBox.w, blueBoxH, tpl.blueBox.radius); ctx.fill();
+            ctx.fillStyle = themeColors[activeTheme].blueBox; ctx.beginPath(); ctx.roundRect(tpl.blueBox.x, blueBoxY, tpl.blueBox.w, blueBoxH, tpl.blueBox.radius); ctx.fill();
             if (loadedBlueBoxBg && loadedBlueBoxBg.complete && loadedBlueBoxBg.naturalWidth !== 0) {
                 ctx.save(); ctx.beginPath(); ctx.roundRect(tpl.blueBox.x, blueBoxY, tpl.blueBox.w, blueBoxH, tpl.blueBox.radius); ctx.clip();
                 ctx.drawImage(loadedBlueBoxBg, tpl.blueBoxBg.x, tpl.blueBoxBg.y + shiftY, tpl.blueBoxBg.w, tpl.blueBoxBg.h); ctx.restore();
@@ -661,7 +739,7 @@
             }
 
             // Etkinlik Ana Başlığı
-            ctx.fillStyle = tpl.eventText.color; ctx.font = `bold ${tpl.eventText.size}px 'Google Sans', sans-serif`; ctx.textAlign = tpl.eventText.align;
+            ctx.fillStyle = themeColors[activeTheme].eventText; ctx.font = `bold ${tpl.eventText.size}px 'Google Sans', sans-serif`; ctx.textAlign = tpl.eventText.align;
             wrapText(ctx, eName, tpl.eventText.x, tpl.eventText.y, tpl.eventText.maxWidth, tpl.eventText.lineHeight);
 
             // --- KIRMIZI KUTU: YAZILARI DİKEY ORTALAMA MOTORU ---
