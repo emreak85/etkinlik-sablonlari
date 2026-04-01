@@ -432,6 +432,9 @@
             });
             tabBar.innerHTML += `<div class="tab-download-wrap"><button class="btn-download-all" onclick="downloadActive()">⬇ Bu Görseli İndir</button><button class="btn-download-all" onclick="downloadAll()">⬇ Tümünü İndir</button></div>`;
             container.appendChild(tabBar);
+            const tabs = tabBar.querySelectorAll('.template-tab');
+            const maxW = Math.max(...[...tabs].map(t => t.offsetWidth));
+            tabs.forEach(t => t.style.width = maxW + 'px');
 
             // Canvas cards
             templates.forEach(tpl => {
