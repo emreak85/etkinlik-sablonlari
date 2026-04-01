@@ -28,6 +28,10 @@
 
         /* === SIDEBAR === */
         .sidebar { width: 310px; flex-shrink: 0; overflow-y: auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: #00637d; border-radius: 3px; }
+        .sidebar::-webkit-scrollbar-thumb:hover { background: #00506a; }
         .sidebar-section { padding: 18px 18px; border-bottom: 1px solid #f2f2f2; }
         .sidebar-section:last-child { border-bottom: none; }
         .sidebar-section-header { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
