@@ -104,6 +104,17 @@
         .theme-dot-white { background: #ffffff; border: 1px solid #ccc; }
         .theme-dot-teal  { background: #00637d; border: 1px solid #00637d; }
         .theme-dot-white.active { box-shadow: 0 0 0 3px #aaa; }
+
+        /* Çoklu Konuşmacı */
+        .speaker-card { background: #f8f9fa; border: 1px solid #e5e5e5; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+        .speaker-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .speaker-card-label { font-size: 12px; font-weight: 700; color: #00637d; text-transform: uppercase; letter-spacing: 0.4px; }
+        .btn-add-speaker { background: #00637d; font-size: 12px; padding: 8px; border-radius: 6px; width: 100%; margin-top: 4px; }
+        .btn-add-speaker:hover { background: #00506a; }
+        .btn-add-speaker:disabled { background-color: #aaa; cursor: not-allowed; transform: none; }
+        .photo-section-disabled { opacity: 0.38; pointer-events: none; }
+        .photo-disabled-note { display: none; font-size: 11px; color: #e05; margin-top: 4px; }
+        .photo-section-disabled .photo-disabled-note { display: block; }
     </style>
 </head>
 <body>
@@ -134,7 +145,7 @@
             </div>
             <div class="form-group">
                 <label>Etkinlik Adı</label>
-                <input type="text" id="eventName" value="Yükseköğretimde Yapay Zeka" onkeyup="drawAllCanvases()">
+                <input type="text" id="eventName" value="" onkeyup="drawAllCanvases()">
             </div>
         </div>
 
@@ -146,22 +157,17 @@
                 </div>
                 <span class="sidebar-section-title">Konuşmacı</span>
             </div>
-            <div class="form-group">
+            <div id="speakerPhotoSection" class="form-group">
                 <label>Fotoğraf (İsteğe Bağlı)</label>
                 <input type="file" id="speakerPhotoInput" accept="image/*" onchange="handleSpeakerPhotoUpload(event)">
                 <button class="btn-remove btn-small-clear" onclick="clearSpeakerPhoto()">✕ Fotoğrafı Kaldır</button>
+                <span class="photo-disabled-note">Birden fazla konuşmacıda fotoğraf devre dışı</span>
             </div>
-            <div class="form-group">
-                <label>Ad Soyad</label>
-                <input type="text" id="speakerName" value="Prof. Dr. Yusuf Sinan Akgül" onkeyup="drawAllCanvases()">
-            </div>
-            <div class="form-group">
-                <label>Ünvan (İsteğe Bağlı)</label>
-                <input type="text" id="speakerTitle" placeholder="Örn: Bilgisayar Müh. Bölümü" onkeyup="drawAllCanvases()">
-            </div>
-            <div class="form-group">
+            <div id="speakersContainer"></div>
+            <button id="addSpeakerBtn" class="btn-add-speaker" onclick="addSpeaker()">+ Konuşmacı Ekle</button>
+            <div class="form-group" style="margin-top:14px;">
                 <label>Moderatör (İsteğe Bağlı)</label>
-                <input type="text" id="moderatorName" value="Doç. Dr. Ahmet Yılmaz" onkeyup="drawAllCanvases()">
+                <input type="text" id="moderatorName" value="" onkeyup="drawAllCanvases()">
             </div>
         </div>
 
@@ -175,15 +181,15 @@
             </div>
             <div class="form-group">
                 <label>Tarih</label>
-                <input type="text" id="dateInput" value="14 Nisan 2026" onkeyup="drawAllCanvases()">
+                <input type="text" id="dateInput" value="" onkeyup="drawAllCanvases()">
             </div>
             <div class="form-group">
                 <label>Yer</label>
-                <input type="text" id="locInput" value="Topkapı Yerleşkesi" onkeyup="drawAllCanvases()">
+                <input type="text" id="locInput" value="" onkeyup="drawAllCanvases()">
             </div>
             <div class="form-group">
                 <label>Saat</label>
-                <input type="text" id="timeInput" value="Saat: 14:00" onkeyup="drawAllCanvases()">
+                <input type="text" id="timeInput" value="" onkeyup="drawAllCanvases()">
             </div>
         </div>
 
@@ -241,8 +247,8 @@
             { 
                 id: "afis", name: "01 - Afiş", width: 840, height: 1190, bgImage: "arkaplanlar/afis.png",
                 photo: { x: 70, y: 350, w: 340, h: 600, radius: 20 },
-                redBox: { x: 430, y: 350, w: 340, h: 290, radius: 20 }, redBoxBg: { x: 370, y: 550, w: 485, h: 485 }, 
-                blueBox: { x: 430, y: 660, w: 340, h: 290, radius: 20 }, blueBoxBg: { x: 640, y: 630, w: 150, h: 220 }, 
+                redBox: { x: 430, y: 350, w: 340, h: 290, radius: 20 }, redBoxBg: { x: 370, y: 560, w: 485, h: 485 }, 
+                blueBox: { x: 430, y: 660, w: 340, h: 290, radius: 20 }, blueBoxBg: { x: 640, y: 620, w: 150, h: 220 }, 
                 eventText: { x: 420, y: 150, size: 70, color: "#00637d", align: "center", maxWidth: 700, lineHeight: 80 },
                 
                 speakerPhoto: { x: 460, y: 380, radius: 50, expandH: 90 },
@@ -250,55 +256,55 @@
                 moderatorText: { x: 460, size: 20, color: "#ffffff", align: "left", maxWidth: 280, lineHeight: 25 },
                 
                 dateText: { x: 460, size: 24, color: "#ffffff", align: "left", maxWidth: 280, lineHeight: 30 },
-                footer: { y: 1040, h: 75, gap: 20, textMaxWidth: 190, textSize: 20, textColor: "#00637d" }
+                footer: { y: 1040, h: 75, gap: 20, textMaxWidth: 190, textSize: 20, textColor: "#00637d", boxMargin: 60 }
             },
-            { 
+            {
                 id: "web-banner", name: "02 - Web Banner", width: 1920, height: 600, bgImage: "arkaplanlar/web-banner.png",
-                photo: { x: 1000, y: 38, w: 380, h: 525, radius: 20 },
-                redBox: { x: 1400, y: 38, w: 420, h: 252, radius: 20 }, redBoxBg: { x: 1400, y: 158, w: 420, h: 420 },
-                blueBox: { x: 1400, y: 311, w: 420, h: 252, radius: 20 }, blueBoxBg: { x: 1720, y: 301, w: 115, h: 165 },
+                photo: { x: 1000, y: 38, w: 380, h: 500, radius: 20 },
+                redBox: { x: 1400, y: 50, w: 420, h: 240, radius: 20 }, redBoxBg: { x: 1400, y: 158, w: 420, h: 420 },
+                blueBox: { x: 1400, y: 310, w: 420, h: 240, radius: 20 }, blueBoxBg: { x: 1720, y: 301, w: 115, h: 165 },
                 eventText: { x: 500, y: 200, size: 80, color: "#00637d", align: "center", maxWidth: 800, lineHeight: 90 },
 
-                speakerPhoto: { x: 1440, y: 58, radius: 35, expandH: 70 },
+                speakerPhoto: { x: 1440, y: 70, radius: 35, expandH: 70 },
                 speakerText: { x: 1440, size: 30, color: "#ffffff", align: "left", maxWidth: 300, lineHeight: 35 },
                 moderatorText: { x: 1440, size: 24, color: "#ffffff", align: "left", maxWidth: 300, lineHeight: 30 },
                 
                 dateText: { x: 1440, size: 25, color: "#ffffff", align: "left", maxWidth: 360, lineHeight: 35 },
-                footer: { y: 450, h: 80, gap: 30, textMaxWidth: 200, textSize: 24, textColor: "#00637d" }
+                footer: { y: 450, h: 80, gap: 30, textMaxWidth: 200, textSize: 24, textColor: "#00637d", boxMargin: 0 }
             },
-            { 
+            {
                 id: "mobil-banner", name: "03 - Mobil Banner", width: 750, height: 750, bgImage: "arkaplanlar/mobil-banner.png",
-                photo: { x: 50, y: 180, w: 310, h: 420, radius: 15 },
-                redBox: { x: 380, y: 180, w: 320, h: 200, radius: 15 }, redBoxBg: { x: 380, y: 280, w: 320, h: 320 },
-                blueBox: { x: 380, y: 400, w: 320, h: 200, radius: 15 }, blueBoxBg: { x: 610, y: 370, w: 115, h: 165 },
+                photo: { x: 50, y: 200, w: 310, h: 500, radius: 15 },
+                redBox: { x: 380, y: 200, w: 320, h: 200, radius: 15 }, redBoxBg: { x: 380, y: 280, w: 320, h: 320 },
+                blueBox: { x: 380, y: 400, w: 320, h: 200, radius: 15 }, blueBoxBg: { x: 610, y: 380, w: 115, h: 165 },
                 eventText: { x: 375, y: 100, size: 45, color: "#00637d", align: "center", maxWidth: 650, lineHeight: 50 },
                 
-                speakerPhoto: { x: 410, y: 200, radius: 40, expandH: 90 },
+                speakerPhoto: { x: 410, y: 230, radius: 40, expandH: 90 },
                 speakerText: { x: 410, size: 25, color: "#ffffff", align: "left", maxWidth: 260, lineHeight: 30 },
                 moderatorText: { x: 410, size: 16, color: "#ffffff", align: "left", maxWidth: 260, lineHeight: 20 },
                 
                 dateText: { x: 410, size: 20, color: "#ffffff", align: "left", maxWidth: 260, lineHeight: 25 },
-                footer: { y: 640, h: 60, gap: 15, textMaxWidth: 140, textSize: 15, textColor: "#00637d" }
+                footer: { y: 650, h: 60, gap: 15, textMaxWidth: 140, textSize: 15, textColor: "#00637d", boxMargin: 30 }
             },
-            { 
+            {
                 id: "story", name: "04 - Story", width: 1080, height: 1920, bgImage: "arkaplanlar/story.png",
-                photo: { x: 100, y: 550, w: 420, h: 880, radius: 25 },
-                redBox: { x: 550, y: 550, w: 430, h: 425, radius: 25 }, redBoxBg: { x: 550, y: 850, w: 430, h: 430 },
-                blueBox: { x: 550, y: 1000, w: 430, h: 425, radius: 25 }, blueBoxBg: { x: 840, y: 950, w: 192, h: 276 },
-                eventText: { x: 540, y: 300, size: 90, color: "#00637d", align: "center", maxWidth: 900, lineHeight: 95 },
+                photo: { x: 100, y: 550, w: 420, h: 600, radius: 25 },
+                redBox: { x: 550, y: 550, w: 430, h: 364, radius: 25 }, redBoxBg: { x: 550, y: 790, w: 430, h: 430 },
+                blueBox: { x: 550, y: 939, w: 430, h: 364, radius: 25 }, blueBoxBg: { x: 830, y: 919, w: 192, h: 276 },
+                eventText: { x: 540, y: 350, size: 90, color: "#00637d", align: "center", maxWidth: 900, lineHeight: 95 },
                 
                 speakerPhoto: { x: 590, y: 590, radius: 70, expandH: 140 },
                 speakerText: { x: 590, size: 40, color: "#ffffff", align: "left", maxWidth: 360, lineHeight: 50 },
                 moderatorText: { x: 590, size: 28, color: "#ffffff", align: "left", maxWidth: 360, lineHeight: 35 },
                 
                 dateText: { x: 590, size: 30, color: "#ffffff", align: "left", maxWidth: 360, lineHeight: 40 },
-                footer: { y: 1600, h: 110, gap: 30, textMaxWidth: 180, textSize: 28, textColor: "#00637d" }
+                footer: { y: 1600, h: 110, gap: 30, textMaxWidth: 180, textSize: 28, textColor: "#00637d", boxMargin: 60 }
             },
-            { 
+            {
                 id: "post", name: "05 - Sosyal Medya", width: 1080, height: 1350, bgImage: "arkaplanlar/post.png",
                 photo: { x: 90, y: 350, w: 420, h: 790, radius: 25 },
-                redBox: { x: 540, y: 350, w: 450, h: 385, radius: 25 }, redBoxBg: { x: 540, y: 600, w: 450, h: 450 },
-                blueBox: { x: 540, y: 755, w: 450, h: 385, radius: 25 }, blueBoxBg: { x: 850, y: 740, w: 174, h: 250 },
+                redBox: { x: 540, y: 350, w: 450, h: 385, radius: 25 }, redBoxBg: { x: 540, y: 620, w: 450, h: 450 },
+                blueBox: { x: 540, y: 755, w: 450, h: 385, radius: 25 }, blueBoxBg: { x: 850, y: 700, w: 174, h: 250 },
                 eventText: { x: 540, y: 180, size: 75, color: "#00637d", align: "center", maxWidth: 900, lineHeight: 85 },
                 
                 speakerPhoto: { x: 580, y: 390, radius: 55, expandH: 100 },
@@ -306,13 +312,13 @@
                 moderatorText: { x: 580, size: 26, color: "#ffffff", align: "left", maxWidth: 380, lineHeight: 35 },
                 
                 dateText: { x: 580, size: 30, color: "#ffffff", align: "left", maxWidth: 380, lineHeight: 40 },
-                footer: { y: 1190, h: 90, gap: 30, textMaxWidth: 180, textSize: 22, textColor: "#00637d" }
+                footer: { y: 1190, h: 90, gap: 30, textMaxWidth: 180, textSize: 22, textColor: "#00637d", boxMargin: 60 }
             },
             {
                 id: "tv", name: "06 - TV Ekranı", width: 1920, height: 1080, bgImage: "arkaplanlar/tv.png",
                 photo: { x: 170, y: 300, w: 800, h: 500, radius: 25 },
-                redBox: { x: 990, y: 300, w: 370, h: 500, radius: 25 }, redBoxBg: { x: 895, y: 710, w: 560, h: 560 },
-                blueBox: { x: 1380, y: 300, w: 370, h: 500, radius: 25 }, blueBoxBg: { x: 1619, y: 295, w: 173, h: 248 },
+                redBox: { x: 990, y: 300, w: 370, h: 500, radius: 25 }, redBoxBg: { x: 895, y: 610, w: 560, h: 560 },
+                blueBox: { x: 1380, y: 300, w: 370, h: 500, radius: 25 }, blueBoxBg: { x: 1619, y: 250, w: 173, h: 248 },
                 eventText: { x: 960, y: 200, size: 85, color: "#00637d", align: "center", maxWidth: 1600, lineHeight: 95 },
 
                 speakerPhoto: { x: 1015, y: 320, radius: 45, expandH: 0 },
@@ -320,7 +326,7 @@
                 moderatorText: { x: 1015, size: 24, color: "#ffffff", align: "left", maxWidth: 310, lineHeight: 30 },
 
                 dateText: { x: 1400, size: 32, color: "#ffffff", align: "left", maxWidth: 320, lineHeight: 42 },
-                footer: { y: 890, h: 120, gap: 40, textMaxWidth: 200, textSize: 25, textColor: "#00637d" }
+                footer: { y: 890, h: 120, gap: 40, textMaxWidth: 200, textSize: 25, textColor: "#00637d", boxMargin: 60 }
             }
         ];
 
@@ -366,6 +372,8 @@
             const blueBg = new Image(); blueBg.onload = () => { loadedBlueBoxBg = blueBg; onLoad(); }; blueBg.onerror = onLoad; blueBg.src = assets.blueBg;
         }
 
+        let speakerList = [{ name: '', title: '' }];
+
         let uploadedPhoto = null;
         let uploadedSpeakerPhoto = null;
         
@@ -376,8 +384,9 @@
         let loadedLogo555 = null;
         
         // FOTOĞRAF HAFIZALARI
-        let photoStates = {}; 
-        let speakerPhotoStates = {}; 
+        let photoStates = {};
+        let speakerPhotoStates = {};
+        let dynRenderState = {};
 
         let uploadedDynamicLogos = []; 
         let logoInputCount = 1;
@@ -449,7 +458,60 @@
             });
 
             templates.forEach(tpl => setupCanvasEvents(document.getElementById(`canvas-${tpl.id}`), tpl));
+            renderSpeakerInputs();
             drawAllCanvases();
+        }
+
+        function renderSpeakerInputs() {
+            const container = document.getElementById('speakersContainer');
+            container.innerHTML = '';
+            speakerList.forEach((sp, i) => {
+                const card = document.createElement('div');
+                card.className = 'speaker-card';
+                card.innerHTML = `
+                    <div class="speaker-card-header">
+                        <span class="speaker-card-label">${speakerList.length > 1 ? (i + 1) + '. Konuşmacı' : 'Konuşmacı'}</span>
+                        ${i > 0 ? `<button class="btn-remove btn-small-clear" onclick="removeSpeaker(${i})">✕ Kaldır</button>` : ''}
+                    </div>
+                    <div class="form-group">
+                        <label>Ad Soyad</label>
+                        <input type="text" value="${sp.name}" oninput="speakerList[${i}].name = this.value; drawAllCanvases();">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0">
+                        <label>Ünvan (İsteğe Bağlı)</label>
+                        <input type="text" value="${sp.title}" placeholder="Örn: Bilgisayar Müh. Bölümü" oninput="speakerList[${i}].title = this.value; drawAllCanvases();">
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            const addBtn = document.getElementById('addSpeakerBtn');
+            if (addBtn) addBtn.disabled = speakerList.length >= 3;
+            updateSpeakerPhotoVisibility();
+        }
+
+        function addSpeaker() {
+            if (speakerList.length >= 3) return;
+            speakerList.push({ name: '', title: '' });
+            renderSpeakerInputs();
+            drawAllCanvases();
+        }
+
+        function removeSpeaker(i) {
+            speakerList.splice(i, 1);
+            renderSpeakerInputs();
+            drawAllCanvases();
+        }
+
+        function updateSpeakerPhotoVisibility() {
+            const photoSection = document.getElementById('speakerPhotoSection');
+            if (!photoSection) return;
+            if (speakerList.length > 1) {
+                photoSection.classList.add('photo-section-disabled');
+                uploadedSpeakerPhoto = null;
+                speakerPhotoStates = {};
+            } else {
+                photoSection.classList.remove('photo-section-disabled');
+            }
         }
 
         function addLogoInput() {
@@ -493,9 +555,8 @@
             reader.onload = function(e) {
                 uploadedPhoto = new Image(); uploadedPhoto.onload = function() { 
                     templates.forEach(tpl => {
-                        const coverScale = Math.max(tpl.photo.w / uploadedPhoto.width, tpl.photo.h / uploadedPhoto.height);
-                        const scaledWidth = uploadedPhoto.width * coverScale; const scaledHeight = uploadedPhoto.height * coverScale;
-                        photoStates[tpl.id] = { baseScale: coverScale, userScale: 1, panX: (tpl.photo.w - scaledWidth) / 2, panY: (tpl.photo.h - scaledHeight) / 2 };
+                        const fitScale = tpl.photo.h / uploadedPhoto.height;
+                        photoStates[tpl.id] = { baseScale: fitScale, userScale: 1, panX: 0, panY: 0 };
                     });
                     drawAllCanvases(); 
                 }; uploadedPhoto.src = e.target.result;
@@ -514,14 +575,18 @@
             function getPinchDistance(touches) { return Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY); }
             
             function startPan(coords) {
+                const drs = dynRenderState[tpl.id] || {};
                 if (uploadedSpeakerPhoto && speakerPhotoStates[tpl.id]) {
                     const sp = tpl.speakerPhoto;
-                    if (Math.hypot(coords.x - (sp.x + sp.radius), coords.y - (sp.y + sp.radius)) <= sp.radius) {
+                    const spY = drs.speakerPhotoY || sp.y;
+                    if (Math.hypot(coords.x - (sp.x + sp.radius), coords.y - (spY + sp.radius)) <= sp.radius) {
                         activeDrag = 'speaker'; startDragX = coords.x - speakerPhotoStates[tpl.id].panX; startDragY = coords.y - speakerPhotoStates[tpl.id].panY; return;
                     }
                 }
                 if (uploadedPhoto && photoStates[tpl.id]) {
-                    if (coords.x >= tpl.photo.x && coords.x <= tpl.photo.x + tpl.photo.w && coords.y >= tpl.photo.y && coords.y <= tpl.photo.y + tpl.photo.h) {
+                    const pY = drs.photoY !== undefined ? drs.photoY : tpl.photo.y;
+                    const pH = drs.photoH || tpl.photo.h;
+                    if (coords.x >= tpl.photo.x && coords.x <= tpl.photo.x + tpl.photo.w && coords.y >= pY && coords.y <= pY + pH) {
                         activeDrag = 'main'; startDragX = coords.x - photoStates[tpl.id].panX; startDragY = coords.y - photoStates[tpl.id].panY;
                     }
                 }
@@ -535,16 +600,20 @@
 
             canvas.addEventListener('wheel', (e) => {
                 const coords = getCanvasCoordinates(e); let target = null; let tplPhoto = null; let tplState = null;
-                
+                const drs = dynRenderState[tpl.id] || {};
+
                 if (uploadedSpeakerPhoto && speakerPhotoStates[tpl.id]) {
                     const sp = tpl.speakerPhoto;
-                    if (Math.hypot(coords.x - (sp.x + sp.radius), coords.y - (sp.y + sp.radius)) <= sp.radius) {
-                        target = 'speaker'; tplPhoto = { x: sp.x, y: sp.y, w: sp.radius*2, h: sp.radius*2 }; tplState = speakerPhotoStates[tpl.id];
+                    const spY = drs.speakerPhotoY || sp.y;
+                    if (Math.hypot(coords.x - (sp.x + sp.radius), coords.y - (spY + sp.radius)) <= sp.radius) {
+                        target = 'speaker'; tplPhoto = { x: sp.x, y: spY, w: sp.radius*2, h: sp.radius*2 }; tplState = speakerPhotoStates[tpl.id];
                     }
                 }
                 if (!target && uploadedPhoto && photoStates[tpl.id]) {
-                    if (coords.x >= tpl.photo.x && coords.x <= tpl.photo.x + tpl.photo.w && coords.y >= tpl.photo.y && coords.y <= tpl.photo.y + tpl.photo.h) {
-                        target = 'main'; tplPhoto = tpl.photo; tplState = photoStates[tpl.id];
+                    const pY = drs.photoY !== undefined ? drs.photoY : tpl.photo.y;
+                    const pH = drs.photoH || tpl.photo.h;
+                    if (coords.x >= tpl.photo.x && coords.x <= tpl.photo.x + tpl.photo.w && coords.y >= pY && coords.y <= pY + pH) {
+                        target = 'main'; tplPhoto = { x: tpl.photo.x, y: pY, w: tpl.photo.w, h: pH }; tplState = photoStates[tpl.id];
                     }
                 }
                 if (!target) return;
@@ -672,8 +741,7 @@
 
         function drawSingleCanvas(tpl) {
             const eName = document.getElementById('eventName').value;
-            let sName = document.getElementById('speakerName').value.trim();
-            let sTitle = document.getElementById('speakerTitle').value.trim();
+            const activeSpeakers = speakerList.filter(s => s.name.trim() !== '');
 
             let mNameRaw = document.getElementById('moderatorName').value.trim();
             let mName = mNameRaw;
@@ -706,42 +774,85 @@
             if (loadedBackgrounds[tpl.id]) { ctx.drawImage(loadedBackgrounds[tpl.id], 0, 0, canvas.width, canvas.height); } 
             else { ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height); }
 
+            // Başlık satır sayısına göre dinamik kutu pozisyonu
+            ctx.font = `bold ${tpl.eventText.size}px 'Google Sans', sans-serif`;
+            const titleLineCount = getLines(ctx, eName, tpl.eventText.maxWidth).length;
+            const titleBottom = tpl.eventText.y + titleLineCount * tpl.eventText.lineHeight;
+            const boxesOverlapTitle = tpl.redBox.x < tpl.eventText.x + tpl.eventText.maxWidth;
+            const dynBoxTop = boxesOverlapTitle ? titleBottom + 20 : tpl.redBox.y;
+            const dynBoxBottom = boxesOverlapTitle ? tpl.footer.y - tpl.footer.boxMargin : tpl.footer.y;
+            const dynTotalH = Math.max(10, dynBoxBottom - dynBoxTop);
+            const dynBoxOffset = dynBoxTop - tpl.redBox.y;
+            const isSideBySide = tpl.blueBox.y === tpl.redBox.y;
+
             // Ana Fotoğraf
+            const photoH = boxesOverlapTitle ? dynTotalH : tpl.photo.h;
+            const photoY = boxesOverlapTitle ? dynBoxTop : (tpl.height - photoH) / 2;
+            dynRenderState[tpl.id] = { photoY, photoH, dynBoxOffset, speakerPhotoY: tpl.speakerPhoto ? tpl.speakerPhoto.y + dynBoxOffset : 0 };
             if (uploadedPhoto && photoStates[tpl.id]) {
-                ctx.save(); ctx.beginPath(); ctx.roundRect(tpl.photo.x, tpl.photo.y, tpl.photo.w, tpl.photo.h, tpl.photo.radius); ctx.clip(); 
+                ctx.save(); ctx.beginPath(); ctx.roundRect(tpl.photo.x, photoY, tpl.photo.w, photoH, tpl.photo.radius); ctx.clip();
                 const state = photoStates[tpl.id];
-                ctx.drawImage(uploadedPhoto, tpl.photo.x + state.panX, tpl.photo.y + state.panY, uploadedPhoto.width * state.baseScale * state.userScale, uploadedPhoto.height * state.baseScale * state.userScale);
+                const fitScale = photoH / uploadedPhoto.height * state.userScale;
+                const scaledW = uploadedPhoto.width * fitScale;
+                const scaledH = uploadedPhoto.height * fitScale;
+                ctx.drawImage(uploadedPhoto, tpl.photo.x + (tpl.photo.w - scaledW) / 2 + state.panX, photoY + (photoH - scaledH) / 2 + state.panY, scaledW, scaledH);
                 ctx.restore();
             } else {
-                ctx.fillStyle = "#e0e0e0"; ctx.beginPath(); ctx.roundRect(tpl.photo.x, tpl.photo.y, tpl.photo.w, tpl.photo.h, tpl.photo.radius); ctx.fill();
+                ctx.fillStyle = "#e0e0e0"; ctx.beginPath(); ctx.roundRect(tpl.photo.x, photoY, tpl.photo.w, photoH, tpl.photo.radius); ctx.fill();
             }
 
-            const shiftY = (uploadedSpeakerPhoto && tpl.speakerPhoto) ? tpl.speakerPhoto.expandH : 0;
-            const redBoxH = tpl.redBox.h + shiftY;
-            const blueBoxH = tpl.blueBox.h - shiftY;
-            const blueBoxY = tpl.blueBox.y + shiftY;
+            const extraSpeakerCount = Math.max(0, activeSpeakers.length - 1);
+            const perSpeakerShift = tpl.speakerText.lineHeight * 1.5;
+            const shiftY = (uploadedSpeakerPhoto && tpl.speakerPhoto)
+                ? tpl.speakerPhoto.expandH
+                : extraSpeakerCount * perSpeakerShift;
+            let redBoxH, blueBoxH, blueBoxY, redBoxY;
+            if (!boxesOverlapTitle) {
+                const speakerExpand = extraSpeakerCount * 20;
+                const modExpand = actualModName !== '' ? 40 : 0;
+                const totalExpand = speakerExpand + modExpand;
+                redBoxH = tpl.redBox.h + totalExpand;
+                redBoxY = tpl.redBox.y;
+                blueBoxH = tpl.blueBox.h - totalExpand;
+                blueBoxY = tpl.blueBox.y + totalExpand;
+            } else if (isSideBySide) {
+                redBoxH = dynTotalH;
+                blueBoxH = dynTotalH;
+                redBoxY = dynBoxTop;
+                blueBoxY = dynBoxTop;
+            } else {
+                const boxGap = 20;
+                const halfH = (dynTotalH - boxGap) / 2;
+                redBoxH = halfH + shiftY;
+                blueBoxH = Math.max(0, halfH - shiftY);
+                redBoxY = dynBoxTop;
+                blueBoxY = dynBoxTop + halfH + shiftY + boxGap;
+            }
 
             // Kırmızı Kutu
-            ctx.fillStyle = themeColors[activeTheme].redBox; ctx.beginPath(); ctx.roundRect(tpl.redBox.x, tpl.redBox.y, tpl.redBox.w, redBoxH, tpl.redBox.radius); ctx.fill();
+            const redBoxDeltaY = redBoxY - tpl.redBox.y;
+            const redBoxDeltaH = redBoxH - tpl.redBox.h;
+            ctx.fillStyle = themeColors[activeTheme].redBox; ctx.beginPath(); ctx.roundRect(tpl.redBox.x, redBoxY, tpl.redBox.w, redBoxH, tpl.redBox.radius); ctx.fill();
             if (loadedRedBoxBg && loadedRedBoxBg.complete && loadedRedBoxBg.naturalWidth !== 0) {
-                ctx.save(); ctx.beginPath(); ctx.roundRect(tpl.redBox.x, tpl.redBox.y, tpl.redBox.w, redBoxH, tpl.redBox.radius); ctx.clip();
-                ctx.drawImage(loadedRedBoxBg, tpl.redBoxBg.x, tpl.redBoxBg.y + shiftY, tpl.redBoxBg.w, tpl.redBoxBg.h); ctx.restore();
+                ctx.save(); ctx.beginPath(); ctx.roundRect(tpl.redBox.x, redBoxY, tpl.redBox.w, redBoxH, tpl.redBox.radius); ctx.clip();
+                ctx.drawImage(loadedRedBoxBg, tpl.redBoxBg.x, tpl.redBoxBg.y + redBoxDeltaY + redBoxDeltaH, tpl.redBoxBg.w, tpl.redBoxBg.h); ctx.restore();
             }
 
             // Mavi Kutu
+            const blueBoxTopDelta = blueBoxY - tpl.blueBox.y;
             ctx.fillStyle = themeColors[activeTheme].blueBox; ctx.beginPath(); ctx.roundRect(tpl.blueBox.x, blueBoxY, tpl.blueBox.w, blueBoxH, tpl.blueBox.radius); ctx.fill();
             if (loadedBlueBoxBg && loadedBlueBoxBg.complete && loadedBlueBoxBg.naturalWidth !== 0) {
                 ctx.save(); ctx.beginPath(); ctx.roundRect(tpl.blueBox.x, blueBoxY, tpl.blueBox.w, blueBoxH, tpl.blueBox.radius); ctx.clip();
-                ctx.drawImage(loadedBlueBoxBg, tpl.blueBoxBg.x, tpl.blueBoxBg.y + shiftY, tpl.blueBoxBg.w, tpl.blueBoxBg.h); ctx.restore();
+                ctx.drawImage(loadedBlueBoxBg, tpl.blueBoxBg.x, tpl.blueBoxBg.y + blueBoxTopDelta, tpl.blueBoxBg.w, tpl.blueBoxBg.h); ctx.restore();
             }
 
             // Konuşmacı Fotoğrafı
             if (uploadedSpeakerPhoto && speakerPhotoStates[tpl.id]) {
                 ctx.save(); ctx.beginPath();
-                const cx = tpl.speakerPhoto.x + tpl.speakerPhoto.radius; const cy = tpl.speakerPhoto.y + tpl.speakerPhoto.radius;
+                const cx = tpl.speakerPhoto.x + tpl.speakerPhoto.radius; const cy = tpl.speakerPhoto.y + dynBoxOffset + tpl.speakerPhoto.radius;
                 ctx.arc(cx, cy, tpl.speakerPhoto.radius, 0, Math.PI * 2); ctx.clip();
                 const sState = speakerPhotoStates[tpl.id];
-                ctx.drawImage(uploadedSpeakerPhoto, tpl.speakerPhoto.x + sState.panX, tpl.speakerPhoto.y + sState.panY, uploadedSpeakerPhoto.width * sState.baseScale * sState.userScale, uploadedSpeakerPhoto.height * sState.baseScale * sState.userScale);
+                ctx.drawImage(uploadedSpeakerPhoto, tpl.speakerPhoto.x + sState.panX, tpl.speakerPhoto.y + dynBoxOffset + sState.panY, uploadedSpeakerPhoto.width * sState.baseScale * sState.userScale, uploadedSpeakerPhoto.height * sState.baseScale * sState.userScale);
                 ctx.restore();
             }
 
@@ -753,9 +864,12 @@
             let redBoxLines = [];
             
             // Konuşmacı Kısmı
-            let tagSize = tpl.speakerText.size * 0.45; // Global olarak belirledik
-            
-            if (sName !== '') {
+            let tagSize = tpl.speakerText.size * 0.45;
+
+            if (activeSpeakers.length === 1) {
+                const sName = activeSpeakers[0].name.trim();
+                const sTitle = activeSpeakers[0].title.trim();
+
                 ctx.font = `300 ${tagSize}px 'Google Sans', sans-serif`;
                 let tagWrapped = getLines(ctx, "Konuşmacı:", tpl.speakerText.maxWidth);
                 tagWrapped.forEach((line, idx) => {
@@ -767,11 +881,9 @@
                 let spkWrapped = getLines(ctx, sName, tpl.speakerText.maxWidth);
                 spkWrapped.forEach((line, idx) => {
                     let isLast = idx === spkWrapped.length - 1;
-                    let hasTitleOrMod = sTitle !== '' || actualModName !== '';
-                    redBoxLines.push({ text: line, font: `bold ${tpl.speakerText.size}px 'Google Sans', sans-serif`, color: tpl.speakerText.color, lh: tpl.speakerText.lineHeight, mb: isLast ? (hasTitleOrMod ? tpl.speakerText.size * 0.1 : 0) : 0 });
+                    redBoxLines.push({ text: line, font: `bold ${tpl.speakerText.size}px 'Google Sans', sans-serif`, color: tpl.speakerText.color, lh: tpl.speakerText.lineHeight, mb: isLast && sTitle !== '' ? -tpl.speakerText.lineHeight * 0.15 : 0 });
                 });
 
-                // Ünvan
                 if (sTitle !== '') {
                     let titleSize = tpl.speakerText.size * 0.65;
                     ctx.font = `300 ${titleSize}px 'Google Sans', sans-serif`;
@@ -781,6 +893,40 @@
                         redBoxLines.push({ text: line, font: `300 ${titleSize}px 'Google Sans', sans-serif`, color: "#ffffff", lh: titleSize * 1.2, mb: isLast ? (actualModName !== '' ? tpl.speakerText.size * 0.6 : 0) : 0 });
                     });
                 }
+
+            } else if (activeSpeakers.length > 1) {
+                ctx.font = `300 ${tagSize}px 'Google Sans', sans-serif`;
+                let tagWrapped = getLines(ctx, "Konuşmacılar:", tpl.speakerText.maxWidth);
+                tagWrapped.forEach((line, idx) => {
+                    let isLast = idx === tagWrapped.length - 1;
+                    redBoxLines.push({ text: line, font: `300 ${tagSize}px 'Google Sans', sans-serif`, color: "#ffffff", lh: tagSize * 1.2, mb: isLast ? tagSize * 1.0 : 0 });
+                });
+
+                activeSpeakers.forEach((sp, i) => {
+                    const spName = sp.name.trim();
+                    const spTitle = sp.title.trim();
+                    const isLastSpeaker = i === activeSpeakers.length - 1;
+
+                    ctx.font = `bold ${tpl.speakerText.size}px 'Google Sans', sans-serif`;
+                    let spkWrapped = getLines(ctx, spName, tpl.speakerText.maxWidth);
+                    spkWrapped.forEach((line, idx) => {
+                        let isLast = idx === spkWrapped.length - 1;
+                        redBoxLines.push({ text: line, font: `bold ${tpl.speakerText.size}px 'Google Sans', sans-serif`, color: tpl.speakerText.color, lh: tpl.speakerText.lineHeight, mb: isLast && spTitle !== '' ? -tpl.speakerText.lineHeight * 0.15 : 0 });
+                    });
+
+                    if (spTitle !== '') {
+                        let titleSize = tpl.speakerText.size * 0.65;
+                        ctx.font = `300 ${titleSize}px 'Google Sans', sans-serif`;
+                        let titleWrapped = getLines(ctx, spTitle, tpl.speakerText.maxWidth);
+                        titleWrapped.forEach((line, idx) => {
+                            let isLast = idx === titleWrapped.length - 1;
+                            let hasMore = !isLastSpeaker || actualModName !== '';
+                            redBoxLines.push({ text: line, font: `300 ${titleSize}px 'Google Sans', sans-serif`, color: "#ffffff", lh: titleSize * 1.2, mb: isLast && hasMore ? tpl.speakerText.size * 0.5 : 0 });
+                        });
+                    } else if (!isLastSpeaker && redBoxLines.length > 0) {
+                        redBoxLines[redBoxLines.length - 1].mb = tpl.speakerText.size * 0.5;
+                    }
+                });
             }
 
             // Moderatör Kısmı
@@ -818,11 +964,11 @@
 
                 let textAreaTop, textAreaBottom, redStartY;
                 if (uploadedSpeakerPhoto && tpl.speakerPhoto) {
-                    textAreaTop = tpl.speakerPhoto.y + tpl.speakerPhoto.radius * 2 + 10;
+                    textAreaTop = tpl.speakerPhoto.y + dynBoxOffset + tpl.speakerPhoto.radius * 2 + 10;
                     redStartY = textAreaTop + redBoxLines[0].lh * 0.8;
                 } else {
-                    textAreaTop = tpl.redBox.y;
-                    textAreaBottom = tpl.redBox.y + redBoxH;
+                    textAreaTop = redBoxY;
+                    textAreaBottom = redBoxY + redBoxH;
                     let textAreaHeight = textAreaBottom - textAreaTop;
                     redStartY = textAreaTop + (textAreaHeight - totalRedHeight) / 2 + redBoxLines[0].lh * 0.8;
                 }
