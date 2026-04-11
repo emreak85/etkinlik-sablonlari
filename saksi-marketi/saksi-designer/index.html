@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saksı Tasarla | Saksı Marketi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #3a7d44;
+      --green-dark: #2d6035;
+      --green-light: #f0fdf4;
+      --border: #e5e7eb;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --white: #fff;
+      --bg: #f8f9fa;
+      --r: 10px;
+    }
+    html, body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      height: 100%;
+      overflow: hidden;
+    }
+    body { display: flex; flex-direction: column; background: var(--bg); }
+
+    /* ── HEADER ── */
+    .ph {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0.7rem 1.5rem;
+      display: flex; align-items: center; gap: 1rem;
+      flex-shrink: 0;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+      z-index: 20;
+    }
+    .back {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      color: var(--green); text-decoration: none; font-weight: 500; font-size: 0.875rem;
+      padding: 0.35rem 0.75rem; border-radius: 6px; transition: background .18s;
+    }
+    .back:hover { background: var(--green-light); }
+    .hsep { width: 1px; height: 22px; background: var(--border); }
+    .htitle { font-weight: 700; font-size: 0.95rem; }
+    .hsub { font-size: 0.75rem; color: var(--muted); }
+
+    /* ── LAYOUT ── */
+    #root { flex: 1; display: flex; overflow: hidden; min-height: 0; }
+    .layout { display: grid; grid-template-columns: 390px 1fr; width: 100%; height: 100%; min-height: 0; }
+
+    /* ── LEFT PANEL ── */
+    .lp {
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 1.25rem 1.25rem 2.5rem;
+      display: flex; flex-direction: column; gap: 1.1rem;
+      min-height: 0;
+      height: 100%;
+    }
+    .lp::-webkit-scrollbar { width: 4px; }
+    .lp::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* Steps */
+    .steps {
+      display: flex; align-items: center; gap: 0.2rem;
+    }
+    .step {
+      display: flex; align-items: center; gap: 0.35rem;
+      font-size: 0.76rem; font-weight: 500; color: var(--muted); white-space: nowrap;
+    }
+    .step.active { color: var(--green); }
+    .step.done { color: #059669; }
+    .snum {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--border); color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.68rem; font-weight: 700; flex-shrink: 0;
+    }
+    .step.active .snum { background: var(--green); color: #fff; }
+    .step.done .snum { background: #059669; color: #fff; }
+    .sline { flex: 1; height: 1px; background: var(--border); min-width: 6px; }
+
+    /* Section label */
+    .slabel {
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--muted);
+      display: flex; align-items: center; gap: 0.35rem;
+    }
+    .slabel i { color: var(--green); }
+
+    /* Material cards */
+    .mat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+    .mat-card {
+      border: 2px solid var(--border); border-radius: var(--r);
+      padding: 0.7rem; cursor: pointer; transition: all .18s;
+      display: flex; align-items: center; gap: 0.6rem; background: var(--white);
+    }
+    .mat-card:hover { border-color: #86efac; background: #f9fef9; }
+    .mat-card.sel {
+      border-color: var(--green); background: var(--green-light);
+      box-shadow: 0 0 0 3px rgba(58,125,68,.12);
+    }
+    .mat-dot {
+      width: 30px; height: 30px; border-radius: 50%;
+      flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    .mat-name { font-size: 0.83rem; font-weight: 600; line-height: 1.2; }
+    .mat-sub { font-size: 0.68rem; color: var(--muted); margin-top: .08rem; }
+
+    /* Model grid */
+    .mod-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.45rem; }
+    .mod-card {
+      border: 2px solid var(--border); border-radius: 8px;
+      padding: 0.55rem 0.35rem; cursor: pointer; transition: all .18s;
+      text-align: center; background: var(--white);
+    }
+    .mod-card:hover { border-color: #86efac; background: #f9fef9; }
+    .mod-card.sel {
+      border-color: var(--green); background: var(--green-light);
+      box-shadow: 0 0 0 3px rgba(58,125,68,.12);
+    }
+    .mod-icon { display: block; margin: 0 auto .28rem; color: #6b7280; }
+    .mod-card.sel .mod-icon { color: var(--green); }
+    .mod-name { font-size: 0.75rem; font-weight: 600; }
+    .mod-desc { font-size: 0.62rem; color: var(--muted); margin-top: .08rem; line-height: 1.3; }
+
+    /* Dims */
+    .dims { display: flex; flex-direction: column; gap: 0.85rem; }
+    .dim label {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.8rem; font-weight: 500; margin-bottom: .35rem;
+    }
+    .dim label em { font-style: normal; color: var(--green); font-weight: 600; font-size: 0.82rem; }
+    .dim-row { display: flex; align-items: center; gap: 0.55rem; }
+    .dim-row input[type="range"] { flex: 1; accent-color: var(--green); cursor: pointer; height: 4px; }
+    .dim-row input[type="number"] {
+      width: 64px; padding: .32rem .4rem; border: 1.5px solid var(--border);
+      border-radius: 6px; font-size: 0.82rem; font-family: inherit;
+      text-align: center; color: var(--text); outline: none; transition: border-color .15s;
+    }
+    .dim-row input[type="number"]:focus { border-color: var(--green); }
+
+    /* Create button */
+    .btn-c {
+      width: 100%; padding: .82rem; font-size: .93rem; font-weight: 700;
+      background: var(--green); color: #fff; border: none; border-radius: var(--r);
+      cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+      transition: all .2s; letter-spacing: .01em;
+    }
+    .btn-c:hover:not(:disabled) {
+      background: var(--green-dark); transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(58,125,68,.3);
+    }
+    .btn-c:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* Download button */
+    .btn-dl-pot {
+      width: 100%; padding: .62rem; font-size: .84rem; font-weight: 600;
+      background: var(--white); color: var(--green);
+      border: 1.5px solid var(--green); border-radius: var(--r);
+      cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: .4rem;
+      transition: all .2s;
+    }
+    .btn-dl-pot:hover { background: var(--green-light); }
+
+    .divider { border: none; border-top: 1px solid var(--border); }
+    .locked { opacity: .3; pointer-events: none; user-select: none; }
+    .locked.open { opacity: 1; pointer-events: auto; user-select: auto; }
+
+    /* ── RIGHT PANEL ── */
+    .rp {
+      position: relative;
+      background: radial-gradient(ellipse at 60% 30%, #1a2640 0%, #0d1117 70%);
+      display: flex; flex-direction: column;
+    }
+    #cw {
+      flex: 1; position: relative; overflow: hidden;
+    }
+    #cw canvas { display: block; }
+
+    .empty-state {
+      position: absolute; inset: 0; pointer-events: none;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: .75rem; color: rgba(255,255,255,.2);
+    }
+    .empty-state svg { opacity: .18; }
+    .empty-state p { font-size: .82rem; }
+
+    /* Bottom info bar */
+    .cinfo {
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding: .65rem 1.25rem;
+      display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap;
+    }
+    .ci { color: rgba(255,255,255,.55); font-size: .72rem; }
+    .ci strong { display: block; color: #fff; font-size: .88rem; font-weight: 600; }
+    .cdiv { width: 1px; height: 26px; background: rgba(255,255,255,.1); flex-shrink: 0; }
+
+    /* Corner badge */
+    .badge {
+      position: absolute; top: .9rem; right: .9rem;
+      background: rgba(0,0,0,.45); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 6px; padding: .28rem .6rem;
+      font-size: .7rem; color: rgba(255,255,255,.4);
+      display: flex; align-items: center; gap: .3rem;
+      pointer-events: none;
+    }
+
+    /* ── Nano Banana ── */
+    .btn-nb {
+      width: 100%; padding: .65rem; font-size: .85rem; font-weight: 600;
+      background: #fef9c3; color: #854d0e; border: 1.5px solid #fde047;
+      border-radius: var(--r); cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: .4rem;
+      transition: all .2s;
+    }
+    .btn-nb:hover:not(:disabled) { background: #fef08a; }
+    .btn-nb:disabled { opacity: .45; cursor: not-allowed; }
+    .nb-error {
+      padding: .55rem .7rem; background: #fff3f3; border: 1px solid #fca5a5;
+      border-radius: 8px; font-size: .75rem; color: #dc2626; line-height: 1.4;
+    }
+    .nb-modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,.88);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 200; padding: 1.5rem;
+    }
+    .nb-modal-box {
+      background: #fff; border-radius: 12px; overflow: hidden;
+      max-width: min(860px, 92vw); max-height: 92vh;
+      display: flex; flex-direction: column; box-shadow: 0 24px 80px rgba(0,0,0,.6);
+    }
+    .nb-modal-img { overflow: auto; }
+    .nb-modal-img img { width: 100%; display: block; }
+    .nb-modal-bar {
+      padding: .7rem 1rem; border-top: 1px solid var(--border);
+      display: flex; gap: .5rem; justify-content: flex-end; flex-shrink: 0;
+    }
+    .btn-dl {
+      padding: .48rem 1rem; font-size: .82rem; font-weight: 600;
+      background: var(--green); color: #fff; border: none;
+      border-radius: 8px; cursor: pointer; font-family: inherit;
+      display: inline-flex; align-items: center; gap: .35rem; text-decoration: none;
+    }
+    .btn-dl:hover { background: var(--green-dark); }
+
+    /* ── Pin / Marker ── */
+    .room-preview { position: relative; }
+    .pin-wrap {
+      position: absolute; inset: 0; cursor: crosshair;
+      border-radius: 8px; user-select: none;
+    }
+    .pin {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 28px; height: 28px;
+      background: rgba(220, 38, 38, 0.9);
+      border: 3px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 10px rgba(0,0,0,.45);
+      pointer-events: none;
+    }
+    .pin-label {
+      position: absolute;
+      transform: translateX(-50%);
+      top: calc(100% + 5px);
+      font-size: .62rem; font-weight: 600;
+      color: #fff; background: rgba(0,0,0,.65);
+      padding: .12rem .3rem; border-radius: 4px;
+      white-space: nowrap; pointer-events: none;
+      left: 50%;
+    }
+    .pin-hint {
+      font-size: .71rem; color: var(--muted);
+      display: flex; align-items: center; gap: .3rem; margin-top: .2rem;
+    }
+
+    /* ── Mekana Yerleştir ── */
+    .room-upload {
+      border: 2px dashed var(--border); border-radius: var(--r);
+      padding: 1.1rem; text-align: center; cursor: pointer;
+      transition: all .18s; color: var(--muted); font-size: 0.82rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+    }
+    .room-upload:hover { border-color: var(--green); background: var(--green-light); color: var(--green); }
+    .room-upload i { font-size: 1.4rem; margin-bottom: .1rem; }
+    .room-preview {
+      width: 100%; border-radius: 8px; overflow: hidden;
+      position: relative; aspect-ratio: 16/9; background: #000;
+    }
+    .room-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .btn-clear {
+      width: 100%; padding: .6rem; font-size: .82rem; font-weight: 600;
+      background: #fff3f3; color: #dc2626; border: 1.5px solid #fca5a5;
+      border-radius: var(--r); cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: .4rem;
+      transition: all .2s; margin-top: .45rem;
+    }
+    .btn-clear:hover { background: #fee2e2; }
+
+    @media (max-width: 820px) {
+      html, body { overflow: auto; }
+      #root { overflow: auto; }
+      .layout { grid-template-columns: 1fr; grid-template-rows: auto 380px; }
+      .rp { min-height: 380px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="ph">
+  <a href="../index.html" class="back"><i class="fas fa-arrow-left"></i> Geri Dön</a>
+  <div class="hsep"></div>
+  <div>
+    <div class="htitle">Saksı Konfiguratörü</div>
+    <div class="hsub">Malzeme → Model → Ölçü → Oluştur</div>
+  </div>
+</div>
+
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, Fragment } = React;
+
+/* ════════════════════════ DATA ════════════════════════ */
+
+const MAL = {
+  fiber: {
+    label:'Fiber Saksı', sub:'Hafif · UV dirençli · Mat',
+    dot:'#1c1c1c', c3d:0x1c1c1c, met:0.05, rou:0.90,
+    mods:['CUBO','LARGO','RECADO','CUADRA','ALTO','NESTA','FREGA','SIESTA','SOLIDO'],
+  },
+  ahsap: {
+    label:'Ahşap Saksı', sub:'Doğal · Sıcak · Organik',
+    dot:'#7A5230', c3d:0x7A5230, met:0.0, rou:0.93,
+    mods:['CUBO','RECADO','CUANDA','CUPRA','ALTO'],
+  },
+  metal: {
+    label:'Metal Saksı', sub:'Endüstriyel · Parlak · Modern',
+    dot:'#b8b8b8', c3d:0xC8C8C8, met:0.92, rou:0.16,
+    mods:['CUBO','LARGO','CUADRA','RECADO','SIESTA','PERO','ALTO'],
+  },
+  corten: {
+    label:'Corten Saksı', sub:'Pas patina · Rustik · Dış mekan',
+    dot:'#8B3A0F', c3d:0x8B3A0F, met:0.55, rou:0.78,
+    mods:['RECADO','CUBO','FREGA','LARGO','ALTO'],
+  },
+};
+
+const MOD = {
+  CUBO:   { label:'Cubo',   desc:'Küp saksı',              s:'kare',     dims:['en','yukseklik'],            def:{en:50,yukseklik:50},              min:{en:30,yukseklik:30},     max:{en:120,yukseklik:120},    lbl:{en:'Genişlik',yukseklik:'Yükseklik'} },
+  LARGO:  { label:'Largo',  desc:'Uzun, ince saksı',       s:'kutu',     dims:['en','derinlik','yukseklik'], def:{en:40,derinlik:40,yukseklik:100},  min:{en:20,derinlik:20,yukseklik:60},  max:{en:60,derinlik:60,yukseklik:150},  lbl:{en:'Genişlik',derinlik:'Derinlik',yukseklik:'Yükseklik'} },
+  RECADO: { label:'Recado', desc:'Geniş, yayvan saksı',    s:'kutu',     dims:['en','derinlik','yukseklik'], def:{en:120,derinlik:45,yukseklik:46},  min:{en:60,derinlik:25,yukseklik:25},  max:{en:200,derinlik:80,yukseklik:100}, lbl:{en:'Uzunluk',derinlik:'Derinlik',yukseklik:'Yükseklik'} },
+  CUADRA: { label:'Cuadra', desc:'Konik kare saksı',       s:'konik-k',  dims:['en','yukseklik'],            def:{en:40,yukseklik:100},             min:{en:20,yukseklik:40},     max:{en:80,yukseklik:150},     lbl:{en:'Üst Genişlik',yukseklik:'Yükseklik'} },
+  CUANDA: { label:'Cuanda', desc:'Konik ahşap saksı',      s:'konik-k',  dims:['en','yukseklik'],            def:{en:80,yukseklik:100},             min:{en:40,yukseklik:50},     max:{en:120,yukseklik:150},    lbl:{en:'Üst Genişlik',yukseklik:'Yükseklik'} },
+  CUPRA:  { label:'Cupra',  desc:'Kare ahşap saksı',       s:'kutu',     dims:['en','derinlik','yukseklik'], def:{en:70,derinlik:70,yukseklik:60},   min:{en:40,derinlik:40,yukseklik:30},  max:{en:120,derinlik:120,yukseklik:100},lbl:{en:'Genişlik',derinlik:'Derinlik',yukseklik:'Yükseklik'} },
+  ALTO:   { label:'Alto',   desc:'Orta yükseklikte saksı', s:'kutu',     dims:['en','derinlik','yukseklik'], def:{en:100,derinlik:30,yukseklik:80},  min:{en:60,derinlik:20,yukseklik:30},  max:{en:150,derinlik:60,yukseklik:100}, lbl:{en:'Genişlik',derinlik:'Derinlik',yukseklik:'Yükseklik'} },
+  SIESTA: { label:'Siesta', desc:'Çoklu silindir set',     s:'siesta',   dims:['cap','yukseklik'],           def:{cap:50,yukseklik:80},             min:{cap:20,yukseklik:40},    max:{cap:80,yukseklik:150},    lbl:{cap:'Çap',yukseklik:'Yükseklik'} },
+  FREGA:  { label:'Frega',  desc:'Yuvarlak silindir',      s:'sil',      dims:['cap','yukseklik'],           def:{cap:60,yukseklik:80},             min:{cap:40,yukseklik:40},    max:{cap:120,yukseklik:150},   lbl:{cap:'Çap',yukseklik:'Yükseklik'} },
+  NESTA:  { label:'Nesta',  desc:'Alçak, geniş saksı',     s:'kase',     dims:['cap','yukseklik'],           def:{cap:60,yukseklik:30},             min:{cap:30,yukseklik:15},    max:{cap:100,yukseklik:50},    lbl:{cap:'Çap',yukseklik:'Yükseklik'} },
+  SOLIDO: { label:'Solido', desc:'Konik silindir saksı',   s:'konik-sil',dims:['cap','yukseklik'],           def:{cap:40,yukseklik:100},            min:{cap:20,yukseklik:50},    max:{cap:80,yukseklik:150},    lbl:{cap:'Üst Çap',yukseklik:'Yükseklik'} },
+  PERO:   { label:'Pero',   desc:'Trapezoid saksı',        s:'trapez',   dims:['en','yukseklik'],            def:{en:70,yukseklik:70},              min:{en:40,yukseklik:40},     max:{en:100,yukseklik:100},    lbl:{en:'Üst Genişlik',yukseklik:'Yükseklik'} },
+};
+
+/* ════════════════════════ THREE.JS ════════════════════════ */
+
+const T = { scene:null, camera:null, renderer:null, pot:null, controls:null, ro:null, floor:null, grid:null };
+
+function mkFrustum(tW, tD, bW, bD, h) {
+  const geo = new THREE.BufferGeometry();
+  const bx=bW/2, bz=bD/2, tx=tW/2, tz=tD/2;
+  const v=[], n=[], uv=[], idx=[];
+
+  function quad(v0,v1,v2,v3) {
+    const base = v.length/3;
+    v.push(...v0,...v1,...v2,...v3);
+    const ax=v1[0]-v0[0],ay=v1[1]-v0[1],az=v1[2]-v0[2];
+    const bx2=v2[0]-v0[0],by=v2[1]-v0[1],bz2=v2[2]-v0[2];
+    const nx=ay*bz2-az*by, ny=az*bx2-ax*bz2, nz=ax*by-ay*bx2;
+    const l=Math.sqrt(nx*nx+ny*ny+nz*nz)||1;
+    const nn=[nx/l,ny/l,nz/l];
+    n.push(...nn,...nn,...nn,...nn);
+    uv.push(0,0, 1,0, 1,1, 0,1);
+    idx.push(base,base+1,base+2, base,base+2,base+3);
+  }
+
+  quad([-bx,0,-bz],[bx,0,-bz],[tx,h,-tz],[-tx,h,-tz]);
+  quad([bx,0,bz],[-bx,0,bz],[-tx,h,tz],[tx,h,tz]);
+  quad([-bx,0,bz],[-bx,0,-bz],[-tx,h,-tz],[-tx,h,tz]);
+  quad([bx,0,-bz],[bx,0,bz],[tx,h,tz],[tx,h,-tz]);
+  quad([-bx,0,bz],[bx,0,bz],[bx,0,-bz],[-bx,0,-bz]);
+  quad([-tx,h,-tz],[tx,h,-tz],[tx,h,tz],[-tx,h,tz]);
+
+  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(v), 3));
+  geo.setAttribute('normal',   new THREE.BufferAttribute(new Float32Array(n), 3));
+  geo.setAttribute('uv',       new THREE.BufferAttribute(new Float32Array(uv), 2));
+  geo.setIndex(idx);
+  return geo;
+}
+
+/* ════════════════════════ TEXTURES ════════════════════════ */
+
+const TCACHE = {};
+
+function cvs(size) {
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  return [c, c.getContext('2d')];
+}
+
+function makeTex(key, fn) {
+  if (TCACHE[key]) return TCACHE[key];
+  const t = fn();
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.anisotropy = 4;
+  // Color maps (albedo/soil) need sRGB encoding; data maps (roughness/bump) stay linear
+  if (key.endsWith('-c') || key === 'soil') t.encoding = THREE.sRGBEncoding;
+  TCACHE[key] = t;
+  return t;
+}
+
+/* ── Ahşap (Wood) ── */
+function woodColorTex() {
+  return makeTex('wood-c', () => {
+    const sz = 512;
+    const [c, ctx] = cvs(sz);
+    // Golden-tan base matching ahsap.png reference
+    ctx.fillStyle = '#B8965A';
+    ctx.fillRect(0, 0, sz, sz);
+
+    // Horizontal plank slats with gaps (visible in reference photos)
+    const plankH = 85; // height of each plank
+    const numPlanks = Math.ceil(sz / plankH);
+    for (let p = 0; p < numPlanks; p++) {
+      const py = p * plankH;
+      // Slight color variation per plank
+      const pv = Math.floor(Math.random() * 20) - 10;
+      ctx.fillStyle = `rgb(${184+pv},${150+pv},${90+pv})`;
+      ctx.fillRect(0, py + 3, sz, plankH - 6);
+
+      // Dark gap line between planks
+      ctx.fillStyle = 'rgba(40,25,10,0.85)';
+      ctx.fillRect(0, py - 2, sz, 4);
+    }
+
+    // Subtle wood grain lines within each plank
+    for (let i = 0; i < 90; i++) {
+      const y0  = (i / 90) * sz;
+      const amp = 2 + Math.random() * 5;
+      const frq = 0.015 + Math.random() * 0.02;
+      const ph  = Math.random() * Math.PI * 2;
+      const r = 160 + Math.floor(Math.random() * 40);
+      const g = 130 + Math.floor(Math.random() * 30);
+      const b = 70 + Math.floor(Math.random() * 25);
+      ctx.beginPath();
+      ctx.moveTo(0, y0);
+      for (let x = 0; x <= sz; x += 2)
+        ctx.lineTo(x, y0 + Math.sin(x * frq + ph) * amp);
+      ctx.strokeStyle = `rgba(${r},${g},${b},${0.2 + Math.random() * 0.3})`;
+      ctx.lineWidth = 0.6 + Math.random() * 1.5;
+      ctx.stroke();
+    }
+
+    // One subtle knot
+    const kx = sz * (0.3 + Math.random() * 0.4);
+    const ky = sz * (0.3 + Math.random() * 0.4);
+    for (let j = 4; j >= 0; j--) {
+      const r2 = 8 + j * 7;
+      const grd = ctx.createRadialGradient(kx, ky, 0, kx, ky, r2);
+      grd.addColorStop(0,   'rgba(80,50,20,0.4)');
+      grd.addColorStop(0.5, 'rgba(140,100,50,0.2)');
+      grd.addColorStop(1,   'rgba(140,100,50,0)');
+      ctx.beginPath();
+      ctx.ellipse(kx, ky, r2 * 1.4, r2 * 0.5, 0.15, 0, Math.PI * 2);
+      ctx.fillStyle = grd;
+      ctx.fill();
+    }
+    return new THREE.CanvasTexture(c);
+  });
+}
+
+function woodRoughTex() {
+  return makeTex('wood-r', () => {
+    const sz = 512;
+    const [c, ctx] = cvs(sz);
+    ctx.fillStyle = '#d6d6d6'; // ~0.84 roughness
+    ctx.fillRect(0, 0, sz, sz);
+    for (let i = 0; i < 130; i++) {
+      const y0 = (i / 130) * sz;
+      const v  = 180 + Math.floor(Math.random() * 50);
+      ctx.beginPath();
+      ctx.moveTo(0, y0);
+      ctx.lineTo(sz, y0 + (Math.random() - 0.5) * 6);
+      ctx.strokeStyle = `rgba(${v},${v},${v},0.6)`;
+      ctx.lineWidth = 1 + Math.random() * 2;
+      ctx.stroke();
+    }
+    return new THREE.CanvasTexture(c);
+  });
+}
+
+/* ── Metal (Brushed Steel) ── */
+function metalColorTex() {
+  return makeTex('metal-c', () => {
+    const sz = 512;
+    const [c, ctx] = cvs(sz);
+    ctx.fillStyle = '#e2e2e2';
+    ctx.fillRect(0, 0, sz, sz);
+    // vertical brush marks - brighter for stainless steel look
+    for (let i = 0; i < 800; i++) {
+      const x = Math.random() * sz;
+      const v = 180 + Math.floor(Math.random() * 70);
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x + (Math.random() - 0.5) * 2, sz);
+      ctx.strokeStyle = `rgba(${v},${v},${v},${0.12 + Math.random() * 0.25})`;
+      ctx.lineWidth = 0.3 + Math.random() * 0.8;
+      ctx.stroke();
+    }
+    // stronger reflection band
+    const grd = ctx.createLinearGradient(0, 0, sz, 0);
+    grd.addColorStop(0,    'rgba(255,255,255,0)');
+    grd.addColorStop(0.4,  'rgba(255,255,255,0.12)');
+    grd.addColorStop(0.5,  'rgba(255,255,255,0.28)');
+    grd.addColorStop(0.6,  'rgba(255,255,255,0.12)');
+    grd.addColorStop(1,    'rgba(255,255,255,0)');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, sz, sz);
+    return new THREE.CanvasTexture(c);
+  });
+}
+
+function metalRoughTex() {
+  return makeTex('metal-r', () => {
+    const sz = 512;
+    const [c, ctx] = cvs(sz);
+    ctx.fillStyle = '#3a3a3a'; // low roughness base
+    ctx.fillRect(0, 0, sz, sz);
+    for (let i = 0; i < 700; i++) {
+      const x = Math.random() * sz;
+      const v = 40 + Math.floor(Math.random() * 40);
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x + (Math.random() - 0.5) * 2, sz);
+      ctx.strokeStyle = `rgba(${v},${v},${v},0.4)`;
+      ctx.lineWidth = 0.5 + Math.random();
+      ctx.stroke();
+    }
+    return new THREE.CanvasTexture(c);
+  });
+}
+
+/* ── Corten (Rust) ── */
+function cortenColorTex() {
+  return makeTex('corten-c', () => {
+    const sz = 512;
+    const [c, ctx] = cvs(sz);
+    ctx.fillStyle = '#6B2800';
+    ctx.fillRect(0, 0, sz, sz);
+
+    const shades = ['#A84000','#C05010','#8B3200','#D06030','#5A2200','#B84820','#903820'];
+
+    // large blotches
+    for (let i = 0; i < 50; i++) {
+      const x = Math.random() * sz, y = Math.random() * sz;
+      const r = 20 + Math.random() * 70;
+      const col = shades[Math.floor(Math.random() * shades.length)];
+      const grd = ctx.createRadialGradient(x, y, 0, x, y, r);
+      grd.addColorStop(0, col + 'cc');
+      grd.addColorStop(1, col + '00');
+      ctx.beginPath();
+      ctx.ellipse(x, y, r * (0.4 + Math.random() * 0.9), r * (0.4 + Math.random() * 0.9),
+                  Math.random() * Math.PI, 0, Math.PI * 2);
+      ctx.fillStyle = grd;
+      ctx.fill();
+    }
+
+    // small detail spots
+    for (let i = 0; i < 120; i++) {
+      const x = Math.random() * sz, y = Math.random() * sz;
+      const r = 4 + Math.random() * 18;
+      const col = shades[Math.floor(Math.random() * shades.length)];
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = col + '88';
+      ctx.fill();
+    }
+
+    // rust streaks (vertical drip-like)
+    for (let i = 0; i < 25; i++) {
+      const x  = Math.random() * sz;
+      const y0 = Math.random() * sz * 0.6;
+      const len = 30 + Math.random() * 100;
+      const grd = ctx.createLinearGradient(x, y0, x + (Math.random()-0.5)*12, y0 + len);
+      grd.addColorStop(0, 'rgba(200,90,20,0.6)');
+      grd.addColorStop(1, 'rgba(200,90,20,0)');
+      ctx.beginPath();
+      ctx.moveTo(x, y0);
+      ctx.quadraticCurveTo(x + (Math.random()-0.5)*14, y0+len/2,
+                           x + (Math.random()-0.5)*18, y0+len);
+      ctx.lineWidth = 1.5 + Math.random() * 3.5;
+      ctx.strokeStyle = grd;
+      ctx.stroke();
+    }
+    return new THREE.CanvasTexture(c);
+  });
+}
+
+function cortenRoughTex() {
+  return makeTex('corten-r', () => {
+    const sz = 512;
+    const [c, ctx] = cvs(sz);
+    ctx.fillStyle = '#999999'; // mid roughness
+    ctx.fillRect(0, 0, sz, sz);
+    // rust patches = rougher (lighter gray)
+    for (let i = 0; i < 60; i++) {
+      const x = Math.random() * sz, y = Math.random() * sz;
+      const r = 15 + Math.random() * 60;
+      const grd = ctx.createRadialGradient(x, y, 0, x, y, r);
+      grd.addColorStop(0, 'rgba(220,220,220,0.7)');
+      grd.addColorStop(1, 'rgba(220,220,220,0)');
+      ctx.beginPath();
+      ctx.ellipse(x, y, r*(0.5+Math.random()*0.8), r*(0.5+Math.random()*0.8),
+                  Math.random()*Math.PI, 0, Math.PI*2);
+      ctx.fillStyle = grd;
+      ctx.fill();
+    }
+    return new THREE.CanvasTexture(c);
+  });
+}
+
+/* ── Fiber ── */
+function fiberColorTex() {
+  return makeTex('fiber-c', () => {
+    const sz = 512;
+    const [c, ctx] = cvs(sz);
+    ctx.fillStyle = '#1c1c1c';
+    ctx.fillRect(0, 0, sz, sz);
+    // pixel noise
+    const id = ctx.getImageData(0, 0, sz, sz);
+    const d  = id.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const n = (Math.random() - 0.5) * 22;
+      d[i]   = Math.max(0, Math.min(255, d[i]   + n));
+      d[i+1] = Math.max(0, Math.min(255, d[i+1] + n));
+      d[i+2] = Math.max(0, Math.min(255, d[i+2] + n));
+    }
+    ctx.putImageData(id, 0, 0);
+    // mold surface dots
+    for (let i = 0; i < 60; i++) {
+      const x = Math.random() * sz, y = Math.random() * sz;
+      const r = 1 + Math.random() * 4;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${0.015 + Math.random()*0.03})`;
+      ctx.fill();
+    }
+    return new THREE.CanvasTexture(c);
+  });
+}
+
+/* ── Soil ── */
+function soilTex() {
+  return makeTex('soil', () => {
+    const sz = 256;
+    const [c, ctx] = cvs(sz);
+    ctx.fillStyle = '#1a0e05';
+    ctx.fillRect(0, 0, sz, sz);
+    for (let i = 0; i < 400; i++) {
+      const x = Math.random() * sz, y = Math.random() * sz;
+      const r = 1 + Math.random() * 5;
+      const v = Math.floor(Math.random() * 40);
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${v+10},${Math.floor(v/2)},0,0.6)`;
+      ctx.fill();
+    }
+    return new THREE.CanvasTexture(c);
+  });
+}
+
+/* ── Bump Maps ── */
+function woodBumpTex() {
+  return makeTex('wood-b', () => {
+    const sz = 256;
+    const [c, ctx] = cvs(sz);
+    ctx.fillStyle = '#808080';
+    ctx.fillRect(0, 0, sz, sz);
+    for (let i = 0; i < 90; i++) {
+      const y0  = (i / 90) * sz;
+      const amp = 2 + Math.random() * 7;
+      const frq = 0.02 + Math.random() * 0.022;
+      const ph  = Math.random() * Math.PI * 2;
+      const v   = 90 + Math.floor(Math.random() * 110);
+      ctx.beginPath();
+      ctx.moveTo(0, y0);
+      for (let x = 0; x <= sz; x += 2)
+        ctx.lineTo(x, y0 + Math.sin(x * frq + ph) * amp);
+      ctx.strokeStyle = `rgba(${v},${v},${v},0.65)`;
+      ctx.lineWidth = 0.8 + Math.random() * 2.5;
+      ctx.stroke();
+    }
+    return new THREE.CanvasTexture(c);
+  });
+}
+
+function fiberBumpTex() {
+  return makeTex('fiber-b', () => {
+    const sz = 256;
+    const [c, ctx] = cvs(sz);
+    const id = ctx.createImageData(sz, sz);
+    const d  = id.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const v = 115 + Math.floor((Math.random() - .5) * 55);
+      d[i] = d[i+1] = d[i+2] = v; d[i+3] = 255;
+    }
+    ctx.putImageData(id, 0, 0);
+    return new THREE.CanvasTexture(c);
+  });
+}
+
+function cortenBumpTex() {
+  return makeTex('corten-b', () => {
+    const sz = 256;
+    const [c, ctx] = cvs(sz);
+    ctx.fillStyle = '#808080';
+    ctx.fillRect(0, 0, sz, sz);
+    for (let i = 0; i < 90; i++) {
+      const x = Math.random() * sz, y = Math.random() * sz;
+      const r = 5 + Math.random() * 28;
+      const v = 140 + Math.floor(Math.random() * 90);
+      const grd = ctx.createRadialGradient(x, y, 0, x, y, r);
+      grd.addColorStop(0, `rgba(${v},${v},${v},.75)`);
+      grd.addColorStop(1, 'rgba(128,128,128,0)');
+      ctx.beginPath();
+      ctx.ellipse(x, y, r*(0.5+Math.random()*.9), r*(0.5+Math.random()*.9),
+                  Math.random()*Math.PI, 0, Math.PI*2);
+      ctx.fillStyle = grd; ctx.fill();
+    }
+    return new THREE.CanvasTexture(c);
+  });
+}
+
+/* ── Material factory ── */
+function makeMats(mKey, w, h, d) {
+  const rw = Math.max(w, d || w) / 50;
+  const rh = h / 50;
+
+  function applyRepeat(tex, rx, ry) {
+    if (!tex) return;
+    tex.repeat.set(rx, ry);
+    tex.needsUpdate = true;
+    return tex;
+  }
+
+  let bodyMap, bodyRoughMap, bodyBumpMap;
+  let met, rou;
+
+  if (mKey === 'ahsap') {
+    bodyMap      = applyRepeat(woodColorTex(),  rw, rh);
+    bodyRoughMap = applyRepeat(woodRoughTex(),  rw, rh);
+    bodyBumpMap  = applyRepeat(woodBumpTex(),   rw, rh);
+    met = 0.0; rou = 0.88;
+  } else if (mKey === 'metal') {
+    bodyMap      = applyRepeat(metalColorTex(), rw, rh);
+    bodyRoughMap = applyRepeat(metalRoughTex(), rw, rh);
+    met = 0.92; rou = 0.18;
+  } else if (mKey === 'corten') {
+    bodyMap      = applyRepeat(cortenColorTex(),  rw, rh);
+    bodyRoughMap = applyRepeat(cortenRoughTex(),  rw, rh);
+    bodyBumpMap  = applyRepeat(cortenBumpTex(),   rw, rh);
+    met = 0.50; rou = 0.75;
+  } else { // fiber
+    bodyMap     = applyRepeat(fiberColorTex(),  rw, rh);
+    bodyBumpMap = applyRepeat(fiberBumpTex(),   rw, rh);
+    met = 0.05; rou = 0.90;
+  }
+
+  const bumpScale = { ahsap:1.8, corten:1.2, fiber:0.35, metal:0 }[mKey] || 0;
+  const envInt = mKey === 'metal' ? 1.8 : 1.2;
+  const base = { metalness:met, roughness:rou, color:0xffffff, envMapIntensity:envInt };
+  const bodyMat = new THREE.MeshStandardMaterial({
+    ...base,
+    map:          bodyMap      || null,
+    roughnessMap: bodyRoughMap || null,
+    bumpMap:      bodyBumpMap  || null,
+    bumpScale,
+  });
+  const rimMat = new THREE.MeshStandardMaterial({
+    ...base,
+    map:          bodyMap      || null,
+    roughnessMap: bodyRoughMap || null,
+    bumpMap:      bodyBumpMap  || null,
+    bumpScale:    bumpScale * .6,
+    metalness: Math.min(1, met + .06),
+    roughness: Math.max(0, rou - .08),
+  });
+  const soilMat = new THREE.MeshStandardMaterial({
+    map: soilTex(), roughness:1, metalness:0, color:0xffffff,
+  });
+
+  return { bodyMat, rimMat, soilMat };
+}
+
+function buildPot(mKey, modKey, dims) {
+  const mod = MOD[modKey];
+  const w = dims.en || dims.cap || 50;
+  const d = dims.derinlik || w;
+  const { bodyMat, rimMat, soilMat } = makeMats(mKey, w, dims.yukseklik || 50, d);
+
+  const g   = new THREE.Group();
+  const h   = dims.yukseklik || 50;
+  const wt  = Math.max(5, Math.min(14, Math.max(w, d) * 0.08)); // duvar kalınlığı
+  const rimH = Math.max(3, h * 0.035);                           // üst dudak yüksekliği
+  const soilD = Math.max(10, h * 0.30);                          // toprak derinliği (üstten)
+
+  // Karanlık iç yüzey materyali
+  const intMat = new THREE.MeshStandardMaterial({
+    color: 0x0c0c0c, roughness: 0.97, metalness: 0,
+    side: THREE.DoubleSide,
+  });
+
+  /* ── İçi boş kare/dikdörtgen saksı (4 ayrı duvar + taban) ── */
+  function makeBoxPot(W, D, H) {
+    const HW = W / 2, HD = D / 2;
+    // 4 duvar
+    [
+      [W,    H, wt,  0,        H/2,  HD - wt/2 ],  // ön
+      [W,    H, wt,  0,        H/2, -HD + wt/2 ],  // arka
+      [wt,   H, D - wt*2, -HW + wt/2, H/2, 0   ],  // sol
+      [wt,   H, D - wt*2,  HW - wt/2, H/2, 0   ],  // sağ
+    ].forEach(([gw, gh, gd, px, py, pz]) => {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(gw, gh, gd), bodyMat);
+      m.position.set(px, py, pz); m.castShadow = true; m.receiveShadow = true;
+      g.add(m);
+    });
+    // Taban
+    const bot = new THREE.Mesh(new THREE.BoxGeometry(W - wt*2, wt, D - wt*2), bodyMat);
+    bot.position.set(0, wt/2, 0); bot.receiveShadow = true; g.add(bot);
+    // Dış alt yüz
+    const botFace = new THREE.Mesh(new THREE.PlaneGeometry(W, D), bodyMat);
+    botFace.rotation.x = -Math.PI/2; botFace.position.y = 0.02; botFace.receiveShadow = true; g.add(botFace);
+    // İç duvarlar (karanlık)
+    const iW = W - wt*2, iD = D - wt*2;
+    if (iW > 2 && iD > 2) {
+      [
+        [iW,   H, 1,  0,        H/2,  iD/2 - 0.5 ],
+        [iW,   H, 1,  0,        H/2, -iD/2 + 0.5 ],
+        [1,    H, iD, -iW/2 + 0.5, H/2, 0         ],
+        [1,    H, iD,  iW/2 - 0.5, H/2, 0         ],
+      ].forEach(([gw, gh, gd, px, py, pz]) => {
+        const m = new THREE.Mesh(new THREE.BoxGeometry(gw, gh, gd), intMat);
+        m.position.set(px, py, pz); g.add(m);
+      });
+    }
+    // Üst dudak (rim) - 4 ayrı parça, açık ortası
+    const rimOW = W + rimH, rimOD = D + rimH;
+    const rimIW = W - wt*2, rimID = D - wt*2;
+    const rimTh = (rimOW - rimIW) / 2; // rim kalınlığı
+    const rimThD = (rimOD - rimID) / 2;
+    const ry = H + rimH/2;
+    // Ön ve arka rim parçaları (tam genişlik)
+    const rimF = new THREE.Mesh(new THREE.BoxGeometry(rimOW, rimH, rimThD), rimMat);
+    rimF.position.set(0, ry, rimOD/2 - rimThD/2); rimF.castShadow = true; g.add(rimF);
+    const rimB = new THREE.Mesh(new THREE.BoxGeometry(rimOW, rimH, rimThD), rimMat);
+    rimB.position.set(0, ry, -rimOD/2 + rimThD/2); rimB.castShadow = true; g.add(rimB);
+    // Sol ve sağ rim parçaları (iç uzunluk)
+    const rimL = new THREE.Mesh(new THREE.BoxGeometry(rimTh, rimH, rimOD - rimThD*2), rimMat);
+    rimL.position.set(-rimOW/2 + rimTh/2, ry, 0); rimL.castShadow = true; g.add(rimL);
+    const rimR = new THREE.Mesh(new THREE.BoxGeometry(rimTh, rimH, rimOD - rimThD*2), rimMat);
+    rimR.position.set(rimOW/2 - rimTh/2, ry, 0); rimR.castShadow = true; g.add(rimR);
+    // Toprak (içeride, derinlemesine)
+    const soilW = Math.max(1, iW - 1), soilD2 = Math.max(1, iD - 1);
+    const soil = new THREE.Mesh(new THREE.PlaneGeometry(soilW, soilD2), soilMat);
+    soil.rotation.x = -Math.PI/2; soil.position.y = H - soilD; g.add(soil);
+  }
+
+  /* ── İçi boş silindir/kase saksı ── */
+  function makeCylPot(R, H, botR) {
+    const bR = botR || R;
+    const iR = Math.max(1, R - wt);
+    const ibR = Math.max(1, bR - wt);
+    // Dış kabuk (açık üst)
+    const outer = new THREE.Mesh(new THREE.CylinderGeometry(R, bR, H, 64, 1, true), bodyMat);
+    outer.position.y = H/2; outer.castShadow = true; outer.receiveShadow = true; g.add(outer);
+    // Dış taban
+    const bot = new THREE.Mesh(new THREE.CircleGeometry(bR, 64), bodyMat);
+    bot.rotation.x = -Math.PI/2; bot.position.y = 0.02; bot.receiveShadow = true; g.add(bot);
+    // İç kabuk (karanlık, içi gösterir)
+    const inner = new THREE.Mesh(new THREE.CylinderGeometry(iR, ibR, H, 64, 1, true), intMat);
+    inner.position.y = H/2; g.add(inner);
+    // Üst dudak
+    const rim = new THREE.Mesh(new THREE.CylinderGeometry(R + rimH*.4, R, rimH, 64), rimMat);
+    rim.position.y = H + rimH/2; rim.castShadow = true; g.add(rim);
+    // Toprak
+    const soil = new THREE.Mesh(new THREE.CircleGeometry(Math.max(0.5, iR - 0.5), 64), soilMat);
+    soil.rotation.x = -Math.PI/2; soil.position.y = H - soilD; g.add(soil);
+  }
+
+  /* ── İçi boş trapezoid/konik kare saksı ── */
+  function makeFrustumPot(tW, tD, bW, bD, H) {
+    // Dış
+    const outer = new THREE.Mesh(mkFrustum(tW, tD, bW, bD, H), bodyMat);
+    outer.castShadow = true; outer.receiveShadow = true; g.add(outer);
+    // İç (biraz küçük, karanlık)
+    const itW = tW - wt*2, ibW = bW - wt*2;
+    if (itW > 4 && ibW > 4) {
+      const inner = new THREE.Mesh(mkFrustum(itW, tD - wt*2, ibW, bD - wt*2, H - wt), intMat);
+      inner.position.y = wt; g.add(inner);
+    }
+    // Taban
+    const bot = new THREE.Mesh(new THREE.PlaneGeometry(bW, bD), bodyMat);
+    bot.rotation.x = -Math.PI/2; bot.position.y = 0.02; bot.receiveShadow = true; g.add(bot);
+    // Üst dudak
+    const rim = new THREE.Mesh(new THREE.BoxGeometry(tW + rimH, rimH, tD + rimH), rimMat);
+    rim.position.y = H + rimH/2; rim.castShadow = true; g.add(rim);
+    // Toprak
+    const sW = Math.max(1, itW > 4 ? itW - 1 : tW - wt*2 - 1);
+    const soil = new THREE.Mesh(new THREE.PlaneGeometry(sW, sW), soilMat);
+    soil.rotation.x = -Math.PI/2; soil.position.y = H - soilD; g.add(soil);
+  }
+
+  /* ── Şekle göre yönlendirme ── */
+  const { s } = mod;
+
+  if      (s === 'kare')     makeBoxPot(dims.en, dims.en, h);
+  else if (s === 'kutu')     makeBoxPot(dims.en, dims.derinlik || dims.en, h);
+  else if (s === 'sil')      makeCylPot((dims.cap || dims.en) / 2, h);
+  else if (s === 'kase')     makeCylPot((dims.cap || dims.en) / 2, h, (dims.cap || dims.en) / 2 * .62);
+  else if (s === 'konik-k')  makeFrustumPot(dims.en, dims.en, dims.en * .28, dims.en * .28, h);
+  else if (s === 'trapez')   makeFrustumPot(dims.en, dims.en, dims.en * .45, dims.en * .45, h);
+  else if (s === 'konik-sil') makeCylPot((dims.cap || dims.en) / 2, h, (dims.cap || dims.en) / 2 * .35);
+  else if (s === 'siesta') {
+    const r = (dims.cap || 50) / 2;
+    const iR = Math.max(1, r - wt);
+    [[0, 1.0], [r*2.25, .72], [-r*2.25, .55]].forEach(([ox, hf]) => {
+      const ch = h * hf;
+      const outer = new THREE.Mesh(new THREE.CylinderGeometry(r, r*.9, ch, 64, 1, true), bodyMat.clone());
+      outer.castShadow = true; outer.receiveShadow = true; outer.position.set(ox, ch/2, 0); g.add(outer);
+      const bot = new THREE.Mesh(new THREE.CircleGeometry(r*.9, 64), bodyMat.clone());
+      bot.rotation.x = -Math.PI/2; bot.position.set(ox, 0.02, 0); bot.receiveShadow = true; g.add(bot);
+      const inner = new THREE.Mesh(new THREE.CylinderGeometry(iR, iR*.9, ch, 64, 1, true), intMat);
+      inner.position.set(ox, ch/2, 0); g.add(inner);
+      const crim = new THREE.Mesh(new THREE.CylinderGeometry(r+rimH*.35, r, rimH, 64), rimMat.clone());
+      crim.position.set(ox, ch+rimH/2, 0); crim.castShadow = true; g.add(crim);
+      const cs = new THREE.Mesh(new THREE.CircleGeometry(Math.max(.5, iR-.5), 64), soilMat);
+      cs.rotation.x = -Math.PI/2; cs.position.set(ox, ch - soilD*.8, 0); g.add(cs);
+    });
+  }
+  else makeBoxPot(dims.en || 50, dims.derinlik || dims.en || 50, h);
+
+  return { group: g, height: h };
+}
+
+/* ── Procedural HDR Environment Map ── */
+function mkEnvMap() {
+  const pmrem = new THREE.PMREMGenerator(T.renderer);
+  pmrem.compileEquirectangularShader();
+  const sz = 1024;
+  const [ec, ectx] = cvs(sz);
+  // Equirectangular sky: top=dark, horizon=warm glow, bottom=dark
+  const sky = ectx.createLinearGradient(0, 0, 0, sz);
+  sky.addColorStop(0,    '#060c16');
+  sky.addColorStop(0.38, '#0c1a2e');
+  sky.addColorStop(0.50, '#182538');
+  sky.addColorStop(0.58, '#28201a');
+  sky.addColorStop(1,    '#100c06');
+  ectx.fillStyle = sky; ectx.fillRect(0, 0, sz, sz);
+  // Key light bloom – warm, upper right
+  const kl = ectx.createRadialGradient(sz*.74, sz*.16, 0, sz*.74, sz*.16, sz*.4);
+  kl.addColorStop(0,   'rgba(255,230,160,0.98)');
+  kl.addColorStop(.35, 'rgba(255,210,110,0.45)');
+  kl.addColorStop(1,   'rgba(255,200,90,0)');
+  ectx.fillStyle = kl; ectx.fillRect(0, 0, sz, sz);
+  // Fill light bloom – cool, upper left
+  const fl = ectx.createRadialGradient(sz*.06, sz*.22, 0, sz*.06, sz*.22, sz*.3);
+  fl.addColorStop(0, 'rgba(130,175,255,0.55)');
+  fl.addColorStop(1, 'rgba(130,175,255,0)');
+  ectx.fillStyle = fl; ectx.fillRect(0, 0, sz, sz);
+  // Back rim – subtle warm behind
+  const rl = ectx.createRadialGradient(sz*.5, sz*.3, 0, sz*.5, sz*.3, sz*.2);
+  rl.addColorStop(0, 'rgba(255,200,140,0.22)');
+  rl.addColorStop(1, 'rgba(255,200,140,0)');
+  ectx.fillStyle = rl; ectx.fillRect(0, 0, sz, sz);
+
+  const skyTex = new THREE.CanvasTexture(ec);
+  skyTex.mapping = THREE.EquirectangularReflectionMapping;
+  const envTex = pmrem.fromEquirectangular(skyTex).texture;
+  pmrem.dispose(); skyTex.dispose();
+  return envTex;
+}
+
+function initScene(container) {
+  if (T.scene) return;
+  const w = container.clientWidth || 600;
+  const h = container.clientHeight || 600;
+
+  /* ── Renderer (set up first – env map needs it) ── */
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.12;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  container.appendChild(renderer.domElement);
+  T.renderer = renderer;
+
+  /* ── Scene ── */
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0b0f18);
+  scene.fog = new THREE.FogExp2(0x0b0f18, .0015);
+  T.scene = scene;
+
+  // IBL – image-based lighting from procedural HDR env
+  const envMap = mkEnvMap();
+  scene.environment = envMap;
+
+  /* ── Camera ── */
+  const camera = new THREE.PerspectiveCamera(44, w/h, .1, 2000);
+  camera.position.set(0, 80, 230);
+  T.camera = camera;
+
+  /* ── Lights (complement IBL) ── */
+  scene.add(new THREE.AmbientLight(0xffffff, .10));
+
+  const key = new THREE.DirectionalLight(0xfff0d0, 1.6);
+  key.position.set(80, 160, 100); key.castShadow = true;
+  key.shadow.mapSize.set(2048, 2048);
+  key.shadow.bias = -0.0004;
+  const ksc = key.shadow.camera;
+  ksc.near=1; ksc.far=700; ksc.left=ksc.bottom=-260; ksc.right=ksc.top=260;
+  scene.add(key);
+
+  const fill = new THREE.DirectionalLight(0xc0d8ff, .32);
+  fill.position.set(-80, 50, -60); scene.add(fill);
+
+  const back = new THREE.DirectionalLight(0xfff8f0, .18);
+  back.position.set(0, 30, -160); scene.add(back);
+
+  /* ── Reflective floor (polished concrete) ── */
+  const gnd = new THREE.Mesh(
+    new THREE.PlaneGeometry(600, 600),
+    new THREE.MeshStandardMaterial({
+      color: 0x0e1622, roughness: 0.20, metalness: 0.60,
+    })
+  );
+  gnd.rotation.x = -Math.PI/2; gnd.receiveShadow = true; scene.add(gnd); T.floor = gnd;
+
+  const grid = new THREE.GridHelper(320, 28, 0x1e2840, 0x17202e);
+  grid.position.y = .35;
+  grid.material.transparent = true; grid.material.opacity = .4;
+  scene.add(grid); T.grid = grid;
+
+  /* ── OrbitControls ── */
+  const ctrl = new THREE.OrbitControls(camera, renderer.domElement);
+  ctrl.enableDamping  = true;
+  ctrl.dampingFactor  = 0.055;
+  ctrl.autoRotate     = false;
+  ctrl.minDistance    = 50;
+  ctrl.maxDistance    = 650;
+  ctrl.maxPolarAngle  = Math.PI / 2.08;
+  ctrl.target.set(0, 40, 0);
+  ctrl.update();
+  T.controls = ctrl;
+
+  /* ── Render loop ── */
+  function loop() {
+    requestAnimationFrame(loop);
+    ctrl.update();
+    renderer.render(scene, camera);
+  }
+  loop();
+
+  /* ── Responsive resize ── */
+  T.ro = new ResizeObserver(() => {
+    const nw = container.clientWidth, nh = container.clientHeight;
+    if (nw && nh) {
+      T.renderer.setSize(nw, nh);
+      T.camera.aspect = nw / nh;
+      T.camera.updateProjectionMatrix();
+    }
+  });
+  T.ro.observe(container);
+}
+
+function showPot(mKey, modKey, dims) {
+  if (!T.scene) return;
+  if (T.pot) {
+    T.scene.remove(T.pot);
+    T.pot.traverse(o => {
+      if (o.geometry) o.geometry.dispose();
+      if (o.material) { Array.isArray(o.material) ? o.material.forEach(m=>m.dispose()) : o.material.dispose(); }
+    });
+    T.pot = null;
+  }
+
+  const { group, height } = buildPot(mKey, modKey, dims);
+  T.scene.add(group); T.pot = group;
+
+  const maxD = Math.max(height, dims.en||dims.cap||50, dims.derinlik||dims.en||dims.cap||50);
+  const dist = maxD * 3.3;
+  T.camera.position.set(dist*.6, height*.9, dist);
+  if (T.controls) {
+    T.controls.target.set(0, height * .45, 0);
+    T.controls.minDistance = maxD * .8;
+    T.controls.maxDistance = maxD * 8;
+    T.controls.update();
+  } else {
+    T.camera.lookAt(0, height*.45, 0);
+  }
+}
+
+/* ════════════════════════ NANO BANANA ════════════════════════ */
+
+function _nbk() {
+  return 'AIzaSyBfsHg8GZCDf3RuzHXvirN5wQv2tMN6jPk';
+}
+
+function _apiErr(status, msg) {
+  if (status === 400) return 'Geçersiz istek — fotoğraf boyutunu küçültüp tekrar deneyin. (' + msg + ')';
+  if (status === 403) return 'API erişimi reddedildi — API anahtarı bu model için yetkilendirilmemiş olabilir. (' + msg + ')';
+  if (status === 429) return 'Kota aşıldı — biraz bekleyip tekrar deneyin.';
+  return 'API hatası ' + status + (msg ? ': ' + msg : '');
+}
+
+async function analyzeAndCompose(roomMime, roomB64, potB64, markerPos) {
+  /* Gemini: oda + saksı görsellerini birlikte analiz et, kompozisyon promptu üret */
+  const hPos = markerPos.x < 33 ? 'left side' : markerPos.x > 66 ? 'right side' : 'center';
+  const vPos = markerPos.y < 35 ? 'background' : markerPos.y > 70 ? 'foreground' : 'middle ground';
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${_nbk()}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { text: `You are an expert at writing image generation prompts. You will receive two images: (1) a room or outdoor space photo, (2) a 3D render of a decorative planter pot on a white background. Write a single, detailed Imagen prompt (English) that describes: adding the exact planter pot from image 2 into the scene from image 1, placed at the ${hPos} ${vPos}. Include: pot shape, material, color, texture from image 2; lighting, style, atmosphere from image 1; realistic perspective, shadows, and integration. The rest of the scene must remain unchanged. Output only the prompt text, nothing else.` },
+            { inlineData: { mimeType: roomMime || 'image/jpeg', data: roomB64 } },
+            { inlineData: { mimeType: 'image/png', data: potB64 } }
+          ]
+        }]
+      })
+    }
+  );
+  const data = await res.json();
+  if (!res.ok) throw new Error(_apiErr(res.status, data.error?.message || ''));
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || `Add a large decorative planter pot at the ${hPos} ${vPos} of the scene with realistic lighting and shadows.`;
+}
+
+async function callNanaBanana(roomMime, roomB64, potB64, markerPos) {
+  /* Adım 1: Gemini ile her iki görseli birlikte analiz et → Imagen prompt üret */
+  const prompt = await analyzeAndCompose(roomMime, roomB64, potB64, markerPos);
+
+  /* Adım 2: Imagen 3 ile oda fotoğrafına saksıyı ekle */
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${_nbk()}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        instances: [{
+          prompt,
+          image: { bytesBase64Encoded: roomB64, mimeType: roomMime || 'image/jpeg' }
+        }],
+        parameters: { sampleCount: 1, editMode: 'inpainting-insert' }
+      })
+    }
+  );
+  const data = await res.json();
+  if (!res.ok) throw new Error(_apiErr(res.status, data.error?.message || ''));
+  const imgB64 = data.predictions?.[0]?.bytesBase64Encoded;
+  if (!imgB64) throw new Error('Görsel üretilemedi. Lütfen tekrar deneyin.');
+  const mime = data.predictions?.[0]?.mimeType || 'image/png';
+  return `data:${mime};base64,${imgB64}`;
+}
+
+/* ════════════════════════ ROOM MODE ════════════════════════ */
+
+function setRoomMode(enabled) {
+  if (!T.scene) return;
+  if (enabled) {
+    T.scene.background = null;
+    T.scene.fog = null;
+    if (T.floor) T.floor.visible = false;
+    if (T.grid)  T.grid.visible  = false;
+  } else {
+    T.scene.background = new THREE.Color(0x0b0f18);
+    T.scene.fog = new THREE.FogExp2(0x0b0f18, .0015);
+    if (T.floor) T.floor.visible = true;
+    if (T.grid)  T.grid.visible  = true;
+  }
+}
+
+/* ════════════════════════ ICONS ════════════════════════ */
+
+function Icon({ s }) {
+  const p = { width:44, height:44, fill:'none', stroke:'currentColor', strokeWidth:1.5, strokeLinecap:'round', strokeLinejoin:'round' };
+  switch(s) {
+    case 'kare':    return <svg {...p}><rect x="8" y="8" width="28" height="28" rx="2.5"/></svg>;
+    case 'kutu':    return <svg {...p}><rect x="8" y="5" width="28" height="34" rx="2.5"/></svg>;
+    case 'sil':     return <svg {...p}><ellipse cx="22" cy="13" rx="13" ry="4.5"/><line x1="9" y1="13" x2="9" y2="35"/><line x1="35" y1="13" x2="35" y2="35"/><ellipse cx="22" cy="35" rx="13" ry="4.5"/></svg>;
+    case 'kase':    return <svg {...p}><path d="M7 17 Q7 39 22 40 Q37 39 37 17"/><line x1="7" y1="17" x2="37" y2="17"/></svg>;
+    case 'konik-k': return <svg {...p}><polygon points="14,37 8,8 36,8 30,37"/></svg>;
+    case 'konik-sil':return <svg {...p}><path d="M13 37 Q9 10 22 7 Q35 10 31 37 Z"/></svg>;
+    case 'trapez':  return <svg {...p}><polygon points="12,37 9,10 35,10 32,37"/></svg>;
+    case 'siesta':  return <svg {...p}><rect x="2" y="8" width="10" height="30" rx="4"/><rect x="17" y="14" width="10" height="24" rx="4"/><rect x="32" y="19" width="10" height="19" rx="4"/></svg>;
+    default:        return <svg {...p}><rect x="8" y="8" width="28" height="28" rx="2.5"/></svg>;
+  }
+}
+
+/* ════════════════════════ APP ════════════════════════ */
+
+function App() {
+  const [mal,  setMal]  = useState(null);
+  const [mod,  setMod]  = useState(null);
+  const [dims, setDims] = useState({});
+  const [built, setBuilt] = useState(false);
+  const [roomPhoto, setRoomPhoto] = useState(null);
+  const [roomPhotoB64, setRoomPhotoB64] = useState(null);
+  const [roomPhotoMime, setRoomPhotoMime] = useState('image/jpeg');
+  const [nbLoading, setNbLoading] = useState(false);
+  const [nbResult, setNbResult] = useState(null);
+  const [nbError, setNbError] = useState(null);
+  const [markerPos, setMarkerPos] = useState({x: 50, y: 75});
+  const [isDragging, setIsDragging] = useState(false);
+  const cwRef = useRef(null);
+
+  useEffect(() => {
+    if (cwRef.current) {
+      const t = setTimeout(() => initScene(cwRef.current), 60);
+      return () => clearTimeout(t);
+    }
+  }, []);
+
+  useEffect(() => {
+    setRoomMode(!!roomPhoto);
+  }, [roomPhoto]);
+
+  const handlePhotoUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (roomPhoto) URL.revokeObjectURL(roomPhoto);
+    setRoomPhoto(URL.createObjectURL(file));
+    setRoomPhotoMime(file.type || 'image/jpeg');
+    const reader = new FileReader();
+    reader.onload = ev => setRoomPhotoB64(ev.target.result.split(',')[1]);
+    reader.readAsDataURL(file);
+    setNbResult(null); setNbError(null);
+    setMarkerPos({x: 50, y: 75});
+  };
+
+  const clearPhoto = () => {
+    if (roomPhoto) URL.revokeObjectURL(roomPhoto);
+    setRoomPhoto(null); setRoomPhotoB64(null);
+    setNbResult(null); setNbError(null);
+  };
+
+  const updateMarker = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = Math.max(2, Math.min(98, ((e.clientX - rect.left) / rect.width) * 100));
+    const y = Math.max(2, Math.min(98, ((e.clientY - rect.top) / rect.height) * 100));
+    setMarkerPos({x, y});
+  };
+
+  const downloadPot = () => {
+    if (!T.renderer || !T.scene || !T.camera) return;
+    /* Mevcut sahne durumunu sakla */
+    const prevBg   = T.scene.background;
+    const prevFog  = T.scene.fog;
+    const floorVis = T.floor?.visible;
+    const gridVis  = T.grid?.visible;
+    /* Transparan arka plan */
+    T.scene.background = null;
+    T.scene.fog        = null;
+    if (T.floor) T.floor.visible = false;
+    if (T.grid)  T.grid.visible  = false;
+    T.renderer.render(T.scene, T.camera);
+    /* PNG olarak indir */
+    const a = document.createElement('a');
+    a.href     = T.renderer.domElement.toDataURL('image/png');
+    a.download = `saksi-${Date.now()}.png`;
+    a.click();
+    /* Sahneyi geri yükle */
+    T.scene.background = prevBg;
+    T.scene.fog        = prevFog;
+    if (T.floor) T.floor.visible = floorVis;
+    if (T.grid)  T.grid.visible  = gridVis;
+    T.renderer.render(T.scene, T.camera);
+  };
+
+  const runNanaBanana = async () => {
+    setNbLoading(true); setNbError(null); setNbResult(null);
+    try {
+      if (!T.renderer || !T.scene || !T.camera) throw new Error('3D görünüm hazır değil');
+      if (!roomPhotoB64) throw new Error('Lütfen önce mekan fotoğrafı yükleyin');
+
+      /* Saksıyı NET görmek için geçici beyaz arka plan */
+      const prevBg = T.scene.background;
+      T.scene.background = new THREE.Color(0xffffff);
+      T.renderer.render(T.scene, T.camera);
+      const potB64 = T.renderer.domElement.toDataURL('image/png').split(',')[1];
+      /* Arka planı geri yükle */
+      T.scene.background = prevBg;
+      T.renderer.render(T.scene, T.camera);
+
+      if (!potB64) throw new Error('3D saksı görüntüsü alınamadı');
+      const result = await callNanaBanana(roomPhotoMime, roomPhotoB64, potB64, markerPos);
+      setNbResult(result);
+    } catch (e) {
+      setNbError(e.message);
+    } finally {
+      setNbLoading(false);
+    }
+  };
+
+  const pickMal = (k) => {
+    setMal(k);
+    if (mod && !MAL[k].mods.includes(mod)) { setMod(null); setDims({}); }
+    setBuilt(false);
+  };
+
+  const pickMod = (k) => {
+    setMod(k);
+    setDims({ ...MOD[k].def });
+    setBuilt(false);
+  };
+
+  const setDim = (k, v) => {
+    setDims(p => ({ ...p, [k]: Number(v) }));
+    setBuilt(false);
+  };
+
+  const create = () => {
+    showPot(mal, mod, dims);
+    setBuilt(true);
+  };
+
+  const mods     = mal ? MAL[mal].mods : [];
+  const curMod   = mod ? MOD[mod] : null;
+  const canBuild = !!(mal && mod);
+  const step     = !mal ? 1 : !mod ? 2 : 3;
+
+  return (
+    <div className="layout">
+
+      {/* ── LEFT ── */}
+      <div className="lp">
+
+        {/* Step indicator */}
+        <div className="steps">
+          <div className={`step ${step===1?'active':mal?'done':''}`}>
+            <div className="snum">{mal?'✓':'1'}</div> Malzeme
+          </div>
+          <div className="sline"/>
+          <div className={`step ${step===2?'active':mod?'done':''}`}>
+            <div className="snum">{mod?'✓':'2'}</div> Model
+          </div>
+          <div className="sline"/>
+          <div className={`step ${step===3?'active':built?'done':''}`}>
+            <div className="snum">{built?'✓':'3'}</div> Ölçü
+          </div>
+        </div>
+
+        {/* Step 1 – Malzeme */}
+        <div className="slabel"><i className="fas fa-layer-group"/> Malzeme Türü</div>
+        <div className="mat-grid">
+          {Object.entries(MAL).map(([k, m]) => (
+            <div key={k} className={`mat-card ${mal===k?'sel':''}`} onClick={() => pickMal(k)}>
+              <div className="mat-dot" style={{ background:m.dot, outline:k==='metal'?'2px solid #999':'none', outlineOffset:2 }}/>
+              <div>
+                <div className="mat-name">{m.label}</div>
+                <div className="mat-sub">{m.sub}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <hr className="divider"/>
+
+        {/* Step 2 – Model */}
+        <div className={`locked ${mal?'open':''}`}>
+          <div className="slabel"><i className="fas fa-shapes"/> Model Seçimi</div>
+          <div className="mod-grid">
+            {mods.map(k => {
+              const m = MOD[k];
+              return (
+                <div key={k} className={`mod-card ${mod===k?'sel':''}`} onClick={() => pickMod(k)}>
+                  <Icon s={m.s} className="mod-icon"/>
+                  <div className="mod-name">{m.label}</div>
+                  <div className="mod-desc">{m.desc}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <hr className="divider"/>
+
+        {/* Step 3 – Ölçüler */}
+        <div className={`locked ${mod?'open':''}`}>
+          <div className="slabel"><i className="fas fa-ruler-combined"/> Ölçüler</div>
+          {curMod && (
+            <div className="dims">
+              {curMod.dims.map(dk => (
+                <div key={dk} className="dim">
+                  <label>
+                    {curMod.lbl[dk]}
+                    <em>{dims[dk] ?? curMod.def[dk]} cm</em>
+                  </label>
+                  <div className="dim-row">
+                    <input type="range"
+                      min={curMod.min[dk]} max={curMod.max[dk]}
+                      value={dims[dk] ?? curMod.def[dk]}
+                      onChange={e => setDim(dk, e.target.value)}
+                    />
+                    <input type="number"
+                      min={curMod.min[dk]} max={curMod.max[dk]}
+                      value={dims[dk] ?? curMod.def[dk]}
+                      onChange={e => setDim(dk, e.target.value)}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <button className="btn-c" onClick={create} disabled={!canBuild}>
+          <i className="fas fa-cube"/> 3D Saksıyı Oluştur
+        </button>
+
+        {built && (
+          <button className="btn-dl-pot" onClick={downloadPot}>
+            <i className="fas fa-download"/> PNG İndir (Transparan)
+          </button>
+        )}
+
+        {/* ── Mekana Yerleştir ── */}
+        <div className={`locked ${built?'open':''}`}>
+          <hr className="divider"/>
+          <div className="slabel"><i className="fas fa-image"/> Mekana Yerleştir</div>
+          {roomPhoto ? (
+            <Fragment>
+              <div className="room-preview">
+                <img src={roomPhoto} alt="Mekan" draggable={false}/>
+                <div
+                  className="pin-wrap"
+                  onMouseDown={e => { setIsDragging(true); updateMarker(e); }}
+                  onMouseMove={e => { if (isDragging) updateMarker(e); }}
+                  onMouseUp={() => setIsDragging(false)}
+                  onMouseLeave={() => setIsDragging(false)}
+                >
+                  <div className="pin" style={{left: markerPos.x+'%', top: markerPos.y+'%'}}>
+                    <span className="pin-label">Saksı buraya</span>
+                  </div>
+                </div>
+              </div>
+              <div className="pin-hint"><i className="fas fa-hand-pointer"/> Kırmızı noktayı sürükleyerek konumu ayarlayın</div>
+              <button className="btn-clear" onClick={clearPhoto} style={{marginTop:'.45rem'}}>
+                <i className="fas fa-times"/> Fotoğrafı Kaldır
+              </button>
+
+              <hr className="divider" style={{marginTop:'.5rem'}}/>
+              <div className="slabel"><span>🍌</span> Nano Banana ile Yerleştir</div>
+              <button className="btn-nb" onClick={runNanaBanana} disabled={nbLoading}>
+                {nbLoading
+                  ? <Fragment><i className="fas fa-spinner fa-spin"/> AI oluşturuyor...</Fragment>
+                  : <Fragment>🍌 Gerçekçi Görsel Oluştur</Fragment>
+                }
+              </button>
+              {nbError && (
+                <div className="nb-error">
+                  <i className="fas fa-circle-exclamation"/> {nbError}
+                  <button onClick={runNanaBanana} style={{marginLeft:'.5rem',background:'none',border:'none',color:'#dc2626',cursor:'pointer',fontWeight:700,fontSize:'.75rem',padding:0}}>
+                    Tekrar Dene
+                  </button>
+                </div>
+              )}
+            </Fragment>
+          ) : (
+            <label className="room-upload">
+              <i className="fas fa-upload"/>
+              <span>Mekan fotoğrafı yükle</span>
+              <span style={{fontSize:'.72rem'}}>JPG, PNG, WEBP</span>
+              <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{display:'none'}}/>
+            </label>
+          )}
+        </div>
+
+      </div>
+
+      {/* ── RIGHT ── */}
+      <div className="rp">
+        <div id="cw" ref={cwRef} style={roomPhoto ? {backgroundImage:`url(${roomPhoto})`,backgroundSize:'cover',backgroundPosition:'center'} : {}}>
+          {!built && (
+            <div className="empty-state">
+              <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth=".75">
+                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+              </svg>
+              <p>Malzeme ve model seçin, ardından oluşturun</p>
+            </div>
+          )}
+        </div>
+
+        {built && (
+          <div className="cinfo">
+            <div className="ci">
+              <strong>{MAL[mal]?.label}</strong>
+              Malzeme
+            </div>
+            <div className="cdiv"/>
+            <div className="ci">
+              <strong>{MOD[mod]?.label}</strong>
+              Model
+            </div>
+            {Object.entries(dims).map(([k, v]) => (
+              <Fragment key={k}>
+                <div className="cdiv"/>
+                <div className="ci">
+                  <strong>{v} cm</strong>
+                  {MOD[mod]?.lbl[k]}
+                </div>
+              </Fragment>
+            ))}
+          </div>
+        )}
+
+        {nbResult && (
+          <div className="nb-modal" onClick={e => e.target === e.currentTarget && setNbResult(null)}>
+            <div className="nb-modal-box">
+              <div className="nb-modal-img">
+                <img src={nbResult} alt="Nano Banana sonucu"/>
+              </div>
+              <div className="nb-modal-bar">
+                <a href={nbResult} download="saksi-mekan.jpg" className="btn-dl">
+                  <i className="fas fa-download"/> İndir
+                </a>
+                <button className="btn-clear" style={{width:'auto',padding:'.48rem 1rem',margin:0}} onClick={() => setNbResult(null)}>
+                  <i className="fas fa-times"/> Kapat
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="badge">
+          <i className="fas fa-mouse"/> Döndür &nbsp;·&nbsp; Sürükle &nbsp;·&nbsp; Scroll ile zoom
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
