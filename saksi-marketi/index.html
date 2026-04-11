@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saksı Marketi</title>
+  <meta name="description" content="Profesyonel peyzaj tasarımı, bahçe bakımı ve büyük fiber saksı satışı. Doğayla yaşayın." />
+  <link rel="stylesheet" href="css/style.css?v=2" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <div class="topbar-left">
+        <span><i class="fas fa-map-marker-alt"></i> Atatürk Cad. No:42, Ankara</span>
+        <span><i class="fas fa-envelope"></i> info@yesildokanus.com</span>
+      </div>
+      <div class="topbar-right">
+        <span>Bizi Takip Edin:</span>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-x-twitter"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#" class="logo">
+        <img src="images/logo-1.png" alt="Saksı Marketi" class="logo-img" />
+      </a>
+      <nav class="nav" id="nav">
+        <div class="dropdown">
+          <a href="#pots">Ürünler <i class="fas fa-chevron-down"></i></a>
+          <div class="dropdown-menu">
+            <a href="#pots">Fiber Saksılar</a>
+            <a href="#pots">Ahşap Saksılar</a>
+            <a href="#pots">Metal Saksılar</a>
+            <a href="#pots">Corten Saksılar</a>
+            <a href="#pots">Diğer Saksılar</a>
+          </div>
+        </div>
+        <a href="#gallery">Galeri</a>
+        <a href="#services">Hizmetler</a>
+        <a href="#blog">Blog</a>
+        <a href="#contact">İletişim</a>
+      </nav>
+      <div class="header-cta">
+        <div class="phone-block">
+          <div class="phone-icon"><i class="fas fa-phone"></i></div>
+          <div>
+            <small>Hemen Arayın</small>
+            <strong>0312 555 44 33</strong>
+          </div>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menü">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg">
+      <img src="images/hero-arka-plan.jpg" alt="Peyzaj" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="container hero-content">
+      <div class="hero-text">
+        <div class="hero-tag"><i class="fas fa-seedling"></i> Doğayı evinize taşıyoruz</div>
+        <h1>Güzel Bahçeler,<br /><span>Yaşayan Mekanlar</span></h1>
+        <p>Peyzaj tasarımından büyük fiber saksılara kadar her ihtiyacınız için profesyonel çözümler sunuyoruz. Doğayla bütünleşen yaşam alanları yaratıyoruz.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-primary">Ücretsiz Keşif Al <i class="fas fa-arrow-up-right-from-square"></i></a>
+          <a href="#services" class="btn btn-outline">Hizmetlerimiz</a>
+        </div>
+        <div class="hero-promo">
+          <div class="promo-badge">
+            <i class="fas fa-tag"></i>
+            <div>
+              <strong>%20 İndirim</strong>
+              <small>İlk Siparişinizde</small>
+            </div>
+          </div>
+          <a href="#pots" class="promo-link">Hemen Kaydol <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <img src="images/hero-kart.jpg" alt="Bahçe çalışması" />
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="container stats-inner">
+        <div class="stat">
+          <strong>2.500+</strong>
+          <span>Tamamlanan Proje</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <strong>98%</strong>
+          <span>Müşteri Memnuniyeti</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <strong>15 Yıl</strong>
+          <span>Deneyim</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <strong>50+</strong>
+          <span>Uzman Ekibimiz</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUSTED LOGOS -->
+  <section class="trusted">
+    <div class="container">
+      <p>Türkiye Genelinde <strong>500+ Kurumsal Müşteri</strong> Tarafından Tercih Ediliyoruz</p>
+      <div class="logos-track">
+        <div class="logos-slide">
+          <span>AVM Grupları</span>
+          <span>Otel Zincirleri</span>
+          <span>Konut Projeleri</span>
+          <span>Belediyeler</span>
+          <span>Hastane Grupları</span>
+          <span>Üniversiteler</span>
+          <span>AVM Grupları</span>
+          <span>Otel Zincirleri</span>
+          <span>Konut Projeleri</span>
+          <span>Belediyeler</span>
+          <span>Hastane Grupları</span>
+          <span>Üniversiteler</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about section" id="about">
+    <div class="container about-inner">
+      <div class="about-images">
+        <div class="img-grid">
+          <img class="img-main" src="images/hakkimizda-ana.jpg" alt="Peyzaj" />
+          <img class="img-top" src="images/hakkimizda-ust.jpg" alt="Bahçe" />
+          <img class="img-bottom" src="images/hakkimizda-alt.jpg" alt="Saksı" />
+        </div>
+        <div class="experience-badge">
+          <strong>15</strong>
+          <span>Yıllık<br />Deneyim</span>
+        </div>
+      </div>
+      <div class="about-text">
+        <div class="section-label">Hakkımızda</div>
+        <h2>YeşilDokunuş Olarak Her Bahçenin <span>Yaşam Dolu</span> Olmasına İnanıyoruz</h2>
+        <p>Peyzaj tasarımı ve bahçecilik alanında 15 yıllık deneyimimizle; konut, ticari alan ve kurumsal projelerde doğayla bütünleşen yaşam alanları yaratıyoruz.</p>
+        <p>Aynı zamanda Türkiye'nin en geniş <strong>büyük boy fiber saksı</strong> koleksiyonunu sunuyor; hem bireysel hem kurumsal müşterilerimize dayanıklı, estetik ve hafif saksı çözümleri sağlıyoruz.</p>
+        <div class="about-features">
+          <div class="feature"><i class="fas fa-check-circle"></i> Ekolojik ve sürdürülebilir yaklaşım</div>
+          <div class="feature"><i class="fas fa-check-circle"></i> Yerinde ölçüm ve ücretsiz danışmanlık</div>
+          <div class="feature"><i class="fas fa-check-circle"></i> 5 yıl bakım garantisi</div>
+          <div class="feature"><i class="fas fa-check-circle"></i> Tüm Türkiye'ye fiber saksı teslimatı</div>
+        </div>
+        <a href="#contact" class="btn btn-primary">Daha Fazla Bilgi Al <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services section" id="services">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Hizmetlerimiz</div>
+        <h2>Bahçeniz İçin <span>Her Şey</span></h2>
+        <p>Peyzaj tasarımından sulama sistemlerine, fiber saksıdan bahçe bakımına kadar eksiksiz hizmet.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-pencil-ruler"></i></div>
+          <h3>Peyzaj Tasarımı</h3>
+          <p>3D modelleme ile hayalinizdeki bahçeyi gerçeğe dönüştürüyoruz. Bitkisel tasarım ve sert zemin planlaması.</p>
+          <a href="#contact" class="service-link">Detaylar <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="service-card featured">
+          <div class="service-icon"><i class="fas fa-seedling"></i></div>
+          <h3>Bahçe Bakımı</h3>
+          <p>Aylık bakım sözleşmeleri ile bahçeniz her zaman canlı ve düzenli. Çim biçimi, budama ve gübreleme.</p>
+          <a href="#contact" class="service-link">Detaylar <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-droplet"></i></div>
+          <h3>Sulama Sistemleri</h3>
+          <p>Akıllı otomatik sulama sistemleri ile su tasarrufu sağlayın. Uygulama üzerinden kontrol imkânı.</p>
+          <a href="#contact" class="service-link">Detaylar <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-spa"></i></div>
+          <h3>Çim Ekimi & Serimi</h3>
+          <p>Rulo çim, tohum ekimi ve yapay çim uygulamaları. Hızlı kurulum, uzun ömürlü yeşil alanlar.</p>
+          <a href="#contact" class="service-link">Detaylar <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-tree"></i></div>
+          <h3>Ağaçlandırma</h3>
+          <p>Gölge ağaçları, meyve ağaçları ve çalılar ile alanlarınızı oksijen dolu yeşil cennetlere çeviriyoruz.</p>
+          <a href="#contact" class="service-link">Detaylar <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-lightbulb"></i></div>
+          <h3>Bahçe Aydınlatma</h3>
+          <p>LED aydınlatma sistemleri ile bahçenizi geceleri de güzel tutun. Enerji verimli çözümler.</p>
+          <a href="#contact" class="service-link">Detaylar <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIBER SAKSILAR -->
+  <section class="pots section" id="pots">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Ürünlerimiz</div>
+        <h2>Büyük Boy <span>Fiber Saksı</span> Koleksiyonu</h2>
+        <p>Hafif, dayanıklı ve estetik fiber saksılarımız konut, otel, AVM ve bahçe projelerinize değer katıyor.</p>
+      </div>
+      <div class="pots-grid">
+        <div class="pot-card">
+          <div class="pot-badge">Çok Satan</div>
+          <div class="pot-img">
+            <img src="images/urun-silindir-fiber-saksi.jpg" alt="Silindir Fiber Saksı" />
+          </div>
+          <div class="pot-info">
+            <h3>Silindir Seri</h3>
+            <p>60 cm – 150 cm arası boyutlar. UV dayanımlı, don geçirmez.</p>
+            <div class="pot-specs">
+              <span><i class="fas fa-weight-hanging"></i> 3–8 kg</span>
+              <span><i class="fas fa-ruler-vertical"></i> 60–150 cm</span>
+              <span><i class="fas fa-palette"></i> 12 renk</span>
+            </div>
+            <div class="pot-price">
+              <span class="price-from">₺850'den başlayan fiyatlar</span>
+              <a href="#contact" class="btn btn-sm">Teklif Al</a>
+            </div>
+          </div>
+        </div>
+        <div class="pot-card">
+          <div class="pot-badge new">Yeni</div>
+          <div class="pot-img">
+            <img src="images/urun-kare-fiber-saksi.jpg" alt="Kare Fiber Saksı" />
+          </div>
+          <div class="pot-info">
+            <h3>Kare Seri</h3>
+            <p>Modern mimariyle uyumlu köşeli tasarım. İç ve dış mekân kullanımına uygun.</p>
+            <div class="pot-specs">
+              <span><i class="fas fa-weight-hanging"></i> 4–10 kg</span>
+              <span><i class="fas fa-ruler-vertical"></i> 40–120 cm</span>
+              <span><i class="fas fa-palette"></i> 8 renk</span>
+            </div>
+            <div class="pot-price">
+              <span class="price-from">₺950'den başlayan fiyatlar</span>
+              <a href="#contact" class="btn btn-sm">Teklif Al</a>
+            </div>
+          </div>
+        </div>
+        <div class="pot-card">
+          <div class="pot-img">
+            <img src="images/urun-oval-fiber-saksi.jpg" alt="Oval Fiber Saksı" />
+          </div>
+          <div class="pot-info">
+            <h3>Oval Seri</h3>
+            <p>Klasik ve şık oval form. Geniş hacimli, büyük bitkiler için ideal.</p>
+            <div class="pot-specs">
+              <span><i class="fas fa-weight-hanging"></i> 5–12 kg</span>
+              <span><i class="fas fa-ruler-vertical"></i> 70–180 cm</span>
+              <span><i class="fas fa-palette"></i> 10 renk</span>
+            </div>
+            <div class="pot-price">
+              <span class="price-from">₺1.100'den başlayan fiyatlar</span>
+              <a href="#contact" class="btn btn-sm">Teklif Al</a>
+            </div>
+          </div>
+        </div>
+        <div class="pot-card">
+          <div class="pot-badge sale">İndirimli</div>
+          <div class="pot-img">
+            <img src="images/urun-ozel-tasarim-saksi.jpg" alt="Özel Tasarım Saksı" />
+          </div>
+          <div class="pot-info">
+            <h3>Özel Tasarım Seri</h3>
+            <p>Logo, desen ve özel renk baskısı. Kurumsal projeler için özelleştirilebilir.</p>
+            <div class="pot-specs">
+              <span><i class="fas fa-weight-hanging"></i> Değişken</span>
+              <span><i class="fas fa-ruler-vertical"></i> İstenilen ölçü</span>
+              <span><i class="fas fa-palette"></i> Tüm renkler</span>
+            </div>
+            <div class="pot-price">
+              <span class="price-from">Fiyat için iletişime geçin</span>
+              <a href="#contact" class="btn btn-sm">Teklif Al</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pots-cta">
+        <div class="pots-cta-text">
+          <h3>Toplu Alımlarda Özel Fiyat</h3>
+          <p>10 adet ve üzeri siparişlerde kurumsal indirim avantajından yararlanın.</p>
+        </div>
+        <a href="#contact" class="btn btn-primary">Toplu Fiyat Teklifi Al <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <div class="designer-cta">
+        <div class="designer-cta-inner">
+          <div class="designer-cta-icon"><i class="fas fa-cube"></i></div>
+          <div class="designer-cta-text">
+            <h3>Kendi Saksını Tasarla</h3>
+            <p>3D tasarım aracımızla saksı türünü, yüksekliğini ve çapını belirle — önce görsel olarak dene.</p>
+          </div>
+          <a href="saksi-designer/index.html" class="btn btn-primary">Tasarım Aracını Aç <i class="fas fa-arrow-up-right-from-square"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="why-us section">
+    <div class="container why-inner">
+      <div class="why-img">
+        <img src="images/neden-biz-uzmanlar.jpg" alt="Peyzaj Uzmanları" />
+        <div class="why-stat-card">
+          <i class="fas fa-award"></i>
+          <div>
+            <strong>15 Yıl</strong>
+            <span>Sektör Lideriyiz</span>
+          </div>
+        </div>
+      </div>
+      <div class="why-text">
+        <div class="section-label">Neden Biz?</div>
+        <h2>Bahçenizi En İyi Ellere Bırakın</h2>
+        <div class="why-items">
+          <div class="why-item">
+            <div class="why-num">01</div>
+            <div>
+              <h4>Ücretsiz Yerinde Keşif</h4>
+              <p>Uzmanlarımız alanınızı yerinde inceleyerek size özel çözüm önerileri sunar.</p>
+            </div>
+          </div>
+          <div class="why-item">
+            <div class="why-num">02</div>
+            <div>
+              <h4>Garantili Uygulama</h4>
+              <p>Tüm peyzaj projelerimiz 5 yıl, fiber saksılarımız 10 yıl garanti kapsamındadır.</p>
+            </div>
+          </div>
+          <div class="why-item">
+            <div class="why-num">03</div>
+            <div>
+              <h4>Ülke Geneli Teslimat</h4>
+              <p>Fiber saksı siparişleriniz 3–5 iş günü içinde Türkiye'nin her noktasına teslim edilir.</p>
+            </div>
+          </div>
+          <div class="why-item">
+            <div class="why-num">04</div>
+            <div>
+              <h4>7/24 Destek</h4>
+              <p>Bakım sözleşmesi müşterilerimize 7 gün 24 saat teknik destek hizmeti sunuyoruz.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG -->
+  <section class="blog section" id="blog">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Blog</div>
+        <h2>Yeşil Yaşam <span>Rehberi</span></h2>
+        <p>Bahçecilik ipuçları, peyzaj trendleri ve fiber saksı bakım önerileri.</p>
+      </div>
+      <div class="blog-grid">
+        <div class="blog-card">
+          <div class="blog-img">
+            <img src="images/blog-fiber-saksi-secimi.jpg" alt="Blog 1" />
+            <div class="blog-date">15 Mar 2025</div>
+          </div>
+          <div class="blog-body">
+            <div class="blog-author"><i class="fas fa-user-circle"></i> Ahmet Yılmaz</div>
+            <h3>Fiber Saksı Seçerken Dikkat Edilmesi Gereken 7 Nokta</h3>
+            <p>Büyük boy fiber saksı alımında boyut, ağırlık, UV dayanımı ve drenaj gibi kritik faktörleri ele alıyoruz.</p>
+            <a href="#" class="blog-link">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="blog-card">
+          <div class="blog-img">
+            <img src="images/blog-peyzaj-trendleri.jpg" alt="Blog 2" />
+            <div class="blog-date">28 Şub 2025</div>
+          </div>
+          <div class="blog-body">
+            <div class="blog-author"><i class="fas fa-user-circle"></i> Selin Kaya</div>
+            <h3>2025 Peyzaj Trendleri: Doğal ve Minimalist Bahçeler</h3>
+            <p>Bu yıl bahçe tasarımında öne çıkan akımlar, bitki türleri ve malzeme seçimleri hakkında kapsamlı bir rehber.</p>
+            <a href="#" class="blog-link">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="blog-card">
+          <div class="blog-img">
+            <img src="images/blog-bakım-rehberi.jpg" alt="Blog 3" />
+            <div class="blog-date">10 Şub 2025</div>
+          </div>
+          <div class="blog-body">
+            <div class="blog-author"><i class="fas fa-user-circle"></i> Mehmet Demir</div>
+            <h3>Akıllı Sulama Sistemi Kurarak Yıllık %40 Su Tasarrufu</h3>
+            <p>Otomatik sulama sistemleri ile hem zamandan hem sudan tasarruf edin. Kurulum ve bakım rehberi.</p>
+            <a href="#" class="blog-link">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact section" id="contact">
+    <div class="container contact-inner">
+      <div class="contact-info">
+        <div class="section-label">İletişim</div>
+        <h2>Bahçe Uzmanlarımızla <span>Ücretsiz</span> Görüşün</h2>
+        <p>Ekibimiz peyzaj ve fiber saksı konularında size en uygun çözümü bulmak için hazır.</p>
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="c-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div>
+              <strong>Adres</strong>
+              <span>Atatürk Cad. No:42, Çankaya / Ankara</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="c-icon"><i class="fas fa-envelope"></i></div>
+            <div>
+              <strong>E-posta</strong>
+              <span>info@yesildokanus.com</span><br />
+              <span>satis@yesildokanus.com</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="c-icon"><i class="fas fa-phone"></i></div>
+            <div>
+              <strong>Telefon</strong>
+              <span>0312 555 44 33</span><br />
+              <span>0532 111 22 33</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form-wrap">
+        <h3>Ücretsiz Keşif Formu</h3>
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Adınız *</label>
+              <input type="text" placeholder="Adınız Soyadınız" required />
+            </div>
+            <div class="form-group">
+              <label>E-posta *</label>
+              <input type="email" placeholder="ornek@email.com" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Telefon</label>
+              <input type="tel" placeholder="05XX XXX XX XX" />
+            </div>
+            <div class="form-group">
+              <label>Hizmet Seçin</label>
+              <select>
+                <option value="">Seçiniz...</option>
+                <option>Peyzaj Tasarımı</option>
+                <option>Bahçe Bakımı</option>
+                <option>Fiber Saksı Alımı</option>
+                <option>Sulama Sistemi</option>
+                <option>Ağaçlandırma</option>
+                <option>Diğer</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group full">
+            <label>Mesajınız</label>
+            <textarea placeholder="Projenizi veya ihtiyacınızı kısaca açıklayın..." rows="4"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary full-btn">
+            Ücretsiz Keşif Talep Et <i class="fas fa-arrow-right"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter">
+    <div class="container newsletter-inner">
+      <div class="newsletter-text">
+        <h3>Bahçenizi En İyi Hale Getirin</h3>
+        <p>Ücretsiz e-bültenimize kayıt olun, ilk siparişinizde %10 indirim kazanın.</p>
+      </div>
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="email" placeholder="E-posta adresinizi girin" required />
+        <button type="submit">Kayıt Ol <i class="fas fa-arrow-right"></i></button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="logo logo-light">
+          <img src="images/logo-1.png" alt="Saksı Marketi" class="logo-img" />
+        </a>
+        <p>Türkiye'nin lider peyzaj tasarımı ve büyük boy fiber saksı şirketi. Doğayla yaşamanın en güzel hali.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-x-twitter"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Hızlı Bağlantılar</h4>
+        <ul>
+          <li><a href="#home">Ana Sayfa</a></li>
+          <li><a href="#about">Hakkımızda</a></li>
+          <li><a href="#services">Hizmetlerimiz</a></li>
+          <li><a href="#pots">Fiber Saksılar</a></li>
+          <li><a href="#blog">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Hizmetlerimiz</h4>
+        <ul>
+          <li><a href="#services">Peyzaj Tasarımı</a></li>
+          <li><a href="#services">Bahçe Bakımı</a></li>
+          <li><a href="#services">Sulama Sistemleri</a></li>
+          <li><a href="#services">Çim Ekimi</a></li>
+          <li><a href="#services">Bahçe Aydınlatma</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>İletişim</h4>
+        <ul class="contact-list">
+          <li><i class="fas fa-map-marker-alt"></i> Atatürk Cad. No:42, Ankara</li>
+          <li><i class="fas fa-envelope"></i> info@yesildokanus.com</li>
+          <li><i class="fas fa-phone"></i> 0312 555 44 33</li>
+        </ul>
+        <div class="footer-insta">
+          <img src="images/instagram-1.jpg" alt="" />
+          <img src="images/instagram-2.jpg" alt="" />
+          <img src="images/instagram-3.jpg" alt="" />
+          <img src="images/instagram-4.jpg" alt="" />
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <span>© 2025 Saksı Marketi. Tüm hakları saklıdır.</span>
+        <span>Doğayla Büyüyen Bir Marka</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BACK TO TOP -->
+  <button class="back-to-top" id="backToTop" aria-label="Yukarı çık">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
