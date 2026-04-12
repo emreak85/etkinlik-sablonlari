@@ -3,54 +3,633 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mail Sistemi — Yakında · emreak.art</title>
+  <title>Mail Sistemi — emreak.art</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: 'Google Sans', sans-serif;
       background: #f0f2f5;
-      min-height: 100vh;
+      padding: 20px;
       display: flex;
-      flex-direction: column;
+      gap: 20px;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      align-items: stretch;
+    }
+
+    /* === SIDEBAR === */
+    .sidebar {
+      width: 360px;
+      flex-shrink: 0;
+      overflow-y: auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: #00637d; border-radius: 3px; }
+    .sidebar::-webkit-scrollbar-thumb:hover { background: #00506a; }
+
+    .sidebar-header {
+      display: flex;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px 20px;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid #f2f2f2;
     }
-    .icon { font-size: 64px; margin-bottom: 24px; }
-    .badge {
-      display: inline-block;
-      background: #00637d;
-      color: white;
-      font-size: 12px;
+    .sidebar-header h1 {
+      font-size: 16px;
       font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      padding: 4px 14px;
-      border-radius: 20px;
-      margin-bottom: 20px;
+      color: #00637d;
     }
-    h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; }
-    p  { font-size: 15px; color: #888; line-height: 1.6; max-width: 380px; }
-    .back-link {
-      margin-top: 32px;
-      display: inline-block;
-      font-size: 14px;
-      font-weight: 600;
+    .sidebar-header a {
+      font-size: 13px;
       color: #00637d;
       text-decoration: none;
-      border-bottom: 2px solid transparent;
-      transition: border-color 0.2s;
+      font-weight: 600;
     }
-    .back-link:hover { border-color: #00637d; }
+    .sidebar-header a:hover { text-decoration: underline; }
+
+    .sidebar-section {
+      padding: 18px;
+      border-bottom: 1px solid #f2f2f2;
+    }
+    .sidebar-section:last-child { border-bottom: none; }
+    .sidebar-section-header {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .sidebar-section-icon {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #00637d;
+      font-size: 14px;
+    }
+    .sidebar-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #00637d;
+      flex-grow: 1;
+    }
+    .sidebar-section-toggle {
+      font-size: 10px;
+      color: #bbb;
+      transition: transform 0.2s;
+    }
+    .sidebar-section.collapsed .sidebar-section-toggle { transform: rotate(-90deg); }
+    .sidebar-section.collapsed .sidebar-section-body { display: none; }
+
+    /* Form */
+    .form-group { margin-bottom: 14px; }
+    .form-group:last-child { margin-bottom: 0; }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 5px;
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    input[type="time"],
+    textarea,
+    select {
+      font-family: 'Google Sans', sans-serif;
+      width: 100%;
+      padding: 9px 11px;
+      border: 1.5px solid #e5e5e5;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #333;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      background: white;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: #00637d;
+      box-shadow: 0 0 0 3px rgba(0,99,125,0.1);
+    }
+    textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+    .instr { color: #999; font-size: 11px; display: block; margin-top: 6px; line-height: 1.55; }
+
+    /* Buttons */
+    .btn-primary {
+      font-family: 'Google Sans', sans-serif;
+      background: #00637d;
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      transition: background 0.2s, transform 0.1s;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-primary:hover { background: #00506a; }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+
+    .btn-secondary {
+      font-family: 'Google Sans', sans-serif;
+      background: #f0f2f5;
+      color: #555;
+      border: 1.5px solid #e5e5e5;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      transition: background 0.2s;
+    }
+    .btn-secondary:hover { background: #e8eaed; }
+
+    .btn-danger {
+      font-family: 'Google Sans', sans-serif;
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 7px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .btn-danger:hover { background: #c82333; }
+
+    .btn-gmail {
+      font-family: 'Google Sans', sans-serif;
+      background: white;
+      color: #333;
+      border: 1.5px solid #e5e5e5;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .btn-gmail:hover { background: #f8f9fa; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    .btn-gmail img { width: 20px; height: 20px; }
+
+    /* Gmail status */
+    .gmail-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #e8f5e9;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #2e7d32;
+      font-weight: 500;
+    }
+    .gmail-status .email-addr { font-weight: 700; }
+    .gmail-disconnect {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: #999;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+    }
+    .gmail-disconnect:hover { color: #dc3545; }
+
+    /* Recipients */
+    .recipient-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .recipient-input-row input { flex-grow: 1; }
+    .recipient-input-row button {
+      flex-shrink: 0;
+      width: auto;
+      padding: 9px 14px;
+    }
+    .recipient-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+    .recipient-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f0f2f5;
+      border: 1px solid #e5e5e5;
+      border-radius: 20px;
+      padding: 5px 8px 5px 12px;
+      font-size: 12px;
+      color: #333;
+      animation: tagIn 0.15s ease;
+    }
+    @keyframes tagIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    .recipient-tag button {
+      background: none;
+      border: none;
+      color: #999;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0;
+      width: auto;
+      line-height: 1;
+    }
+    .recipient-tag button:hover { color: #dc3545; }
+    .recipient-count {
+      font-size: 11px;
+      color: #999;
+      margin-top: 8px;
+    }
+    .bulk-area { margin-top: 10px; }
+    .bulk-area textarea { min-height: 50px; font-size: 12px; }
+
+    /* Send section */
+    .send-progress {
+      margin-top: 12px;
+      display: none;
+    }
+    .send-progress.active { display: block; }
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: #e5e5e5;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: #00637d;
+      border-radius: 3px;
+      transition: width 0.3s;
+      width: 0;
+    }
+    .progress-text {
+      font-size: 12px;
+      color: #666;
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    /* Settings */
+    .settings-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .settings-row .form-group { flex: 1; margin-bottom: 0; }
+
+    /* === PREVIEW AREA === */
+    .preview-area {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid #f2f2f2;
+    }
+    .preview-header h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #00637d;
+    }
+    .preview-actions { display: flex; gap: 8px; }
+    .preview-scroll {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      justify-content: center;
+      padding: 30px 20px;
+      background: #f0f2f5;
+    }
+    .preview-scroll::-webkit-scrollbar { width: 6px; }
+    .preview-scroll::-webkit-scrollbar-track { background: transparent; }
+    .preview-scroll::-webkit-scrollbar-thumb { background: #00637d; border-radius: 3px; }
+
+    .email-preview-frame {
+      width: 640px;
+      flex-shrink: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      align-self: flex-start;
+      border: none;
+    }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast {
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .toast.success { background: #2e7d32; }
+    .toast.error { background: #dc3545; }
+    .toast.info { background: #00637d; }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
+
+    /* Help modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 14px;
+      padding: 28px;
+      max-width: 560px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+    .modal h2 {
+      font-size: 18px;
+      color: #00637d;
+      margin-bottom: 16px;
+    }
+    .modal h3 {
+      font-size: 14px;
+      color: #333;
+      margin: 16px 0 8px;
+    }
+    .modal p, .modal li {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .modal ol { padding-left: 20px; }
+    .modal li { margin-bottom: 6px; }
+    .modal code {
+      background: #f0f2f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .modal-close {
+      float: right;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #999;
+      padding: 0;
+      width: auto;
+    }
+    .modal-close:hover { color: #333; }
   </style>
 </head>
 <body>
-  <div class="icon">📧</div>
-  <span class="badge">Yakında</span>
-  <h1>Mail Sistemi</h1>
-  <p>Bu proje henüz hazır değil. Çok yakında burada yayına girecek.</p>
-  <a href="../" class="back-link">← Ana sayfaya dön</a>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h1><i class="fa-solid fa-envelope"></i> Mail Sistemi</h1>
+      <a href="../">← Ana sayfa</a>
+    </div>
+
+    <!-- Gmail Girişi -->
+    <div class="sidebar-section" id="sectionGmail">
+      <div class="sidebar-section-header" onclick="toggleSection('sectionGmail')">
+        <div class="sidebar-section-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
+        <div class="sidebar-section-title">Gmail Hesabı</div>
+        <div class="sidebar-section-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+      <div class="sidebar-section-body">
+        <div id="gmailNotConnected">
+          <button class="btn-gmail" onclick="gmailSignIn()">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+            Gmail ile Giriş Yap
+          </button>
+        </div>
+        <div id="gmailConnected" style="display:none;">
+          <div class="gmail-status">
+            <i class="fa-solid fa-circle-check"></i>
+            <span class="email-addr" id="gmailEmail"></span>
+            <button class="gmail-disconnect" onclick="gmailSignOut()" title="Çıkış yap"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Email Konusu -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-header" onclick="toggleSection(this.closest('.sidebar-section'))">
+        <div class="sidebar-section-icon"><i class="fa-solid fa-heading"></i></div>
+        <div class="sidebar-section-title">Email Konusu</div>
+        <div class="sidebar-section-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+      <div class="sidebar-section-body">
+        <div class="form-group">
+          <input type="text" id="emailSubject" placeholder="Etkinlik Daveti" oninput="updatePreview()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Metin Alanı -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-header" onclick="toggleSection(this.closest('.sidebar-section'))">
+        <div class="sidebar-section-icon"><i class="fa-solid fa-paragraph"></i></div>
+        <div class="sidebar-section-title">Metin Alanı</div>
+        <div class="sidebar-section-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+      <div class="sidebar-section-body">
+        <div class="form-group">
+          <label>Selamlama / Bilgi Metni</label>
+          <textarea id="greetingText" rows="4" oninput="updatePreview()">Değerli Akademik ve İdari Personelimiz,
+
+Üniversitemiz İktisadi ve İdari Bilimler Fakültesi tarafından düzenlenen programa ilişkin detayları aşağıda bilgilerinize sunarız.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Etkinlik Bilgileri -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-header" onclick="toggleSection(this.closest('.sidebar-section'))">
+        <div class="sidebar-section-icon"><i class="fa-solid fa-calendar-days"></i></div>
+        <div class="sidebar-section-title">Etkinlik Bilgileri</div>
+        <div class="sidebar-section-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+      <div class="sidebar-section-body">
+        <div class="form-group">
+          <label>Tarih</label>
+          <input type="date" id="eventDate" onchange="updatePreview()">
+        </div>
+        <div class="form-group">
+          <label>Saat</label>
+          <input type="time" id="eventTime" onchange="updatePreview()">
+        </div>
+        <div class="form-group">
+          <label>Yer</label>
+          <input type="text" id="eventLocation" placeholder="Topkapı Yerleşkesi" oninput="updatePreview()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Görsel -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-header" onclick="toggleSection(this.closest('.sidebar-section'))">
+        <div class="sidebar-section-icon"><i class="fa-solid fa-image"></i></div>
+        <div class="sidebar-section-title">Görsel</div>
+        <div class="sidebar-section-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+      <div class="sidebar-section-body">
+        <div class="form-group">
+          <label>Görsel URL</label>
+          <input type="text" id="imageUrl" value="https://www.fsm.edu.tr/resimler/upload/poster2026-03-27-01-45-11pm.jpg" oninput="handleImageUrl()">
+          <span class="instr">Görselin dışarıdan erişilebilir URL'sini girin.</span>
+        </div>
+        <div id="imagePreviewContainer" style="display:none; margin-top:10px;">
+          <img id="imagePreviewThumb" class="image-preview" alt="Önizleme" style="width:100%; border-radius:8px; border:1.5px solid #e5e5e5;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Alıcılar -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-header" onclick="toggleSection(this.closest('.sidebar-section'))">
+        <div class="sidebar-section-icon"><i class="fa-solid fa-users"></i></div>
+        <div class="sidebar-section-title">Alıcılar</div>
+        <div class="sidebar-section-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+      <div class="sidebar-section-body">
+        <div class="recipient-input-row">
+          <input type="email" id="recipientInput" placeholder="email@ornek.com" onkeydown="if(event.key==='Enter'){addRecipient(); event.preventDefault();}">
+          <button class="btn-primary" onclick="addRecipient()" style="width:auto;"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <div class="recipient-tags" id="recipientTags"></div>
+        <div class="recipient-count" id="recipientCount"></div>
+        <div class="bulk-area">
+          <label>Toplu Ekle</label>
+          <textarea id="bulkEmails" rows="2" placeholder="Virgül, noktalı virgül veya satır ile ayırarak yapıştırın"></textarea>
+          <button class="btn-secondary" onclick="addBulkRecipients()" style="margin-top:6px; width:100%;">
+            <i class="fa-solid fa-list"></i> Hepsini Ekle
+          </button>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px;">
+          <button class="btn-secondary" onclick="exportRecipients()" style="flex:1;">
+            <i class="fa-solid fa-download"></i> Dışa Aktar
+          </button>
+          <button class="btn-danger" onclick="clearRecipients()" style="flex:1;">
+            <i class="fa-solid fa-trash"></i> Tümünü Sil
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gönder -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-body">
+        <button class="btn-primary" id="sendBtn" onclick="sendEmails()" style="padding:14px; font-size:15px;">
+          <i class="fa-solid fa-paper-plane"></i> Mailing Gönder
+        </button>
+        <div class="send-progress" id="sendProgress">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBarFill"></div>
+          </div>
+          <div class="progress-text" id="progressText">Gönderiliyor...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREVIEW AREA -->
+  <div class="preview-area">
+    <div class="preview-header">
+      <h2><i class="fa-solid fa-eye"></i> Önizleme</h2>
+      <div class="preview-actions">
+        <button class="btn-secondary" onclick="copyEmailHTML()" title="HTML'i kopyala">
+          <i class="fa-solid fa-code"></i> HTML Kopyala
+        </button>
+        <button class="btn-secondary" onclick="openHelp()">
+          <i class="fa-solid fa-circle-question"></i> Yardım
+        </button>
+      </div>
+    </div>
+    <div class="preview-scroll">
+      <iframe class="email-preview-frame" id="emailPreview"></iframe>
+    </div>
+  </div>
+
+  <!-- HELP MODAL -->
+  <div class="modal-overlay" id="helpModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeHelp()"><i class="fa-solid fa-xmark"></i></button>
+      <h2>Kullanım Notları</h2>
+
+      <h3>Client ID'leri Güncelleme</h3>
+      <p>Google Client ID kodun üstündeki <code>GOOGLE_CLIENT_ID</code> sabitinde tanımlıdır. Değiştirmek için <code>index.html</code> dosyasını düzenleyin.</p>
+
+      <h3>Gmail Günlük Limitleri</h3>
+      <p>Consumer Gmail hesapları için günlük ~100 email gönderim limiti vardır. Workspace hesapları için ~2000.</p>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <script src="script.js"></script>
 </body>
 </html>
