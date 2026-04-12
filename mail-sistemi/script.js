@@ -231,17 +231,17 @@
 
       const fontFamily = "'Google Sans', Arial, Helvetica, sans-serif";
 
-      const fsmLogoUrl = assetBase + '/fsm-logo.svg';
-      const calendarIconUrl = assetBase + '/icon-calendar.svg';
-      const clockIconUrl = assetBase + '/icon-clock.svg';
-      const pinIconUrl = assetBase + '/icon-pin.svg';
+      const fsmLogoUrl = assetBase + '/fsm-logo.png';
+      const calendarIconUrl = assetBase + '/icon-calendar.png';
+      const clockIconUrl = assetBase + '/icon-clock.png';
+      const pinIconUrl = assetBase + '/icon-pin.png';
 
       const socialIcons = [
-        { file: 'sosyal-medya-4.svg', alt: 'Dergipark', url: 'https://fsm.edu.tr' },
-        { file: 'sosyal-medya-2.svg', alt: 'X', url: 'https://fsm.edu.tr' },
-        { file: 'sosyal-medya-3.svg', alt: 'Facebook', url: 'https://fsm.edu.tr' },
-        { file: 'sosyal-medya-1.svg', alt: 'Instagram', url: 'https://fsm.edu.tr' },
-        { file: 'sosyal-medya-5.svg', alt: 'YouTube', url: 'https://fsm.edu.tr' }
+        { file: 'sosyal-medya-4.png', alt: 'Dergipark', url: 'https://fsm.edu.tr' },
+        { file: 'sosyal-medya-2.png', alt: 'X', url: 'https://fsm.edu.tr' },
+        { file: 'sosyal-medya-3.png', alt: 'Facebook', url: 'https://fsm.edu.tr' },
+        { file: 'sosyal-medya-1.png', alt: 'Instagram', url: 'https://fsm.edu.tr' },
+        { file: 'sosyal-medya-5.png', alt: 'YouTube', url: 'https://fsm.edu.tr' }
       ];
       const socialIconsHtml = socialIcons.map(s =>
         `<a href="${s.url}" target="_blank" style="display:inline-block; margin:0 4px; transition:opacity 0.2s, transform 0.2s;" onmouseover="this.style.opacity='0.7';this.style.transform='scale(1.15)'" onmouseout="this.style.opacity='1';this.style.transform='scale(1)'"><img src="${assetBase}/${s.file}" width="28" height="28" alt="${s.alt}" style="display:block; border:0;"></a>`
@@ -304,7 +304,7 @@
           <td width="33%" valign="top" height="95" style="padding-right:8px; height:95px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" height="95" style="background-color:#f1f5f9; border:1px solid #e1eaef; border-radius:14px; height:95px; table-layout:fixed;">
               <tr style="height:95px;"><td align="center" valign="top" height="95" style="padding:20px 10px 0 10px; height:95px; overflow:hidden;">
-                <img src="${calendarIconUrl}" width="25" height="25" alt="Tarih" style="display:block; margin:0 auto 13px auto;">
+                <img src="${calendarIconUrl}" width="30" height="30" alt="Tarih" style="display:block; margin:0 auto 13px auto;">
                 <div style="font-family:${fontFamily}; font-size:14px; font-weight:bold; color:#000000; line-height:1.4;">
                   ${dateFormatted || '<span style="color:#ccc;">Tarih</span>'}
                 </div>
@@ -314,7 +314,7 @@
           <td width="33%" valign="top" height="95" style="padding:0 4px; height:95px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" height="95" style="background-color:#f1f5f9; border:1px solid #e1eaef; border-radius:14px; height:95px; table-layout:fixed;">
               <tr style="height:95px;"><td align="center" valign="top" height="95" style="padding:20px 10px 0 10px; height:95px; overflow:hidden;">
-                <img src="${clockIconUrl}" width="25" height="25" alt="Saat" style="display:block; margin:0 auto 13px auto;">
+                <img src="${clockIconUrl}" width="30" height="30" alt="Saat" style="display:block; margin:0 auto 13px auto;">
                 <div style="font-family:${fontFamily}; font-size:14px; font-weight:bold; color:#000000; line-height:1.4;">
                   ${time ? escapeHtml(time) : '<span style="color:#ccc;">Saat</span>'}
                 </div>
@@ -324,7 +324,7 @@
           <td width="33%" valign="top" height="95" style="padding-left:8px; height:95px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" height="95" style="background-color:#f1f5f9; border:1px solid #e1eaef; border-radius:14px; height:95px; table-layout:fixed;">
               <tr style="height:95px;"><td align="center" valign="top" height="95" style="padding:20px 10px 0 10px; height:95px; overflow:hidden;">
-                <img src="${pinIconUrl}" width="20" height="25" alt="Yer" style="display:block; margin:0 auto 13px auto;">
+                <img src="${pinIconUrl}" width="30" height="30" alt="Yer" style="display:block; margin:0 auto 13px auto;">
                 <div style="font-family:${fontFamily}; font-size:14px; font-weight:bold; color:#000000; line-height:1.4;">
                   ${location ? escapeHtml(location) : '<span style="color:#ccc;">Yer</span>'}
                 </div>
@@ -341,7 +341,7 @@
 
   <!-- FOOTER SOCIAL -->
   <tr>
-    <td align="center" style="padding:20px 57px 10px 57px;">
+    <td align="center" style="padding:0px 57px 10px 57px;">
       ${socialIconsHtml}
     </td>
   </tr>
