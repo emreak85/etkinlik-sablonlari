@@ -105,6 +105,11 @@
         .theme-dot-teal  { background: #00637d; border: 1px solid #00637d; }
         .theme-dot-white.active { box-shadow: 0 0 0 3px #aaa; }
 
+        .theme-color-pickers { margin-top: 14px; display: none; flex-direction: column; gap: 8px; }
+        .color-picker-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .color-picker-row label { margin: 0; font-size: 11px; text-transform: uppercase; color: #666; letter-spacing: 0.4px; font-weight: 600; }
+        .color-picker-row input[type="color"] { width: 40px; height: 28px; border: 1px solid #e5e5e5; border-radius: 6px; padding: 2px; cursor: pointer; background: white; flex-shrink: 0; }
+
         /* Çoklu Konuşmacı */
         .speaker-card { background: #f8f9fa; border: 1px solid #e5e5e5; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
         .speaker-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -133,6 +138,20 @@
                 <div class="theme-dot theme-dot-white active" id="theme-1" onclick="switchTheme(1)" title="Varsayılan tema"></div>
                 <div class="theme-dot theme-dot-teal"  id="theme-2" onclick="switchTheme(2)" title="Alternatif tema"></div>
             </div>
+            <div class="theme-color-pickers" id="themeColorPickers">
+                <div class="color-picker-row">
+                    <label>Arkaplan</label>
+                    <input type="color" id="colorBg" value="#00637d" oninput="updateCustomColor('bg', this.value)">
+                </div>
+                <div class="color-picker-row">
+                    <label>Kutu 1</label>
+                    <input type="color" id="colorRedBox" value="#007e9b" oninput="updateCustomColor('redBox', this.value)">
+                </div>
+                <div class="color-picker-row">
+                    <label>Kutu 2</label>
+                    <input type="color" id="colorBlueBox" value="#003a47" oninput="updateCustomColor('blueBox', this.value)">
+                </div>
+            </div>
         </div>
 
         <!-- Etkinlik -->
@@ -157,6 +176,10 @@
                 </div>
                 <span class="sidebar-section-title">Konuşmacı</span>
             </div>
+            <div class="form-group">
+                <label>Konuşmacı Başlığı</label>
+                <input type="text" id="speakerLabel" value="Konuşmacı" placeholder="Örn: Koordinatör, Sorumlu..." onkeyup="drawAllCanvases()">
+            </div>
             <div id="speakerPhotoSection" class="form-group">
                 <label>Fotoğraf (İsteğe Bağlı)</label>
                 <input type="file" id="speakerPhotoInput" accept="image/*" onchange="handleSpeakerPhotoUpload(event)">
@@ -168,6 +191,10 @@
             <div class="form-group" style="margin-top:14px;">
                 <label>Moderatör (İsteğe Bağlı)</label>
                 <input type="text" id="moderatorName" value="" onkeyup="drawAllCanvases()">
+            </div>
+            <div class="form-group">
+                <label>Moderatör Başlığı</label>
+                <input type="text" id="moderatorLabel" value="Moderatör" placeholder="Örn: Jüri Başkanı..." onkeyup="drawAllCanvases()">
             </div>
         </div>
 
@@ -249,7 +276,7 @@
                 photo: { x: 70, y: 350, w: 340, h: 600, radius: 20 },
                 redBox: { x: 430, y: 350, w: 340, h: 290, radius: 20 }, redBoxBg: { x: 370, y: 560, w: 485, h: 485 }, 
                 blueBox: { x: 430, y: 660, w: 340, h: 290, radius: 20 }, blueBoxBg: { x: 640, y: 620, w: 150, h: 220 }, 
-                eventText: { x: 420, y: 150, size: 70, color: "#00637d", align: "center", maxWidth: 700, lineHeight: 80 },
+                eventText: { x: 420, y: 150, size: 70, color: "#00637d", align: "center", maxWidth: 700, lineHeight: 88, maxLines: 3 },
                 
                 speakerPhoto: { x: 460, y: 380, radius: 50, expandH: 90 },
                 speakerText: { x: 460, size: 30, color: "#ffffff", align: "left", maxWidth: 280, lineHeight: 35 },
@@ -263,7 +290,7 @@
                 photo: { x: 1000, y: 38, w: 380, h: 500, radius: 20 },
                 redBox: { x: 1400, y: 50, w: 420, h: 240, radius: 20 }, redBoxBg: { x: 1400, y: 158, w: 420, h: 420 },
                 blueBox: { x: 1400, y: 310, w: 420, h: 240, radius: 20 }, blueBoxBg: { x: 1720, y: 301, w: 115, h: 165 },
-                eventText: { x: 500, y: 200, size: 80, color: "#00637d", align: "center", maxWidth: 800, lineHeight: 90 },
+                eventText: { x: 500, y: 200, size: 80, color: "#00637d", align: "center", maxWidth: 800, lineHeight: 100, maxLines: 3 },
 
                 speakerPhoto: { x: 1440, y: 70, radius: 35, expandH: 70 },
                 speakerText: { x: 1440, size: 30, color: "#ffffff", align: "left", maxWidth: 300, lineHeight: 35 },
@@ -277,7 +304,7 @@
                 photo: { x: 50, y: 200, w: 310, h: 500, radius: 15 },
                 redBox: { x: 380, y: 200, w: 320, h: 200, radius: 15 }, redBoxBg: { x: 380, y: 280, w: 320, h: 320 },
                 blueBox: { x: 380, y: 400, w: 320, h: 200, radius: 15 }, blueBoxBg: { x: 610, y: 380, w: 115, h: 165 },
-                eventText: { x: 375, y: 100, size: 45, color: "#00637d", align: "center", maxWidth: 650, lineHeight: 50 },
+                eventText: { x: 375, y: 100, size: 45, color: "#00637d", align: "center", maxWidth: 650, lineHeight: 56, maxLines: 2 },
                 
                 speakerPhoto: { x: 410, y: 230, radius: 40, expandH: 90 },
                 speakerText: { x: 410, size: 25, color: "#ffffff", align: "left", maxWidth: 260, lineHeight: 30 },
@@ -291,7 +318,7 @@
                 photo: { x: 100, y: 550, w: 420, h: 600, radius: 25 },
                 redBox: { x: 550, y: 550, w: 430, h: 364, radius: 25 }, redBoxBg: { x: 550, y: 790, w: 430, h: 430 },
                 blueBox: { x: 550, y: 939, w: 430, h: 364, radius: 25 }, blueBoxBg: { x: 830, y: 919, w: 192, h: 276 },
-                eventText: { x: 540, y: 350, size: 90, color: "#00637d", align: "center", maxWidth: 900, lineHeight: 95 },
+                eventText: { x: 540, y: 350, size: 90, color: "#00637d", align: "center", maxWidth: 900, lineHeight: 112, maxLines: 4 },
                 
                 speakerPhoto: { x: 590, y: 590, radius: 70, expandH: 140 },
                 speakerText: { x: 590, size: 40, color: "#ffffff", align: "left", maxWidth: 360, lineHeight: 50 },
@@ -305,7 +332,7 @@
                 photo: { x: 90, y: 350, w: 420, h: 790, radius: 25 },
                 redBox: { x: 540, y: 350, w: 450, h: 385, radius: 25 }, redBoxBg: { x: 540, y: 620, w: 450, h: 450 },
                 blueBox: { x: 540, y: 755, w: 450, h: 385, radius: 25 }, blueBoxBg: { x: 850, y: 700, w: 174, h: 250 },
-                eventText: { x: 540, y: 180, size: 75, color: "#00637d", align: "center", maxWidth: 900, lineHeight: 85 },
+                eventText: { x: 540, y: 180, size: 75, color: "#00637d", align: "center", maxWidth: 900, lineHeight: 94, maxLines: 3 },
                 
                 speakerPhoto: { x: 580, y: 390, radius: 55, expandH: 100 },
                 speakerText: { x: 580, size: 40, color: "#ffffff", align: "left", maxWidth: 380, lineHeight: 45 },
@@ -319,7 +346,7 @@
                 photo: { x: 170, y: 300, w: 800, h: 500, radius: 25 },
                 redBox: { x: 990, y: 300, w: 370, h: 500, radius: 25 }, redBoxBg: { x: 895, y: 610, w: 560, h: 560 },
                 blueBox: { x: 1380, y: 300, w: 370, h: 500, radius: 25 }, blueBoxBg: { x: 1619, y: 250, w: 173, h: 248 },
-                eventText: { x: 960, y: 200, size: 85, color: "#00637d", align: "center", maxWidth: 1600, lineHeight: 95 },
+                eventText: { x: 960, y: 200, size: 85, color: "#00637d", align: "center", maxWidth: 1600, lineHeight: 106, maxLines: 2 },
 
                 speakerPhoto: { x: 1015, y: 320, radius: 45, expandH: 0 },
                 speakerText: { x: 1015, size: 38, color: "#ffffff", align: "left", maxWidth: 310, lineHeight: 46 },
@@ -332,6 +359,25 @@
 
         let activeTemplateId = templates[0].id;
         let activeTheme = 1;
+
+        let customColors = {
+            bg:      "#00637d",
+            redBox:  "#007e9b",
+            blueBox: "#003a47"
+        };
+
+        function getActiveColors() {
+            const tc = themeColors[activeTheme];
+            if (activeTheme === 2) {
+                return { bg: customColors.bg, redBox: customColors.redBox, blueBox: customColors.blueBox, eventText: tc.eventText };
+            }
+            return { bg: "#ffffff", redBox: tc.redBox, blueBox: tc.blueBox, eventText: tc.eventText };
+        }
+
+        function updateCustomColor(key, value) {
+            customColors[key] = value;
+            drawAllCanvases();
+        }
 
         const themeBgMap = {
             1: { afis: "arkaplanlar/afis.png", "web-banner": "arkaplanlar/web-banner.png", "mobil-banner": "arkaplanlar/mobil-banner.png", story: "arkaplanlar/story.png", post: "arkaplanlar/post.png", tv: "arkaplanlar/tv.png" },
@@ -353,6 +399,7 @@
             activeTheme = theme;
             document.getElementById('theme-1').classList.toggle('active', theme === 1);
             document.getElementById('theme-2').classList.toggle('active', theme === 2);
+            document.getElementById('themeColorPickers').style.display = theme === 2 ? 'flex' : 'none';
             const assets = themeAssets[theme];
             let loaded = 0;
             const total = templates.length + 4;
@@ -654,6 +701,14 @@
             canvas.addEventListener('touchend', () => { activeDrag = null; initialPinchDistance = 0; });
         }
 
+        function pluralizeTR(w) {
+            const vowels = 'aeıioöuü';
+            const back = 'aıou';
+            const lastVowel = [...w.toLowerCase()].reverse().find(c => vowels.includes(c));
+            if (!lastVowel) return w + 'lar';
+            return w + (back.includes(lastVowel) ? 'lar' : 'ler');
+        }
+
         // Satırları bölüp bir dizi olarak döndüren yardımcı fonksiyon
         function getLines(ctx, text, maxWidth) {
             if(!text) return [];
@@ -672,6 +727,9 @@
             let items = []; 
             if (loadedLogoFsm && loadedLogoFsm.complete && loadedLogoFsm.naturalHeight > 0) {
                 let w = (loadedLogoFsm.naturalWidth / loadedLogoFsm.naturalHeight) * f.h; items.push({ type: 'img', img: loadedLogoFsm, w: w, h: f.h });
+            }
+            if (loadedLogo555 && loadedLogo555.complete && loadedLogo555.naturalHeight > 0) {
+                let w = (loadedLogo555.naturalWidth / loadedLogo555.naturalHeight) * f.h; items.push({ type: 'img', img: loadedLogo555, w: w, h: f.h });
             }
             if (dynamicTextStr && dynamicTextStr.trim() !== '') {
                 let fontSize = f.textSize; let lines = []; let textW = 0; let lineHeight = fontSize * 1.2;
@@ -692,9 +750,6 @@
                 }
                 if (items.length > 0) items.push({ type: 'divider', w: 2, h: f.h });
                 items.push({ type: 'text', lines: lines, fontSize: fontSize, w: textW, h: lines.length * lineHeight });
-            }
-            if (loadedLogo555 && loadedLogo555.complete && loadedLogo555.naturalHeight > 0) {
-                let w = (loadedLogo555.naturalWidth / loadedLogo555.naturalHeight) * f.h; items.push({ type: 'img', img: loadedLogo555, w: w, h: f.h });
             }
             uploadedDynamicLogos.forEach(logoImg => {
                 if (logoImg && logoImg.complete && logoImg.naturalHeight > 0) {
@@ -743,20 +798,16 @@
             const eName = document.getElementById('eventName').value;
             const activeSpeakers = speakerList.filter(s => s.name.trim() !== '');
 
+            const speakerLabelVal = document.getElementById('speakerLabel').value.trim() || "Konuşmacı";
+            const moderatorLabelVal = document.getElementById('moderatorLabel').value.trim() || "Moderatör";
+
             let mNameRaw = document.getElementById('moderatorName').value.trim();
-            let mName = mNameRaw;
             let modTitle = "";
             let actualModName = "";
 
             if (mNameRaw !== '') {
-                modTitle = "Moderatör:";
-                if (mNameRaw.toLowerCase().startsWith('moderatör:')) {
-                    actualModName = mNameRaw.substring(10).trim();
-                } else if (mNameRaw.toLowerCase().startsWith('moderatör')) {
-                    actualModName = mNameRaw.substring(9).trim();
-                } else {
-                    actualModName = mNameRaw;
-                }
+                modTitle = moderatorLabelVal + ":";
+                actualModName = mNameRaw;
             }
 
             const dateStr = document.getElementById('dateInput').value;
@@ -770,16 +821,34 @@
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Ana Arkaplan
-            if (loadedBackgrounds[tpl.id]) { ctx.drawImage(loadedBackgrounds[tpl.id], 0, 0, canvas.width, canvas.height); } 
-            else { ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+            const colors = getActiveColors();
+
+            // Ana Arkaplan — önce düz renk, sonra PNG overlay
+            ctx.fillStyle = colors.bg;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            if (loadedBackgrounds[tpl.id]) { ctx.drawImage(loadedBackgrounds[tpl.id], 0, 0, canvas.width, canvas.height); }
+
+            // Başlık auto-fit: maxLines tanımlıysa, satır sayısı aşılırsa font küçült
+            let titleFontSize = tpl.eventText.size;
+            let titleLineHeight = tpl.eventText.lineHeight;
+            const titleRatio = tpl.eventText.lineHeight / tpl.eventText.size;
+            const TITLE_MIN_SIZE = 40;
+            ctx.font = `bold ${titleFontSize}px 'Google Sans', sans-serif`;
+            let titleLines = getLines(ctx, eName, tpl.eventText.maxWidth);
+            if (tpl.eventText.maxLines) {
+                while (titleLines.length > tpl.eventText.maxLines && titleFontSize > TITLE_MIN_SIZE) {
+                    titleFontSize -= 2;
+                    titleLineHeight = Math.round(titleFontSize * titleRatio);
+                    ctx.font = `bold ${titleFontSize}px 'Google Sans', sans-serif`;
+                    titleLines = getLines(ctx, eName, tpl.eventText.maxWidth);
+                }
+            }
 
             // Başlık satır sayısına göre dinamik kutu pozisyonu
-            ctx.font = `bold ${tpl.eventText.size}px 'Google Sans', sans-serif`;
-            const titleLineCount = getLines(ctx, eName, tpl.eventText.maxWidth).length;
-            const titleBottom = tpl.eventText.y + titleLineCount * tpl.eventText.lineHeight;
+            const titleLineCount = titleLines.length;
+            const titleBottom = tpl.eventText.y + titleLineCount * titleLineHeight;
             const boxesOverlapTitle = tpl.redBox.x < tpl.eventText.x + tpl.eventText.maxWidth;
-            const dynBoxTop = boxesOverlapTitle ? titleBottom + 20 : tpl.redBox.y;
+            const dynBoxTop = boxesOverlapTitle ? titleBottom + 0 : tpl.redBox.y;
             const dynBoxBottom = boxesOverlapTitle ? tpl.footer.y - tpl.footer.boxMargin : tpl.footer.y;
             const dynTotalH = Math.max(10, dynBoxBottom - dynBoxTop);
             const dynBoxOffset = dynBoxTop - tpl.redBox.y;
@@ -832,7 +901,7 @@
             // Kırmızı Kutu
             const redBoxDeltaY = redBoxY - tpl.redBox.y;
             const redBoxDeltaH = redBoxH - tpl.redBox.h;
-            ctx.fillStyle = themeColors[activeTheme].redBox; ctx.beginPath(); ctx.roundRect(tpl.redBox.x, redBoxY, tpl.redBox.w, redBoxH, tpl.redBox.radius); ctx.fill();
+            ctx.fillStyle = colors.redBox; ctx.beginPath(); ctx.roundRect(tpl.redBox.x, redBoxY, tpl.redBox.w, redBoxH, tpl.redBox.radius); ctx.fill();
             if (loadedRedBoxBg && loadedRedBoxBg.complete && loadedRedBoxBg.naturalWidth !== 0) {
                 ctx.save(); ctx.beginPath(); ctx.roundRect(tpl.redBox.x, redBoxY, tpl.redBox.w, redBoxH, tpl.redBox.radius); ctx.clip();
                 ctx.drawImage(loadedRedBoxBg, tpl.redBoxBg.x, tpl.redBoxBg.y + redBoxDeltaY + redBoxDeltaH, tpl.redBoxBg.w, tpl.redBoxBg.h); ctx.restore();
@@ -840,7 +909,7 @@
 
             // Mavi Kutu
             const blueBoxTopDelta = blueBoxY - tpl.blueBox.y;
-            ctx.fillStyle = themeColors[activeTheme].blueBox; ctx.beginPath(); ctx.roundRect(tpl.blueBox.x, blueBoxY, tpl.blueBox.w, blueBoxH, tpl.blueBox.radius); ctx.fill();
+            ctx.fillStyle = colors.blueBox; ctx.beginPath(); ctx.roundRect(tpl.blueBox.x, blueBoxY, tpl.blueBox.w, blueBoxH, tpl.blueBox.radius); ctx.fill();
             if (loadedBlueBoxBg && loadedBlueBoxBg.complete && loadedBlueBoxBg.naturalWidth !== 0) {
                 ctx.save(); ctx.beginPath(); ctx.roundRect(tpl.blueBox.x, blueBoxY, tpl.blueBox.w, blueBoxH, tpl.blueBox.radius); ctx.clip();
                 ctx.drawImage(loadedBlueBoxBg, tpl.blueBoxBg.x, tpl.blueBoxBg.y + blueBoxTopDelta, tpl.blueBoxBg.w, tpl.blueBoxBg.h); ctx.restore();
@@ -857,8 +926,8 @@
             }
 
             // Etkinlik Ana Başlığı
-            ctx.fillStyle = themeColors[activeTheme].eventText; ctx.font = `bold ${tpl.eventText.size}px 'Google Sans', sans-serif`; ctx.textAlign = tpl.eventText.align;
-            wrapText(ctx, eName, tpl.eventText.x, tpl.eventText.y, tpl.eventText.maxWidth, tpl.eventText.lineHeight);
+            ctx.fillStyle = colors.eventText; ctx.font = `bold ${titleFontSize}px 'Google Sans', sans-serif`; ctx.textAlign = tpl.eventText.align;
+            wrapText(ctx, eName, tpl.eventText.x, tpl.eventText.y, tpl.eventText.maxWidth, titleLineHeight);
 
             // --- KIRMIZI KUTU: YAZILARI DİKEY ORTALAMA MOTORU ---
             let redBoxLines = [];
@@ -871,7 +940,7 @@
                 const sTitle = activeSpeakers[0].title.trim();
 
                 ctx.font = `300 ${tagSize}px 'Google Sans', sans-serif`;
-                let tagWrapped = getLines(ctx, "Konuşmacı:", tpl.speakerText.maxWidth);
+                let tagWrapped = getLines(ctx, speakerLabelVal + ":", tpl.speakerText.maxWidth);
                 tagWrapped.forEach((line, idx) => {
                     let isLast = idx === tagWrapped.length - 1;
                     redBoxLines.push({ text: line, font: `300 ${tagSize}px 'Google Sans', sans-serif`, color: "#ffffff", lh: tagSize * 1.2, mb: isLast ? tagSize * 1.3 : 0 });
@@ -896,7 +965,7 @@
 
             } else if (activeSpeakers.length > 1) {
                 ctx.font = `300 ${tagSize}px 'Google Sans', sans-serif`;
-                let tagWrapped = getLines(ctx, "Konuşmacılar:", tpl.speakerText.maxWidth);
+                let tagWrapped = getLines(ctx, pluralizeTR(speakerLabelVal) + ":", tpl.speakerText.maxWidth);
                 tagWrapped.forEach((line, idx) => {
                     let isLast = idx === tagWrapped.length - 1;
                     redBoxLines.push({ text: line, font: `300 ${tagSize}px 'Google Sans', sans-serif`, color: "#ffffff", lh: tagSize * 1.2, mb: isLast ? tagSize * 1.0 : 0 });
